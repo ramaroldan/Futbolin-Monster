@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: f4997dc931c310949ab67157a6e31c6f
+timeCreated: 1518038102
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 12353
+  packageName: Toon Killers & Survivors
+  packageVersion: 1.0
+  assetPath: Assets/Toon Killers & Survivors/Materials/Killers.mat
+  uploadId: 230361

@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 38f5f397f88e65c45aadc97faf214a5f
+timeCreated: 1518713104
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 12353
+  packageName: Toon Killers & Survivors
+  packageVersion: 1.0
+  assetPath: Assets/Toon Killers & Survivors/Prefab/Props/Flashlight.prefab
+  uploadId: 230361

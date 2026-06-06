@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 1c080a514c0906341bd5b87aa69ebcac
+timeCreated: 1518779049
+licenseType: Store
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 9100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 12353
+  packageName: Toon Killers & Survivors
+  packageVersion: 1.0
+  assetPath: Assets/Toon Killers & Survivors/Chainsaw.controller
+  uploadId: 230361

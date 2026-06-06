@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 0eee5f14c62b8da40a0cbd09adcd0f56
+timeCreated: 1518655386
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 12353
+  packageName: Toon Killers & Survivors
+  packageVersion: 1.0
+  assetPath: Assets/Toon Killers & Survivors/Prefab/Characters/Survivor2.prefab
+  uploadId: 230361

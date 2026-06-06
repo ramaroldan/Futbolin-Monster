@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: aea8b9c71bfb7f84eaf7dfdf4dbaff89
+timeCreated: 1518713109
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 12353
+  packageName: Toon Killers & Survivors
+  packageVersion: 1.0
+  assetPath: Assets/Toon Killers & Survivors/Prefab/Props/Medkit.prefab
+  uploadId: 230361

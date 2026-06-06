@@ -1,0 +1,1396 @@
+fileFormatVersion: 2
+guid: 3e39451437ee6c54ab0149cbbb65654c
+timeCreated: 1518046477
+licenseType: Store
+ModelImporter:
+  serializedVersion: 22
+  fileIDToRecycleName:
+    100000: ChainsawIdle:Character1_Ctrl_ChestEndEffector
+    100002: ChainsawIdle:Character1_Ctrl_ChestOriginEffector
+    100004: ChainsawIdle:Character1_Ctrl_Head
+    100006: ChainsawIdle:Character1_Ctrl_HeadEffector
+    100008: ChainsawIdle:Character1_Ctrl_Hips
+    100010: ChainsawIdle:Character1_Ctrl_HipsEffector
+    100012: ChainsawIdle:Character1_Ctrl_LeftAnkleEffector
+    100014: ChainsawIdle:Character1_Ctrl_LeftArm
+    100016: ChainsawIdle:Character1_Ctrl_LeftElbowEffector
+    100018: ChainsawIdle:Character1_Ctrl_LeftFoot
+    100020: ChainsawIdle:Character1_Ctrl_LeftForeArm
+    100022: ChainsawIdle:Character1_Ctrl_LeftHand
+    100024: ChainsawIdle:Character1_Ctrl_LeftHandIndex1
+    100026: ChainsawIdle:Character1_Ctrl_LeftHandIndex2
+    100028: ChainsawIdle:Character1_Ctrl_LeftHandIndex3
+    100030: ChainsawIdle:Character1_Ctrl_LeftHandIndex4
+    100032: ChainsawIdle:Character1_Ctrl_LeftHandIndexEffector
+    100034: ChainsawIdle:Character1_Ctrl_LeftHandMiddle1
+    100036: ChainsawIdle:Character1_Ctrl_LeftHandMiddle2
+    100038: ChainsawIdle:Character1_Ctrl_LeftHandMiddle3
+    100040: ChainsawIdle:Character1_Ctrl_LeftHandMiddle4
+    100042: ChainsawIdle:Character1_Ctrl_LeftHandMiddleEffector
+    100044: ChainsawIdle:Character1_Ctrl_LeftHandPinky1
+    100046: ChainsawIdle:Character1_Ctrl_LeftHandPinky2
+    100048: ChainsawIdle:Character1_Ctrl_LeftHandPinky3
+    100050: ChainsawIdle:Character1_Ctrl_LeftHandPinky4
+    100052: ChainsawIdle:Character1_Ctrl_LeftHandPinkyEffector
+    100054: ChainsawIdle:Character1_Ctrl_LeftHandRing1
+    100056: ChainsawIdle:Character1_Ctrl_LeftHandRing2
+    100058: ChainsawIdle:Character1_Ctrl_LeftHandRing3
+    100060: ChainsawIdle:Character1_Ctrl_LeftHandRing4
+    100062: ChainsawIdle:Character1_Ctrl_LeftHandRingEffector
+    100064: ChainsawIdle:Character1_Ctrl_LeftHipEffector
+    100066: ChainsawIdle:Character1_Ctrl_LeftKneeEffector
+    100068: ChainsawIdle:Character1_Ctrl_LeftLeg
+    100070: ChainsawIdle:Character1_Ctrl_LeftShoulder
+    100072: ChainsawIdle:Character1_Ctrl_LeftShoulderEffector
+    100074: ChainsawIdle:Character1_Ctrl_LeftUpLeg
+    100076: ChainsawIdle:Character1_Ctrl_LeftWristEffector
+    100078: ChainsawIdle:Character1_Ctrl_Neck
+    100080: ChainsawIdle:Character1_Ctrl_Reference
+    100082: ChainsawIdle:Character1_Ctrl_RightAnkleEffector
+    100084: ChainsawIdle:Character1_Ctrl_RightArm
+    100086: ChainsawIdle:Character1_Ctrl_RightElbowEffector
+    100088: ChainsawIdle:Character1_Ctrl_RightFoot
+    100090: ChainsawIdle:Character1_Ctrl_RightForeArm
+    100092: ChainsawIdle:Character1_Ctrl_RightHand
+    100094: ChainsawIdle:Character1_Ctrl_RightHandIndex1
+    100096: ChainsawIdle:Character1_Ctrl_RightHandIndex2
+    100098: ChainsawIdle:Character1_Ctrl_RightHandIndex3
+    100100: ChainsawIdle:Character1_Ctrl_RightHandIndex4
+    100102: ChainsawIdle:Character1_Ctrl_RightHandIndexEffector
+    100104: ChainsawIdle:Character1_Ctrl_RightHandMiddle1
+    100106: ChainsawIdle:Character1_Ctrl_RightHandMiddle2
+    100108: ChainsawIdle:Character1_Ctrl_RightHandMiddle3
+    100110: ChainsawIdle:Character1_Ctrl_RightHandMiddle4
+    100112: ChainsawIdle:Character1_Ctrl_RightHandMiddleEffector
+    100114: ChainsawIdle:Character1_Ctrl_RightHandPinky1
+    100116: ChainsawIdle:Character1_Ctrl_RightHandPinky2
+    100118: ChainsawIdle:Character1_Ctrl_RightHandPinky3
+    100120: ChainsawIdle:Character1_Ctrl_RightHandPinky4
+    100122: ChainsawIdle:Character1_Ctrl_RightHandPinkyEffector
+    100124: ChainsawIdle:Character1_Ctrl_RightHandRing1
+    100126: ChainsawIdle:Character1_Ctrl_RightHandRing2
+    100128: ChainsawIdle:Character1_Ctrl_RightHandRing3
+    100130: ChainsawIdle:Character1_Ctrl_RightHandRing4
+    100132: ChainsawIdle:Character1_Ctrl_RightHandRingEffector
+    100134: ChainsawIdle:Character1_Ctrl_RightHipEffector
+    100136: ChainsawIdle:Character1_Ctrl_RightKneeEffector
+    100138: ChainsawIdle:Character1_Ctrl_RightLeg
+    100140: ChainsawIdle:Character1_Ctrl_RightShoulder
+    100142: ChainsawIdle:Character1_Ctrl_RightShoulderEffector
+    100144: ChainsawIdle:Character1_Ctrl_RightUpLeg
+    100146: ChainsawIdle:Character1_Ctrl_RightWristEffector
+    100148: ChainsawIdle:Character1_Ctrl_Spine
+    100150: ChainsawIdle:Character1_Ctrl_Spine1
+    100152: ChainsawIdle:Character1_Head
+    100154: ChainsawIdle:Character1_Hips
+    100156: ChainsawIdle:Character1_LeftArm
+    100158: ChainsawIdle:Character1_LeftFoot
+    100160: ChainsawIdle:Character1_LeftForeArm
+    100162: ChainsawIdle:Character1_LeftHand
+    100164: ChainsawIdle:Character1_LeftHandIndex1
+    100166: ChainsawIdle:Character1_LeftHandIndex2
+    100168: ChainsawIdle:Character1_LeftHandIndex3
+    100170: ChainsawIdle:Character1_LeftHandIndex4
+    100172: ChainsawIdle:Character1_LeftHandMiddle1
+    100174: ChainsawIdle:Character1_LeftHandMiddle2
+    100176: ChainsawIdle:Character1_LeftHandMiddle3
+    100178: ChainsawIdle:Character1_LeftHandMiddle4
+    100180: ChainsawIdle:Character1_LeftHandPinky1
+    100182: ChainsawIdle:Character1_LeftHandPinky2
+    100184: ChainsawIdle:Character1_LeftHandPinky3
+    100186: ChainsawIdle:Character1_LeftHandPinky4
+    100188: ChainsawIdle:Character1_LeftHandRing1
+    100190: ChainsawIdle:Character1_LeftHandRing2
+    100192: ChainsawIdle:Character1_LeftHandRing3
+    100194: ChainsawIdle:Character1_LeftHandRing4
+    100196: ChainsawIdle:Character1_LeftLeg
+    100198: ChainsawIdle:Character1_LeftShoulder
+    100200: ChainsawIdle:Character1_LeftUpLeg
+    100202: ChainsawIdle:Character1_Neck
+    100204: ChainsawIdle:Character1_Reference
+    100206: ChainsawIdle:Character1_RightArm
+    100208: ChainsawIdle:Character1_RightFoot
+    100210: ChainsawIdle:Character1_RightForeArm
+    100212: ChainsawIdle:Character1_RightHand
+    100214: ChainsawIdle:Character1_RightHandIndex1
+    100216: ChainsawIdle:Character1_RightHandIndex2
+    100218: ChainsawIdle:Character1_RightHandIndex3
+    100220: ChainsawIdle:Character1_RightHandIndex4
+    100222: ChainsawIdle:Character1_RightHandMiddle1
+    100224: ChainsawIdle:Character1_RightHandMiddle2
+    100226: ChainsawIdle:Character1_RightHandMiddle3
+    100228: ChainsawIdle:Character1_RightHandMiddle4
+    100230: ChainsawIdle:Character1_RightHandPinky1
+    100232: ChainsawIdle:Character1_RightHandPinky2
+    100234: ChainsawIdle:Character1_RightHandPinky3
+    100236: ChainsawIdle:Character1_RightHandPinky4
+    100238: ChainsawIdle:Character1_RightHandRing1
+    100240: ChainsawIdle:Character1_RightHandRing2
+    100242: ChainsawIdle:Character1_RightHandRing3
+    100244: ChainsawIdle:Character1_RightHandRing4
+    100246: ChainsawIdle:Character1_RightLeg
+    100248: ChainsawIdle:Character1_RightShoulder
+    100250: ChainsawIdle:Character1_RightUpLeg
+    100252: ChainsawIdle:Character1_Spine
+    100254: ChainsawIdle:Character1_Spine1
+    100256: ChainsawIdle:K1
+    100258: ChainsawIdle:WeaponHolder
+    100260: //RootNode
+    400000: ChainsawIdle:Character1_Ctrl_ChestEndEffector
+    400002: ChainsawIdle:Character1_Ctrl_ChestOriginEffector
+    400004: ChainsawIdle:Character1_Ctrl_Head
+    400006: ChainsawIdle:Character1_Ctrl_HeadEffector
+    400008: ChainsawIdle:Character1_Ctrl_Hips
+    400010: ChainsawIdle:Character1_Ctrl_HipsEffector
+    400012: ChainsawIdle:Character1_Ctrl_LeftAnkleEffector
+    400014: ChainsawIdle:Character1_Ctrl_LeftArm
+    400016: ChainsawIdle:Character1_Ctrl_LeftElbowEffector
+    400018: ChainsawIdle:Character1_Ctrl_LeftFoot
+    400020: ChainsawIdle:Character1_Ctrl_LeftForeArm
+    400022: ChainsawIdle:Character1_Ctrl_LeftHand
+    400024: ChainsawIdle:Character1_Ctrl_LeftHandIndex1
+    400026: ChainsawIdle:Character1_Ctrl_LeftHandIndex2
+    400028: ChainsawIdle:Character1_Ctrl_LeftHandIndex3
+    400030: ChainsawIdle:Character1_Ctrl_LeftHandIndex4
+    400032: ChainsawIdle:Character1_Ctrl_LeftHandIndexEffector
+    400034: ChainsawIdle:Character1_Ctrl_LeftHandMiddle1
+    400036: ChainsawIdle:Character1_Ctrl_LeftHandMiddle2
+    400038: ChainsawIdle:Character1_Ctrl_LeftHandMiddle3
+    400040: ChainsawIdle:Character1_Ctrl_LeftHandMiddle4
+    400042: ChainsawIdle:Character1_Ctrl_LeftHandMiddleEffector
+    400044: ChainsawIdle:Character1_Ctrl_LeftHandPinky1
+    400046: ChainsawIdle:Character1_Ctrl_LeftHandPinky2
+    400048: ChainsawIdle:Character1_Ctrl_LeftHandPinky3
+    400050: ChainsawIdle:Character1_Ctrl_LeftHandPinky4
+    400052: ChainsawIdle:Character1_Ctrl_LeftHandPinkyEffector
+    400054: ChainsawIdle:Character1_Ctrl_LeftHandRing1
+    400056: ChainsawIdle:Character1_Ctrl_LeftHandRing2
+    400058: ChainsawIdle:Character1_Ctrl_LeftHandRing3
+    400060: ChainsawIdle:Character1_Ctrl_LeftHandRing4
+    400062: ChainsawIdle:Character1_Ctrl_LeftHandRingEffector
+    400064: ChainsawIdle:Character1_Ctrl_LeftHipEffector
+    400066: ChainsawIdle:Character1_Ctrl_LeftKneeEffector
+    400068: ChainsawIdle:Character1_Ctrl_LeftLeg
+    400070: ChainsawIdle:Character1_Ctrl_LeftShoulder
+    400072: ChainsawIdle:Character1_Ctrl_LeftShoulderEffector
+    400074: ChainsawIdle:Character1_Ctrl_LeftUpLeg
+    400076: ChainsawIdle:Character1_Ctrl_LeftWristEffector
+    400078: ChainsawIdle:Character1_Ctrl_Neck
+    400080: ChainsawIdle:Character1_Ctrl_Reference
+    400082: ChainsawIdle:Character1_Ctrl_RightAnkleEffector
+    400084: ChainsawIdle:Character1_Ctrl_RightArm
+    400086: ChainsawIdle:Character1_Ctrl_RightElbowEffector
+    400088: ChainsawIdle:Character1_Ctrl_RightFoot
+    400090: ChainsawIdle:Character1_Ctrl_RightForeArm
+    400092: ChainsawIdle:Character1_Ctrl_RightHand
+    400094: ChainsawIdle:Character1_Ctrl_RightHandIndex1
+    400096: ChainsawIdle:Character1_Ctrl_RightHandIndex2
+    400098: ChainsawIdle:Character1_Ctrl_RightHandIndex3
+    400100: ChainsawIdle:Character1_Ctrl_RightHandIndex4
+    400102: ChainsawIdle:Character1_Ctrl_RightHandIndexEffector
+    400104: ChainsawIdle:Character1_Ctrl_RightHandMiddle1
+    400106: ChainsawIdle:Character1_Ctrl_RightHandMiddle2
+    400108: ChainsawIdle:Character1_Ctrl_RightHandMiddle3
+    400110: ChainsawIdle:Character1_Ctrl_RightHandMiddle4
+    400112: ChainsawIdle:Character1_Ctrl_RightHandMiddleEffector
+    400114: ChainsawIdle:Character1_Ctrl_RightHandPinky1
+    400116: ChainsawIdle:Character1_Ctrl_RightHandPinky2
+    400118: ChainsawIdle:Character1_Ctrl_RightHandPinky3
+    400120: ChainsawIdle:Character1_Ctrl_RightHandPinky4
+    400122: ChainsawIdle:Character1_Ctrl_RightHandPinkyEffector
+    400124: ChainsawIdle:Character1_Ctrl_RightHandRing1
+    400126: ChainsawIdle:Character1_Ctrl_RightHandRing2
+    400128: ChainsawIdle:Character1_Ctrl_RightHandRing3
+    400130: ChainsawIdle:Character1_Ctrl_RightHandRing4
+    400132: ChainsawIdle:Character1_Ctrl_RightHandRingEffector
+    400134: ChainsawIdle:Character1_Ctrl_RightHipEffector
+    400136: ChainsawIdle:Character1_Ctrl_RightKneeEffector
+    400138: ChainsawIdle:Character1_Ctrl_RightLeg
+    400140: ChainsawIdle:Character1_Ctrl_RightShoulder
+    400142: ChainsawIdle:Character1_Ctrl_RightShoulderEffector
+    400144: ChainsawIdle:Character1_Ctrl_RightUpLeg
+    400146: ChainsawIdle:Character1_Ctrl_RightWristEffector
+    400148: ChainsawIdle:Character1_Ctrl_Spine
+    400150: ChainsawIdle:Character1_Ctrl_Spine1
+    400152: ChainsawIdle:Character1_Head
+    400154: ChainsawIdle:Character1_Hips
+    400156: ChainsawIdle:Character1_LeftArm
+    400158: ChainsawIdle:Character1_LeftFoot
+    400160: ChainsawIdle:Character1_LeftForeArm
+    400162: ChainsawIdle:Character1_LeftHand
+    400164: ChainsawIdle:Character1_LeftHandIndex1
+    400166: ChainsawIdle:Character1_LeftHandIndex2
+    400168: ChainsawIdle:Character1_LeftHandIndex3
+    400170: ChainsawIdle:Character1_LeftHandIndex4
+    400172: ChainsawIdle:Character1_LeftHandMiddle1
+    400174: ChainsawIdle:Character1_LeftHandMiddle2
+    400176: ChainsawIdle:Character1_LeftHandMiddle3
+    400178: ChainsawIdle:Character1_LeftHandMiddle4
+    400180: ChainsawIdle:Character1_LeftHandPinky1
+    400182: ChainsawIdle:Character1_LeftHandPinky2
+    400184: ChainsawIdle:Character1_LeftHandPinky3
+    400186: ChainsawIdle:Character1_LeftHandPinky4
+    400188: ChainsawIdle:Character1_LeftHandRing1
+    400190: ChainsawIdle:Character1_LeftHandRing2
+    400192: ChainsawIdle:Character1_LeftHandRing3
+    400194: ChainsawIdle:Character1_LeftHandRing4
+    400196: ChainsawIdle:Character1_LeftLeg
+    400198: ChainsawIdle:Character1_LeftShoulder
+    400200: ChainsawIdle:Character1_LeftUpLeg
+    400202: ChainsawIdle:Character1_Neck
+    400204: ChainsawIdle:Character1_Reference
+    400206: ChainsawIdle:Character1_RightArm
+    400208: ChainsawIdle:Character1_RightFoot
+    400210: ChainsawIdle:Character1_RightForeArm
+    400212: ChainsawIdle:Character1_RightHand
+    400214: ChainsawIdle:Character1_RightHandIndex1
+    400216: ChainsawIdle:Character1_RightHandIndex2
+    400218: ChainsawIdle:Character1_RightHandIndex3
+    400220: ChainsawIdle:Character1_RightHandIndex4
+    400222: ChainsawIdle:Character1_RightHandMiddle1
+    400224: ChainsawIdle:Character1_RightHandMiddle2
+    400226: ChainsawIdle:Character1_RightHandMiddle3
+    400228: ChainsawIdle:Character1_RightHandMiddle4
+    400230: ChainsawIdle:Character1_RightHandPinky1
+    400232: ChainsawIdle:Character1_RightHandPinky2
+    400234: ChainsawIdle:Character1_RightHandPinky3
+    400236: ChainsawIdle:Character1_RightHandPinky4
+    400238: ChainsawIdle:Character1_RightHandRing1
+    400240: ChainsawIdle:Character1_RightHandRing2
+    400242: ChainsawIdle:Character1_RightHandRing3
+    400244: ChainsawIdle:Character1_RightHandRing4
+    400246: ChainsawIdle:Character1_RightLeg
+    400248: ChainsawIdle:Character1_RightShoulder
+    400250: ChainsawIdle:Character1_RightUpLeg
+    400252: ChainsawIdle:Character1_Spine
+    400254: ChainsawIdle:Character1_Spine1
+    400256: ChainsawIdle:K1
+    400258: ChainsawIdle:WeaponHolder
+    400260: //RootNode
+    4300000: ChainsawIdle:K1
+    7400000: ChainsawRun
+    9500000: //RootNode
+    13700000: ChainsawIdle:K1
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ChainsawIdle_Killer3_Material__3
+    second: {fileID: 2100000, guid: 1ca116d50ee3e304dbf6474d88398f8c, type: 2}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 0
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: "Avatar Rig Configuration mis-match. Inbetween bone rotation
+      in configuration does not match rotation in animation file:\n\t'ChainsawIdle:Character1_Spine1'
+      : rotation error = 7.953025 deg\n"
+    animationImportErrors: 
+    animationImportWarnings: "\nClip 'Take 001' has import animation warnings that
+      might lower retargeting quality:\nNote: Activate translation DOF on avatar
+      to improve retargeting quality.\n\t'ChainsawIdle:Character1_Spine1' is inbetween
+      humanoid transforms and has rotation animation that will be discarded.\n"
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    animationCompression: 3
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: ChainsawRun
+      takeName: Take 001
+      firstFrame: 0
+      lastFrame: 20
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 1
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 1
+      keepOriginalPositionY: 0
+      keepOriginalPositionXZ: 1
+      heightFromFeet: 1
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human:
+    - boneName: ChainsawIdle:Character1_Hips
+      humanName: Hips
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ChainsawIdle:Character1_LeftUpLeg
+      humanName: LeftUpperLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ChainsawIdle:Character1_RightUpLeg
+      humanName: RightUpperLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ChainsawIdle:Character1_LeftLeg
+      humanName: LeftLowerLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ChainsawIdle:Character1_RightLeg
+      humanName: RightLowerLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ChainsawIdle:Character1_LeftFoot
+      humanName: LeftFoot
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ChainsawIdle:Character1_RightFoot
+      humanName: RightFoot
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ChainsawIdle:Character1_Spine
+      humanName: Spine
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ChainsawIdle:Character1_Neck
+      humanName: Neck
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ChainsawIdle:Character1_Head
+      humanName: Head
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ChainsawIdle:Character1_LeftShoulder
+      humanName: LeftShoulder
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ChainsawIdle:Character1_RightShoulder
+      humanName: RightShoulder
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ChainsawIdle:Character1_LeftArm
+      humanName: LeftUpperArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ChainsawIdle:Character1_RightArm
+      humanName: RightUpperArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ChainsawIdle:Character1_LeftForeArm
+      humanName: LeftLowerArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ChainsawIdle:Character1_RightForeArm
+      humanName: RightLowerArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ChainsawIdle:Character1_LeftHand
+      humanName: LeftHand
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ChainsawIdle:Character1_RightHand
+      humanName: RightHand
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ChainsawIdle:Character1_LeftHandIndex1
+      humanName: Left Index Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ChainsawIdle:Character1_LeftHandIndex2
+      humanName: Left Index Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ChainsawIdle:Character1_LeftHandIndex3
+      humanName: Left Index Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ChainsawIdle:Character1_LeftHandMiddle1
+      humanName: Left Middle Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ChainsawIdle:Character1_LeftHandMiddle2
+      humanName: Left Middle Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ChainsawIdle:Character1_LeftHandMiddle3
+      humanName: Left Middle Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ChainsawIdle:Character1_LeftHandRing1
+      humanName: Left Ring Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ChainsawIdle:Character1_LeftHandRing2
+      humanName: Left Ring Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ChainsawIdle:Character1_LeftHandRing3
+      humanName: Left Ring Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ChainsawIdle:Character1_LeftHandPinky1
+      humanName: Left Little Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ChainsawIdle:Character1_LeftHandPinky2
+      humanName: Left Little Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ChainsawIdle:Character1_LeftHandPinky3
+      humanName: Left Little Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ChainsawIdle:Character1_RightHandIndex1
+      humanName: Right Index Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ChainsawIdle:Character1_RightHandIndex2
+      humanName: Right Index Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ChainsawIdle:Character1_RightHandIndex3
+      humanName: Right Index Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ChainsawIdle:Character1_RightHandMiddle1
+      humanName: Right Middle Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ChainsawIdle:Character1_RightHandMiddle2
+      humanName: Right Middle Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ChainsawIdle:Character1_RightHandMiddle3
+      humanName: Right Middle Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ChainsawIdle:Character1_RightHandRing1
+      humanName: Right Ring Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ChainsawIdle:Character1_RightHandRing2
+      humanName: Right Ring Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ChainsawIdle:Character1_RightHandRing3
+      humanName: Right Ring Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ChainsawIdle:Character1_RightHandPinky1
+      humanName: Right Little Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ChainsawIdle:Character1_RightHandPinky2
+      humanName: Right Little Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ChainsawIdle:Character1_RightHandPinky3
+      humanName: Right Little Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    skeleton:
+    - name: ChainsawRun(Clone)
+      parentName: 
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_Reference
+      parentName: ChainsawRun(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_ChestEndEffector
+      parentName: ChainsawIdle:Character1_Ctrl_Reference
+      position: {x: -0.069473684, y: 1.1217427, z: 0.023623794}
+      rotation: {x: 0.103916965, y: 1.790018e-17, z: -1.1678431e-16, w: 0.994586}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_ChestOriginEffector
+      parentName: ChainsawIdle:Character1_Ctrl_Reference
+      position: {x: -0.06947369, y: 0.80336696, z: 0.015330185}
+      rotation: {x: 0.034694687, y: 5.9763208e-18, z: -1.130799e-16, w: 0.999398}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_HeadEffector
+      parentName: ChainsawIdle:Character1_Ctrl_Reference
+      position: {x: 0.00050387264, y: 1.7077193, z: 0.08107516}
+      rotation: {x: 1.4163847e-16, y: 2.7415802e-32, z: -1.110223e-16, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_Hips
+      parentName: ChainsawIdle:Character1_Ctrl_Reference
+      position: {x: -0.0742449, y: 0.60917896, z: 0.010847573}
+      rotation: {x: 1.4163847e-16, y: 2.7415802e-32, z: -1.110223e-16, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_LeftUpLeg
+      parentName: ChainsawIdle:Character1_Ctrl_Hips
+      position: {x: -0.2298277, y: -0.0925576, z: 0.004723911}
+      rotation: {x: -0.29019693, y: 0.011105971, z: 0.0448649, w: 0.9558502}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_LeftLeg
+      parentName: ChainsawIdle:Character1_Ctrl_LeftUpLeg
+      position: {x: -0.02505352, y: -0.2635599, z: 0.03358303}
+      rotation: {x: 0.3352279, y: -0.011526395, z: -0.010510351, w: 0.94200796}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_LeftFoot
+      parentName: ChainsawIdle:Character1_Ctrl_LeftLeg
+      position: {x: -0, y: -0.36003903, z: -0.018055925}
+      rotation: {x: -0.04754325, y: -0.008361986, z: -0.033485644, w: 0.9982727}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_RightUpLeg
+      parentName: ChainsawIdle:Character1_Ctrl_Hips
+      position: {x: 0.22982769, y: -0.0925576, z: 0.004723911}
+      rotation: {x: -0.3037324, y: 0.027363174, z: -0.07403435, w: 0.9494824}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_RightLeg
+      parentName: ChainsawIdle:Character1_Ctrl_RightUpLeg
+      position: {x: 0.02505352, y: -0.2635599, z: 0.03358303}
+      rotation: {x: 0.5790614, y: 0.00112365, z: 0.05335242, w: 0.81353563}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_RightFoot
+      parentName: ChainsawIdle:Character1_Ctrl_RightLeg
+      position: {x: -3.5527136e-17, y: -0.36003903, z: -0.018055925}
+      rotation: {x: -0.36002362, y: 0.00709342, z: 0.029677723, w: 0.9324441}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_Spine
+      parentName: ChainsawIdle:Character1_Ctrl_Hips
+      position: {x: -0, y: 0.18183166, z: 0}
+      rotation: {x: 0.034694687, y: 5.9763208e-18, z: -1.130799e-16, w: 0.999398}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_Spine1
+      parentName: ChainsawIdle:Character1_Ctrl_Spine
+      position: {x: -6.938894e-20, y: 0.18773666, z: 0}
+      rotation: {x: 0.06934756, y: 1.19454385e-17, z: -1.1500135e-16, w: 0.99759257}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_LeftShoulder
+      parentName: ChainsawIdle:Character1_Ctrl_Spine1
+      position: {x: -0.23866832, y: 0.12728286, z: -0.031721044}
+      rotation: {x: 0, y: -0, z: -8.4703295e-22, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_LeftArm
+      parentName: ChainsawIdle:Character1_Ctrl_LeftShoulder
+      position: {x: -0.1070725, y: 0.000001373291, z: 0}
+      rotation: {x: -0.1820397, y: 0.7843399, z: 0.19727924, w: 0.55924356}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_LeftForeArm
+      parentName: ChainsawIdle:Character1_Ctrl_LeftArm
+      position: {x: -0.19058074, y: -0.0022502136, z: 0.0073054694}
+      rotation: {x: 0.000070663395, y: 0.019167399, z: -0.005690944, w: 0.9998001}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_LeftHand
+      parentName: ChainsawIdle:Character1_Ctrl_LeftForeArm
+      position: {x: -0.34216842, y: -0.011356354, z: 0}
+      rotation: {x: 0.0030922142, y: -0.28280982, z: -0.24376866, w: 0.9276777}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_LeftHandIndex1
+      parentName: ChainsawIdle:Character1_Ctrl_LeftHand
+      position: {x: -0.046895217, y: -0.07478111, z: 0.11692797}
+      rotation: {x: 0.32453215, y: -0.0015441653, z: -0.38581002, w: 0.86361283}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_LeftHandIndex2
+      parentName: ChainsawIdle:Character1_Ctrl_LeftHandIndex1
+      position: {x: -0.041871183, y: 0.00018562317, z: 0.057587795}
+      rotation: {x: 0.61295587, y: 0.0000023014659, z: 0.4134808, w: 0.6732895}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_LeftHandIndex3
+      parentName: ChainsawIdle:Character1_Ctrl_LeftHandIndex2
+      position: {x: -0.038007125, y: -0.00000015258789, z: 0.05634283}
+      rotation: {x: 0.3321924, y: 0.020785633, z: 0.26726317, w: 0.90431553}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_LeftHandIndex4
+      parentName: ChainsawIdle:Character1_Ctrl_LeftHandIndex3
+      position: {x: -0.012245941, y: -0.000000076293944, z: 0.015280762}
+      rotation: {x: 5.587604e-16, y: -0.000000011507825, z: 0.000000039501106, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_LeftHandMiddle1
+      parentName: ChainsawIdle:Character1_Ctrl_LeftHand
+      position: {x: -0.21011871, y: -0.017414017, z: 0.08476787}
+      rotation: {x: 0.07695643, y: 0.0022264833, z: 0.5972097, w: 0.7983817}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_LeftHandMiddle2
+      parentName: ChainsawIdle:Character1_Ctrl_LeftHandMiddle1
+      position: {x: -0.08279739, y: 0.00067359925, z: 0.0098173525}
+      rotation: {x: 0.08838948, y: -0.0005344134, z: 0.5736717, w: 0.814302}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_LeftHandMiddle3
+      parentName: ChainsawIdle:Character1_Ctrl_LeftHandMiddle2
+      position: {x: -0.07431259, y: 0.00044921873, z: 0.011450243}
+      rotation: {x: 0.039854717, y: 0.00009673771, z: 0.2600903, w: 0.9647615}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_LeftHandMiddle4
+      parentName: ChainsawIdle:Character1_Ctrl_LeftHandMiddle3
+      position: {x: -0.019794159, y: 0, z: 0.0032323455}
+      rotation: {x: 6.0431896e-17, y: 0.000000014204483, z: 5.1363936e-17, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_LeftHandPinky1
+      parentName: ChainsawIdle:Character1_Ctrl_LeftHand
+      position: {x: -0.20898917, y: -0.003764038, z: -0.07816385}
+      rotation: {x: -0.009440988, y: 0.103703044, z: 0.59160745, w: 0.79947305}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_LeftHandPinky2
+      parentName: ChainsawIdle:Character1_Ctrl_LeftHandPinky1
+      position: {x: -0.06707756, y: 0.0027410125, z: -0.014269776}
+      rotation: {x: -0.10395959, y: 0.004281361, z: 0.5704505, w: 0.8147149}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_LeftHandPinky3
+      parentName: ChainsawIdle:Character1_Ctrl_LeftHandPinky2
+      position: {x: -0.08645416, y: 0.0035604094, z: -0.015782231}
+      rotation: {x: -0.04998681, y: -0.0056096097, z: 0.29076442, w: 0.9554716}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_LeftHandPinky4
+      parentName: ChainsawIdle:Character1_Ctrl_LeftHandPinky3
+      position: {x: -0.016464157, y: 0.0003553009, z: -0.0025621317}
+      rotation: {x: -7.068998e-17, y: -4.718448e-16, z: -1.7097868e-16, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_LeftHandRing1
+      parentName: ChainsawIdle:Character1_Ctrl_LeftHand
+      position: {x: -0.2142289, y: 0.004522934, z: 0.010617018}
+      rotation: {x: 0.031140134, y: 0.064677164, z: 0.48279652, w: 0.8727856}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_LeftHandRing2
+      parentName: ChainsawIdle:Character1_Ctrl_LeftHandRing1
+      position: {x: -0.08422249, y: 0.003341217, z: -0.00003320217}
+      rotation: {x: 0.022899417, y: -0.0014369019, z: 0.6816511, w: 0.7313175}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_LeftHandRing3
+      parentName: ChainsawIdle:Character1_Ctrl_LeftHandRing2
+      position: {x: -0.088637844, y: 0.005561981, z: 0.002989421}
+      rotation: {x: 0.003140748, y: 0.022334177, z: 0.31693473, w: 0.9481792}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_LeftHandRing4
+      parentName: ChainsawIdle:Character1_Ctrl_LeftHandRing3
+      position: {x: -0.01923355, y: 0, z: -0.000000009536743}
+      rotation: {x: 6.1232336e-17, y: 1.2246466e-16, z: 6.123237e-17, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_Neck
+      parentName: ChainsawIdle:Character1_Ctrl_Spine1
+      position: {x: -0, y: 0.18773673, z: 0}
+      rotation: {x: 1.4163847e-16, y: 2.7415802e-32, z: -1.110223e-16, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_Head
+      parentName: ChainsawIdle:Character1_Ctrl_Neck
+      position: {x: -0, y: 0.45125136, z: 0}
+      rotation: {x: 1.4163847e-16, y: 2.7415802e-32, z: -1.110223e-16, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_RightShoulder
+      parentName: ChainsawIdle:Character1_Ctrl_Spine1
+      position: {x: 0.23866831, y: 0.12728286, z: -0.031721044}
+      rotation: {x: -0.00000006885358, y: 0.000000014519479, z: -0.20634945, w: 0.9784784}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_RightArm
+      parentName: ChainsawIdle:Character1_Ctrl_RightShoulder
+      position: {x: 0.107072525, y: 0.000001373291, z: 0}
+      rotation: {x: 0.4545986, y: 0.38930503, z: -0.11749824, w: 0.7924493}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_RightForeArm
+      parentName: ChainsawIdle:Character1_Ctrl_RightArm
+      position: {x: 0.19058074, y: -0.0022502136, z: 0.0073054694}
+      rotation: {x: 0.031624563, y: 0.9441239, z: -0.010999423, w: -0.32788554}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_RightHand
+      parentName: ChainsawIdle:Character1_Ctrl_RightForeArm
+      position: {x: 0.3421684, y: -0.011356354, z: 0}
+      rotation: {x: 0.59314156, y: -0.215302, z: 0.29480997, w: 0.71757597}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_RightHandIndex1
+      parentName: ChainsawIdle:Character1_Ctrl_RightHand
+      position: {x: 0.04689529, y: -0.07478111, z: 0.11692797}
+      rotation: {x: 0.33640745, y: 0.1919845, z: -0.08367182, w: 0.91813457}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_RightHandIndex2
+      parentName: ChainsawIdle:Character1_Ctrl_RightHandIndex1
+      position: {x: 0.041871108, y: 0.00018562317, z: 0.057587795}
+      rotation: {x: 0.47643098, y: -0.0000016187406, z: -0.32138643, w: 0.8183668}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_RightHandIndex3
+      parentName: ChainsawIdle:Character1_Ctrl_RightHandIndex2
+      position: {x: 0.0380072, y: -0.00000015258789, z: 0.05634283}
+      rotation: {x: 0.19476968, y: -0.01809453, z: -0.15402845, w: 0.9685105}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_RightHandIndex4
+      parentName: ChainsawIdle:Character1_Ctrl_RightHandIndex3
+      position: {x: 0.012245865, y: -0.000000076293944, z: 0.015280762}
+      rotation: {x: -0.00000018901967, y: 0.00000020925252, z: 0.00000015147964, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_RightHandMiddle1
+      parentName: ChainsawIdle:Character1_Ctrl_RightHand
+      position: {x: 0.21011871, y: -0.017414017, z: 0.08476787}
+      rotation: {x: -0.019482194, y: 0.038984742, z: -0.6182418, w: 0.7847788}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_RightHandMiddle2
+      parentName: ChainsawIdle:Character1_Ctrl_RightHandMiddle1
+      position: {x: 0.08279739, y: 0.00067359925, z: 0.0098173525}
+      rotation: {x: 0.1019438, y: 0.00061624375, z: -0.66164356, w: 0.74285597}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_RightHandMiddle3
+      parentName: ChainsawIdle:Character1_Ctrl_RightHandMiddle2
+      position: {x: 0.07431259, y: 0.00044921873, z: 0.011450243}
+      rotation: {x: 0.051869415, y: -0.01123719, z: -0.32126173, w: 0.9455021}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_RightHandMiddle4
+      parentName: ChainsawIdle:Character1_Ctrl_RightHandMiddle3
+      position: {x: 0.019794159, y: 0, z: 0.0032323455}
+      rotation: {x: -5.9068465e-15, y: 0.00000004745855, z: 0.00000011718449, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_RightHandPinky1
+      parentName: ChainsawIdle:Character1_Ctrl_RightHand
+      position: {x: 0.20898917, y: -0.003764038, z: -0.07816385}
+      rotation: {x: -0.0792753, y: 0.04672713, z: -0.5992079, w: 0.7952873}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_RightHandPinky2
+      parentName: ChainsawIdle:Character1_Ctrl_RightHandPinky1
+      position: {x: 0.06707764, y: 0.0027410125, z: -0.014269776}
+      rotation: {x: -0.12107496, y: -0.0049863677, z: -0.66436464, w: 0.7375199}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_RightHandPinky3
+      parentName: ChainsawIdle:Character1_Ctrl_RightHandPinky2
+      position: {x: 0.086454086, y: 0.0035604094, z: -0.015782231}
+      rotation: {x: -0.056405958, y: -0.011530945, z: -0.36181915, w: 0.93046886}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_RightHandPinky4
+      parentName: ChainsawIdle:Character1_Ctrl_RightHandPinky3
+      position: {x: 0.016464157, y: 0.0003553009, z: -0.0025621317}
+      rotation: {x: -0.00000003654012, y: -0.000000050882434, z: 0.000000071538885,
+        w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_RightHandRing1
+      parentName: ChainsawIdle:Character1_Ctrl_RightHand
+      position: {x: 0.21422897, y: 0.004522934, z: 0.010617018}
+      rotation: {x: -0.09613416, y: -0.003402438, z: -0.49287373, w: 0.86476713}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_RightHandRing2
+      parentName: ChainsawIdle:Character1_Ctrl_RightHandRing1
+      position: {x: 0.08422241, y: 0.003341217, z: -0.00003320217}
+      rotation: {x: 0.026035493, y: 0.0016337617, z: -0.7750065, w: 0.63141465}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_RightHandRing3
+      parentName: ChainsawIdle:Character1_Ctrl_RightHandRing2
+      position: {x: 0.088637844, y: 0.005561981, z: 0.002989421}
+      rotation: {x: -0.00028956088, y: -0.021104027, z: -0.40717772, w: 0.9131051}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_RightHandRing4
+      parentName: ChainsawIdle:Character1_Ctrl_RightHandRing3
+      position: {x: 0.01923355, y: 0, z: -0.000000009536743}
+      rotation: {x: 0.000000049324832, y: 0.00000006587936, z: -0.000000012028202,
+        w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_HipsEffector
+      parentName: ChainsawIdle:Character1_Ctrl_Reference
+      position: {x: -0.0742449, y: 0.5166214, z: 0.015571484}
+      rotation: {x: 1.4163847e-16, y: 2.7415802e-32, z: -1.110223e-16, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_LeftAnkleEffector
+      parentName: ChainsawIdle:Character1_Ctrl_Reference
+      position: {x: -0.2696952, y: -0.010935136, z: 0.17120889}
+      rotation: {x: 5.9067806e-31, y: -0.000000113829294, z: -1.2246467e-16, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_LeftElbowEffector
+      parentName: ChainsawIdle:Character1_Ctrl_Reference
+      position: {x: -0.35422233, y: 1.1312777, z: 0.20123905}
+      rotation: {x: -0.12406415, y: 0.7656133, z: 0.28350875, w: 0.5639743}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_LeftHandIndexEffector
+      parentName: ChainsawIdle:Character1_Ctrl_Reference
+      position: {x: -1.0030308, y: 1.0671978, z: 0.18553728}
+      rotation: {x: 0.7612646, y: -0.48733017, z: 0.35855228, w: 0.23329349}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_LeftHandMiddleEffector
+      parentName: ChainsawIdle:Character1_Ctrl_Reference
+      position: {x: -1.0274857, y: 1.0400822, z: 0.15305114}
+      rotation: {x: 0.16346021, y: 0.013636114, z: 0.98568237, w: 0.039052937}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_LeftHandPinkyEffector
+      parentName: ChainsawIdle:Character1_Ctrl_Reference
+      position: {x: -1.0289956, y: 1.0578394, z: -0.014002997}
+      rotation: {x: -0.014583747, y: -0.00782252, z: 0.999637, w: 0.021261692}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_LeftHandRingEffector
+      parentName: ChainsawIdle:Character1_Ctrl_Reference
+      position: {x: -1.0518982, y: 1.0609071, z: 0.08259528}
+      rotation: {x: 0.093288206, y: 0.016603388, z: 0.99546236, w: -0.008736534}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_LeftHipEffector
+      parentName: ChainsawIdle:Character1_Ctrl_Reference
+      position: {x: -0.3040726, y: 0.5418974, z: 0.015571485}
+      rotation: {x: -0.32483542, y: 0.013938818, z: 0.056488577, w: 0.9439792}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_LeftKneeEffector
+      parentName: ChainsawIdle:Character1_Ctrl_Reference
+      position: {x: -0.2984688, y: 0.34388164, z: 0.20978421}
+      rotation: {x: 0.028489215, y: 0.008042419, z: 0.041108776, w: 0.99871606}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_LeftShoulderEffector
+      parentName: ChainsawIdle:Character1_Ctrl_Reference
+      position: {x: -0.4199858, y: 1.159606, z: 0.024456238}
+      rotation: {x: -0.114288025, y: 0.7553364, z: 0.28909367, w: 0.57691425}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_LeftWristEffector
+      parentName: ChainsawIdle:Character1_Ctrl_Reference
+      position: {x: -0.2344633, y: 1.0776786, z: 0.517456}
+      rotation: {x: -0.21980108, y: 0.52137864, z: 0.15824458, w: 0.8092037}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_RightAnkleEffector
+      parentName: ChainsawIdle:Character1_Ctrl_Reference
+      position: {x: 0.13310643, y: 0.07002098, z: -0.06079381}
+      rotation: {x: 3.3838286e-15, y: -0.0000000895763, z: -0.00000004571947, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_RightElbowEffector
+      parentName: ChainsawIdle:Character1_Ctrl_Reference
+      position: {x: 0.39136928, y: 1.1209794, z: -0.12620892}
+      rotation: {x: -0.046726506, y: -0.5399536, z: -0.63846934, w: 0.5464647}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_RightHandIndexEffector
+      parentName: ChainsawIdle:Character1_Ctrl_Reference
+      position: {x: 0.9691522, y: 0.9953889, z: 0.17152333}
+      rotation: {x: 0.70829034, y: 0.21253069, z: -0.5699451, w: 0.35821518}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_RightHandMiddleEffector
+      parentName: ChainsawIdle:Character1_Ctrl_Reference
+      position: {x: 1.0162799, y: 1.0654777, z: 0.1741393}
+      rotation: {x: -0.06986333, y: 0.08168956, z: 0.98228645, w: 0.1534903}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_RightHandPinkyEffector
+      parentName: ChainsawIdle:Character1_Ctrl_Reference
+      position: {x: 1.0146792, y: 1.0853974, z: 0.003165124}
+      rotation: {x: 0.19662315, y: -0.033960268, z: 0.96093124, w: 0.19182615}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_RightHandRingEffector
+      parentName: ChainsawIdle:Character1_Ctrl_Reference
+      position: {x: 1.0394577, y: 1.0931416, z: 0.10674306}
+      rotation: {x: -0.0019826638, y: 0.0936152, z: 0.96338004, w: 0.25125933}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_RightHipEffector
+      parentName: ChainsawIdle:Character1_Ctrl_Reference
+      position: {x: 0.1555828, y: 0.5269918, z: 0.015571484}
+      rotation: {x: -0.3037324, y: 0.027363183, z: -0.07403438, w: 0.9494824}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_RightKneeEffector
+      parentName: ChainsawIdle:Character1_Ctrl_Reference
+      position: {x: 0.1496559, y: 0.32878697, z: 0.19746463}
+      rotation: {x: 0.3600017, y: -0.011236898, z: -0.028646033, w: 0.93244404}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_RightShoulderEffector
+      parentName: ChainsawIdle:Character1_Ctrl_Reference
+      position: {x: 0.26237833, y: 1.1175895, z: 0.01425211}
+      rotation: {x: 0.6106941, y: 0.31818208, z: -0.24239542, w: 0.68341595}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Ctrl_RightWristEffector
+      parentName: ChainsawIdle:Character1_Ctrl_Reference
+      position: {x: 0.24655655, y: 0.8974316, z: 0.08888154}
+      rotation: {x: 0.0060463664, y: 0.87003994, z: -0.03328221, w: -0.4918194}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Reference
+      parentName: ChainsawRun(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Hips
+      parentName: ChainsawIdle:Character1_Reference
+      position: {x: 0.000000022351742, y: 0.79722834, z: 0.010847573}
+      rotation: {x: -0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_LeftUpLeg
+      parentName: ChainsawIdle:Character1_Hips
+      position: {x: -0.22982772, y: -0.0925576, z: 0.004723911}
+      rotation: {x: -0.000000023283064, y: 0.000000005820766, z: -0.0000000014551914,
+        w: 1}
+      scale: {x: 0.9999999, y: 1, z: 1.0000001}
+    - name: ChainsawIdle:Character1_LeftLeg
+      parentName: ChainsawIdle:Character1_LeftUpLeg
+      position: {x: -0.025052484, y: -0.26356652, z: 0.03353308}
+      rotation: {x: 0.000000026193447, y: -0.000000006548362, z: -0.0000000033651304,
+        w: 1}
+      scale: {x: 1, y: 1.0000001, z: 1}
+    - name: ChainsawIdle:Character1_LeftFoot
+      parentName: ChainsawIdle:Character1_LeftLeg
+      position: {x: -0.0000000067085795, y: -0.36003947, z: -0.01805612}
+      rotation: {x: -0.000000002910383, y: 7.2759576e-10, z: 0.000000004820322, w: 1}
+      scale: {x: 1, y: 1.0000001, z: 1}
+    - name: ChainsawIdle:Character1_RightUpLeg
+      parentName: ChainsawIdle:Character1_Hips
+      position: {x: 0.22982769, y: -0.0925576, z: 0.004723911}
+      rotation: {x: -0.000000023283064, y: 0.000000004001776, z: 0.0000000054569678,
+        w: 1}
+      scale: {x: 1, y: 1.0000001, z: 0.9999998}
+    - name: ChainsawIdle:Character1_RightLeg
+      parentName: ChainsawIdle:Character1_RightUpLeg
+      position: {x: 0.025053756, y: -0.26355976, z: 0.03358507}
+      rotation: {x: -0, y: -0.0000000031377558, z: -0.0000000053660183, w: 1}
+      scale: {x: 1.0000002, y: 0.9999999, z: 1.0000005}
+    - name: ChainsawIdle:Character1_RightFoot
+      parentName: ChainsawIdle:Character1_RightLeg
+      position: {x: -0.000000015083804, y: -0.3600389, z: -0.018056124}
+      rotation: {x: 0.000000023283068, y: -8.6400886e-10, z: -9.0949026e-11, w: 1}
+      scale: {x: 1.0000001, y: 1.0000002, z: 1}
+    - name: ChainsawIdle:Character1_Spine
+      parentName: ChainsawIdle:Character1_Hips
+      position: {x: -0, y: 0.1818317, z: 0}
+      rotation: {x: -0.000000002910383, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_Spine1
+      parentName: ChainsawIdle:Character1_Spine
+      position: {x: 8.881784e-18, y: 0.18773668, z: 7.6070916e-10}
+      rotation: {x: 0.000000002910383, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_LeftShoulder
+      parentName: ChainsawIdle:Character1_Spine1
+      position: {x: -0.23866825, y: 0.12728287, z: -0.031721044}
+      rotation: {x: -0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1.0000002, z: 1.0000002}
+    - name: ChainsawIdle:Character1_LeftArm
+      parentName: ChainsawIdle:Character1_LeftShoulder
+      position: {x: -0.10707237, y: 0.0000014057426, z: -0.000000007781147}
+      rotation: {x: -0, y: -0, z: 0.000012805685, w: 1}
+      scale: {x: 1.000001, y: 1.0000001, z: 1.0000004}
+    - name: ChainsawIdle:Character1_LeftForeArm
+      parentName: ChainsawIdle:Character1_LeftArm
+      position: {x: -0.19058084, y: -0.0022453556, z: 0.007305361}
+      rotation: {x: 0.0000000611149, y: -0.000000023291298, z: -0.00013471581, w: 1}
+      scale: {x: 1.0000006, y: 1.0000001, z: 1.0000006}
+    - name: ChainsawIdle:Character1_LeftHand
+      parentName: ChainsawIdle:Character1_LeftForeArm
+      position: {x: -0.34216574, y: -0.011439709, z: -0.0000001999634}
+      rotation: {x: -0.00000006401347, y: 0.000000023320409, z: 0.0006416581, w: 0.9999998}
+      scale: {x: 0.9999996, y: 1.0000001, z: 1}
+    - name: ChainsawIdle:Character1_LeftHandIndex1
+      parentName: ChainsawIdle:Character1_LeftHand
+      position: {x: -0.046972957, y: -0.07473234, z: 0.11692793}
+      rotation: {x: 0.024610754, y: -0.20522925, z: 0.016648892, w: 0.9782628}
+      scale: {x: 1.0000004, y: 1.0000006, z: 1.0000001}
+    - name: ChainsawIdle:Character1_LeftHandIndex2
+      parentName: ChainsawIdle:Character1_LeftHandIndex1
+      position: {x: -0.0418715, y: 0.00007600119, z: 0.057587814}
+      rotation: {x: 0.00012104399, y: -0.034899317, z: 0.003457592, w: 0.9993849}
+      scale: {x: 1.0000002, y: 1.0000007, z: 1.0000005}
+    - name: ChainsawIdle:Character1_LeftHandIndex3
+      parentName: ChainsawIdle:Character1_LeftHandIndex2
+      position: {x: -0.03398392, y: 0.00016333432, z: 0.05885681}
+      rotation: {x: 0.0008893957, y: 0.32556564, z: -0.0044303853, w: 0.94550866}
+      scale: {x: 1.0000005, y: 1.0000007, z: 1.0000007}
+    - name: ChainsawIdle:Character1_LeftHandIndex4
+      parentName: ChainsawIdle:Character1_LeftHandIndex3
+      position: {x: -0.018697107, y: -0.00006667892, z: 0.0058205295}
+      rotation: {x: -0.002287049, y: 0.98768175, z: -0.0030240244, w: -0.15643008}
+      scale: {x: 1.0000006, y: 1.0000005, z: 1.0000008}
+    - name: ChainsawIdle:Character1_LeftHandMiddle1
+      parentName: ChainsawIdle:Character1_LeftHand
+      position: {x: -0.21013673, y: -0.017195597, z: 0.08476779}
+      rotation: {x: 0.002533359, y: 0.05601192, z: 0.016069872, w: 0.9982976}
+      scale: {x: 1, y: 1.0000007, z: 1}
+    - name: ChainsawIdle:Character1_LeftHandMiddle2
+      parentName: ChainsawIdle:Character1_LeftHandMiddle1
+      position: {x: -0.08279887, y: 0.00045686096, z: 0.009817341}
+      rotation: {x: 0.00000023005992, y: -0.00006221789, z: 0.0034649516, w: 0.999994}
+      scale: {x: 1.0000002, y: 0.9999998, z: 1}
+    - name: ChainsawIdle:Character1_LeftHandMiddle3
+      parentName: ChainsawIdle:Character1_LeftHandMiddle2
+      position: {x: -0.07430846, y: 0.00076967274, z: 0.011459513}
+      rotation: {x: 0.0000016326193, y: 0.0005908244, z: -0.004581421, w: 0.9999894}
+      scale: {x: 1.0000002, y: 1.0000006, z: 1.0000001}
+    - name: ChainsawIdle:Character1_LeftHandMiddle4
+      parentName: ChainsawIdle:Character1_LeftHandMiddle3
+      position: {x: -0.019797383, y: -0.00009597247, z: 0.003211392}
+      rotation: {x: 0.0000045985994, y: -0.00251875, z: 0.0043119127, w: 0.9999876}
+      scale: {x: 1.0000007, y: 1.0000008, z: 1.0000007}
+    - name: ChainsawIdle:Character1_LeftHandRing1
+      parentName: ChainsawIdle:Character1_LeftHand
+      position: {x: -0.21422407, y: 0.0047456687, z: 0.010616939}
+      rotation: {x: 0.00455643, y: 0.11755214, z: 0.033857618, w: 0.99247897}
+      scale: {x: 1.0000001, y: 1.0000005, z: 1.0000001}
+    - name: ChainsawIdle:Character1_LeftHandRing2
+      parentName: ChainsawIdle:Character1_LeftHandRing1
+      position: {x: -0.084230945, y: 0.00312069, z: -0.000033205106}
+      rotation: {x: 0.00000019805813, y: -0.000062247, z: 0.0034649638, w: 0.999994}
+      scale: {x: 1.0000007, y: 1.0000008, z: 1.0000006}
+    - name: ChainsawIdle:Character1_LeftHandRing3
+      parentName: ChainsawIdle:Character1_LeftHandRing2
+      position: {x: -0.08861263, y: 0.005944146, z: 0.0030004568}
+      rotation: {x: 0.0000016203014, y: 0.0005908742, z: -0.0045814216, w: 0.9999894}
+      scale: {x: 1.0000007, y: 1.0000012, z: 1.0000005}
+    - name: ChainsawIdle:Character1_LeftHandRing4
+      parentName: ChainsawIdle:Character1_LeftHandRing3
+      position: {x: -0.019233275, y: -0.00009327071, z: -0.000020340642}
+      rotation: {x: 0.000004624628, y: -0.0025189049, z: 0.0043118894, w: 0.9999876}
+      scale: {x: 1.0000011, y: 1.0000014, z: 1.0000006}
+    - name: ChainsawIdle:Character1_LeftHandPinky1
+      parentName: ChainsawIdle:Character1_LeftHand
+      position: {x: -0.20899303, y: -0.003546767, z: -0.07816391}
+      rotation: {x: -0.0005927112, y: 0.22377321, z: 0.043158483, w: 0.973685}
+      scale: {x: 1.0000005, y: 1.0000008, z: 1.0000001}
+    - name: ChainsawIdle:Character1_LeftHandPinky2
+      parentName: ChainsawIdle:Character1_LeftHandPinky1
+      position: {x: -0.06708453, y: 0.00256536, z: -0.014269784}
+      rotation: {x: 0.0000000058308585, y: 0.000000026173046, z: 0.003478166, w: 0.99999404}
+      scale: {x: 1.0000012, y: 1.0000013, z: 1.0000004}
+    - name: ChainsawIdle:Character1_LeftHandPinky3
+      parentName: ChainsawIdle:Character1_LeftHandPinky2
+      position: {x: -0.0864379, y: 0.0039354037, z: -0.015782189}
+      rotation: {x: 0.000000023392424, y: -1.0961719e-10, z: -0.0047078603, w: 0.999989}
+      scale: {x: 1.0000002, y: 0.99999994, z: 1}
+    - name: ChainsawIdle:Character1_LeftHandPinky4
+      parentName: ChainsawIdle:Character1_LeftHandPinky3
+      position: {x: -0.0164657, y: 0.00027175574, z: -0.002562163}
+      rotation: {x: -0.00000003498067, y: -0.000000011584916, z: 0.004851237, w: 0.9999883}
+      scale: {x: 1.0000002, y: 1.0000005, z: 1}
+    - name: ChainsawIdle:Character1_RightShoulder
+      parentName: ChainsawIdle:Character1_Spine1
+      position: {x: 0.2386682, y: 0.12728287, z: -0.031721044}
+      rotation: {x: -0.00000001164153, y: -0.000000002910383, z: 0.000000008003553,
+        w: 1}
+      scale: {x: 1, y: 0.99999994, z: 1.0000002}
+    - name: ChainsawIdle:Character1_RightArm
+      parentName: ChainsawIdle:Character1_RightShoulder
+      position: {x: 0.10707244, y: 0.0000013321737, z: 0.000000005039317}
+      rotation: {x: 0.000000020372326, y: -0.0000000029102663, z: -0.000040427407,
+        w: 1}
+      scale: {x: 1.0000004, y: 1.0000006, z: 1.0000002}
+    - name: ChainsawIdle:Character1_RightForeArm
+      parentName: ChainsawIdle:Character1_RightArm
+      position: {x: 0.19058111, y: -0.0022346869, z: 0.0073054633}
+      rotation: {x: -0.00000000870889, y: -0.000000040741657, z: 0.00042475306, w: 0.99999994}
+      scale: {x: 1.0000002, y: 1.0000001, z: 1.0000002}
+    - name: ChainsawIdle:Character1_RightHand
+      parentName: ChainsawIdle:Character1_RightForeArm
+      position: {x: 0.3421596, y: -0.011619428, z: 0.00000006034033}
+      rotation: {x: -0.000000001596506, y: 0.000000023285969, z: -0.002023085, w: 0.99999803}
+      scale: {x: 1.0000007, y: 1.0000002, z: 1.0000007}
+    - name: ChainsawIdle:WeaponHolder
+      parentName: ChainsawIdle:Character1_RightHand
+      position: {x: 0.5066001, y: -0.11683475, z: 0.1470374}
+      rotation: {x: -0.067622215, y: 0.01899283, z: 0.0029413365, w: 0.9975259}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ChainsawIdle:Character1_RightHandIndex1
+      parentName: ChainsawIdle:Character1_RightHand
+      position: {x: 0.04714011, y: -0.074627034, z: 0.116927974}
+      rotation: {x: 0.02495944, y: 0.20518662, z: -0.01279708, w: 0.9783209}
+      scale: {x: 1.0000006, y: 1.0000002, z: 1.0000002}
+    - name: ChainsawIdle:Character1_RightHandIndex2
+      parentName: ChainsawIdle:Character1_RightHandIndex1
+      position: {x: 0.04187125, y: -0.00016000806, z: 0.057587788}
+      rotation: {x: -0.00038126012, y: -0.03489853, z: -0.0109181935, w: 0.9993312}
+      scale: {x: 1, y: 1.0000012, z: 1.0000004}
+    - name: ChainsawIdle:Character1_RightHandIndex3
+      parentName: ChainsawIdle:Character1_RightHandIndex2
+      position: {x: 0.041841514, y: 0.0005165513, z: 0.05355447}
+      rotation: {x: -0.0028070603, y: 0.32555258, z: 0.014122357, w: 0.94541436}
+      scale: {x: 1.0000001, y: 1.0000005, z: 1.0000005}
+    - name: ChainsawIdle:Character1_RightHandIndex4
+      parentName: ChainsawIdle:Character1_RightHandIndex3
+      position: {x: 0.0016058604, y: -0.0001566066, z: 0.01951565}
+      rotation: {x: 0.0072030113, y: 0.9876264, z: 0.010000498, w: -0.15634058}
+      scale: {x: 1.0000013, y: 1.0000002, z: 1.0000012}
+    - name: ChainsawIdle:Character1_RightHandMiddle1
+      parentName: ChainsawIdle:Character1_RightHand
+      position: {x: 0.21017464, y: -0.016725294, z: 0.08476794}
+      rotation: {x: 0.0024380793, y: -0.056016438, z: -0.012138981, w: 0.9983531}
+      scale: {x: 0.9999998, y: 1.0000011, z: 1.0000006}
+    - name: ChainsawIdle:Character1_RightHandMiddle2
+      parentName: ChainsawIdle:Character1_RightHandMiddle1
+      position: {x: 0.08280011, y: -0.00000988147, z: 0.0098173525}
+      rotation: {x: -0.00038127578, y: -0.03489856, z: -0.010918177, w: 0.9993312}
+      scale: {x: 1.0000006, y: 0.9999991, z: 1}
+    - name: ChainsawIdle:Character1_RightHandMiddle3
+      parentName: ChainsawIdle:Character1_RightHandMiddle2
+      position: {x: 0.07491736, y: 0.0014594825, z: 0.00623931}
+      rotation: {x: -0.002807065, y: 0.32555258, z: 0.014122348, w: 0.94541436}
+      scale: {x: 1.0000001, y: 1.0000006, z: 1}
+    - name: ChainsawIdle:Character1_RightHandMiddle4
+      parentName: ChainsawIdle:Character1_RightHandMiddle3
+      position: {x: 0.014600283, y: -0.0002935734, z: 0.013747817}
+      rotation: {x: 0.007202966, y: 0.9876264, z: 0.010000489, w: -0.15634058}
+      scale: {x: 1.0000013, y: 1.0000008, z: 1.0000007}
+    - name: ChainsawIdle:Character1_RightHandRing1
+      parentName: ChainsawIdle:Character1_RightHand
+      position: {x: 0.214213, y: 0.005225058, z: 0.0106170485}
+      rotation: {x: 0.00435669, y: -0.117559955, z: -0.02994976, w: 0.9926045}
+      scale: {x: 0.99999994, y: 1.0000008, z: 1.0000005}
+    - name: ChainsawIdle:Character1_RightHandRing2
+      parentName: ChainsawIdle:Character1_RightHandRing1
+      position: {x: 0.084247164, y: 0.0026458688, z: -0.00003317337}
+      rotation: {x: -0.00038126367, y: -0.03489859, z: -0.01091821, w: 0.9993312}
+      scale: {x: 1.0000006, y: 0.9999997, z: 1.0000001}
+    - name: ChainsawIdle:Character1_RightHandRing3
+      parentName: ChainsawIdle:Character1_RightHandRing2
+      position: {x: 0.08854689, y: 0.006766465, z: -0.003195303}
+      rotation: {x: -0.0028070828, y: 0.3255526, z: 0.014122352, w: 0.94541436}
+      scale: {x: 1.0000002, y: 1.0000007, z: 1.0000001}
+    - name: ChainsawIdle:Character1_RightHandRing4
+      parentName: ChainsawIdle:Character1_RightHandRing3
+      position: {x: 0.015943114, y: -0.00029119215, z: 0.01075462}
+      rotation: {x: 0.0072029643, y: 0.9876263, z: 0.010000529, w: -0.15634061}
+      scale: {x: 1.0000014, y: 1.0000007, z: 1.0000008}
+    - name: ChainsawIdle:Character1_RightHandPinky1
+      parentName: ChainsawIdle:Character1_RightHand
+      position: {x: 0.2090004, y: -0.0030790817, z: -0.078163825}
+      rotation: {x: -0.0009726556, y: -0.22377239, z: -0.039325163, w: 0.97384727}
+      scale: {x: 1.0000004, y: 1.0000011, z: 1.0000008}
+    - name: ChainsawIdle:Character1_RightHandPinky2
+      parentName: ChainsawIdle:Character1_RightHandPinky1
+      position: {x: 0.067097925, y: 0.0021872518, z: -0.014269782}
+      rotation: {x: -0.00038169613, y: -0.03489854, z: -0.010896465, w: 0.9993314}
+      scale: {x: 1.000001, y: 1.0000012, z: 1.000001}
+    - name: ChainsawIdle:Character1_RightHandPinky3
+      parentName: ChainsawIdle:Character1_RightHandPinky2
+      position: {x: 0.08508651, y: 0.0047317976, z: -0.021770801}
+      rotation: {x: -0.002803512, y: 0.32555285, z: 0.013920293, w: 0.94541717}
+      scale: {x: 1.0000004, y: 1.0000006, z: 1.0000007}
+    - name: ChainsawIdle:Character1_RightHandPinky4
+      parentName: ChainsawIdle:Character1_RightHandPinky3
+      position: {x: 0.015085055, y: 0.00010714105, z: 0.007084457}
+      rotation: {x: 0.0072136717, y: 0.98763096, z: 0.009387626, w: -0.15634872}
+      scale: {x: 1.0000006, y: 1.0000008, z: 1.0000005}
+    - name: ChainsawIdle:Character1_Neck
+      parentName: ChainsawIdle:Character1_Spine1
+      position: {x: -0, y: 0.18773672, z: 0.000000008040816}
+      rotation: {x: -0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1.0000002, z: 1.0000002}
+    - name: ChainsawIdle:Character1_Head
+      parentName: ChainsawIdle:Character1_Neck
+      position: {x: -0, y: 0.4512519, z: 0.0000000047856967}
+      rotation: {x: -0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1.0000002, z: 1.0000002}
+    - name: ChainsawIdle:K1
+      parentName: ChainsawRun(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 1
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 3
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 12353
+  packageName: Toon Killers & Survivors
+  packageVersion: 1.0
+  assetPath: Assets/Toon Killers & Survivors/Anims/ChainsawRun.fbx
+  uploadId: 230361

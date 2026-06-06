@@ -1,0 +1,20 @@
+fileFormatVersion: 2
+guid: 25a5a62f8ef418c4da59192ea3e187f2
+timeCreated: 1518779649
+licenseType: Store
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 12353
+  packageName: Toon Killers & Survivors
+  packageVersion: 1.0
+  assetPath: Assets/Toon Killers & Survivors/DemoScripts/AnimationToButton.cs
+  uploadId: 230361

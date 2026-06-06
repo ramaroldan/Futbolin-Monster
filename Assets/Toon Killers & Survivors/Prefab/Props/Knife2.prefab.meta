@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 8ffd76d902e19c94582b3389bcde7a43
+timeCreated: 1518713106
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 12353
+  packageName: Toon Killers & Survivors
+  packageVersion: 1.0
+  assetPath: Assets/Toon Killers & Survivors/Prefab/Props/Knife2.prefab
+  uploadId: 230361

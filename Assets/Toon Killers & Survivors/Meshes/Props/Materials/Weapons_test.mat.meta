@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 7b5ce5d639c27c2418c6de31ce5ff92d
+timeCreated: 1518778788
+licenseType: Store
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 12353
+  packageName: Toon Killers & Survivors
+  packageVersion: 1.0
+  assetPath: Assets/Toon Killers & Survivors/Meshes/Props/Materials/Weapons_test.mat
+  uploadId: 230361

@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: af6c1513efcb31142825d85a76f917b6
+timeCreated: 1518713099
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 12353
+  packageName: Toon Killers & Survivors
+  packageVersion: 1.0
+  assetPath: Assets/Toon Killers & Survivors/Prefab/Props/Toolbox.prefab
+  uploadId: 230361

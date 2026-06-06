@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: b3d84092a788d66409f6c03ea7d2de8a
+timeCreated: 1518713102
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 12353
+  packageName: Toon Killers & Survivors
+  packageVersion: 1.0
+  assetPath: Assets/Toon Killers & Survivors/Prefab/Props/Axe.prefab
+  uploadId: 230361

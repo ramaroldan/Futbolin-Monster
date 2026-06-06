@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 20421486040f9f945a8dc398c20e0ed5
+timeCreated: 1518781558
+licenseType: Store
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 25800000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 12353
+  packageName: Toon Killers & Survivors
+  packageVersion: 1.0
+  assetPath: Assets/Toon Killers & Survivors/Demo/LightingData.asset
+  uploadId: 230361
