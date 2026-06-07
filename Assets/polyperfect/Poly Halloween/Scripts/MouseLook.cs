@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace Polyperfect.Universal
 {
@@ -12,6 +12,11 @@ namespace Polyperfect.Universal
 
         void Start()
         {
+            if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "MainMenu")
+            {
+                this.enabled = false;
+                return;
+            }
             Cursor.lockState = CursorLockMode.Locked;
         }
 
