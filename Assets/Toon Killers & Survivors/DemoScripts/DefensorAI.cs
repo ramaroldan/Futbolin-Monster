@@ -95,6 +95,13 @@ public class DefensorAI : MonoBehaviour
 
         vidaActual = vidaMax;
 
+        // Auto-inicializar límites X si están en 0
+        if (xMin == 0f && xMax == 0f)
+        {
+            xMin = 45f;
+            xMax = 65f;
+        }
+
         // Auto-inicializar límites Z basados en el lado inicial del campo
         if (zMin == 0f && zMax == 0f)
         {
@@ -571,6 +578,51 @@ public class DefensorAI : MonoBehaviour
 
     void OnDrawGizmos()
     {
+#if UNITY_EDITOR
+        if (!Application.isPlaying)
+        {
+            // Auto-inicializar límites X si están en 0
+            if (xMin == 0f && xMax == 0f)
+            {
+                xMin = 45f;
+                xMax = 65f;
+            }
+
+            // Auto-inicializar límites Z basados en la posición
+            if (zMin == 0f && zMax == 0f)
+            {
+                if (transform.position.z < 73f)
+                {
+                    zMin = 55f;
+                    zMax = 73f;
+                }
+                else
+                {
+                    zMin = 73f;
+                    zMax = 90f;
+                }
+            }
+
+            // Asegurar colisionadores y físicas para recibir daño en el editor
+            CapsuleCollider col = GetComponent<CapsuleCollider>();
+            if (col == null)
+            {
+                col = gameObject.AddComponent<CapsuleCollider>();
+                col.center = new Vector3(0f, 0.9f, 0f);
+                col.radius = 0.35f;
+                col.height = 1.8f;
+                col.isTrigger = false;
+            }
+
+            Rigidbody rb = GetComponent<Rigidbody>();
+            if (rb == null)
+            {
+                rb = gameObject.AddComponent<Rigidbody>();
+                rb.isKinematic = true;
+                rb.useGravity = false;
+            }
+        }
+#endif
         DrawZoneGizmo(false);
     }
 
