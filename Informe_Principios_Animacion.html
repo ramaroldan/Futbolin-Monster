@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Informe Técnico - 12 Principios de Animación en MiniJason</title>
+  <meta name="description" content="Detalle técnico y justificación de los 12 principios de animación aplicados en el personaje MiniJason usando Unity.">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
+    :root {
+      --bg-color: #0b0f19;
+      --card-bg: rgba(22, 28, 45, 0.7);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --accent-blue: #3b82f6;
+      --accent-purple: #8b5cf6;
+      --accent-gradient: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      --code-bg: rgba(15, 23, 42, 0.8);
+      --badge-bg: rgba(59, 130, 246, 0.15);
+      --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-primary);
+      line-height: 1.5;
+      padding: 30px 15px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* Print Header controls */
+    .print-controls {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 20px;
+    }
+
+    .btn-print {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 600;
+      font-size: 14px;
+      background: var(--accent-gradient);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    }
+
+    .btn-print:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(59, 130, 246, 0.5);
+    }
+
+    /* Header styling */
+    header {
+      background: linear-gradient(135deg, rgba(20, 26, 44, 0.9), rgba(11, 15, 25, 0.9));
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 24px 30px;
+      margin-bottom: 30px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    header::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: var(--accent-gradient);
+    }
+
+    .header-content h1 {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: var(--accent-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 12px;
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      padding-top: 15px;
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .meta-item strong {
+      color: var(--text-primary);
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    /* Grid of principles */
+    .principles-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .principle-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.25s ease;
+      box-shadow: var(--shadow);
+      position: relative;
+    }
+
+    .principle-card:hover {
+      border-color: rgba(59, 130, 246, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .badge {
+      background: var(--badge-bg);
+      color: var(--accent-blue);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .card-body {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+      flex-grow: 1;
+    }
+
+    .implementation {
+      margin-top: auto;
+      border-top: 1px solid rgba(255, 255, 255, 0.04);
+      padding-top: 10px;
+    }
+
+    .code-ref {
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 11px;
+      background: var(--code-bg);
+      color: #38bdf8;
+      padding: 6px 10px;
+      border-radius: 6px;
+      display: block;
+      margin-bottom: 8px;
+      overflow-x: auto;
+      border-left: 3px solid var(--accent-blue);
+    }
+
+    .justification {
+      font-size: 12px;
+      color: #94a3b8;
+      line-height: 1.4;
+    }
+
+    .justification em {
+      color: #e2e8f0;
+      font-style: normal;
+      font-weight: 500;
+    }
+
+    /* Print styling rules */
+    @media print {
+      body {
+        background-color: #ffffff !important;
+        color: #0f172a !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        font-size: 9.5pt !important;
+      }
+
+      .container {
+        max-width: 100% !important;
+      }
+
+      .print-controls {
+        display: none !important;
+      }
+
+      header {
+        background: none !important;
+        border: none !important;
+        border-bottom: 2px solid #e2e8f0 !important;
+        padding: 0 0 15px 0 !important;
+        margin-bottom: 15px !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+      }
+
+      header::after {
+        display: none !important;
+      }
+
+      .header-content h1 {
+        -webkit-text-fill-color: initial !important;
+        color: #0f172a !important;
+        font-size: 20pt !important;
+        margin-bottom: 8px !important;
+      }
+
+      .meta-grid {
+        border-top: 1px solid #e2e8f0 !important;
+        padding-top: 10px !important;
+        color: #475569 !important;
+        font-size: 9pt !important;
+      }
+
+      .meta-item strong {
+        color: #0f172a !important;
+      }
+
+      .principles-grid {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 12px !important;
+      }
+
+      .principle-card {
+        background: none !important;
+        border: 1px solid #cbd5e1 !important;
+        box-shadow: none !important;
+        padding: 10px 12px !important;
+        border-radius: 8px !important;
+        page-break-inside: avoid !important;
+      }
+
+      .card-title {
+        color: #0f172a !important;
+        font-size: 11pt !important;
+      }
+
+      .badge {
+        background: #f1f5f9 !important;
+        color: #0f172a !important;
+        border: 1px solid #cbd5e1 !important;
+        font-size: 8pt !important;
+      }
+
+      .card-body {
+        color: #334155 !important;
+        font-size: 8.5pt !important;
+        margin-bottom: 6px !important;
+      }
+
+      .implementation {
+        border-top: 1px solid #e2e8f0 !important;
+        padding-top: 6px !important;
+      }
+
+      .code-ref {
+        background: #f8fafc !important;
+        color: #0369a1 !important;
+        border: 1px solid #e2e8f0 !important;
+        border-left: 3px solid #0284c7 !important;
+        font-size: 8pt !important;
+        padding: 4px 6px !important;
+      }
+
+      .justification {
+        color: #475569 !important;
+        font-size: 8.5pt !important;
+      }
+
+      .justification em {
+        color: #0f172a !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="print-controls no-print" id="btn-container">
+      <button class="btn-print" onclick="window.print()" id="btn-action">
+        <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: middle;">
+          <path d="M2.5 8a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1z"/>
+          <path d="M5 1a2 2 0 0 0-2 2v2H2a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h1v1a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-1h1a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-1V3a2 2 0 0 0-2-2H5zM4 3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2H4V3zm1 5a2.5 2.5 0 1 1 5 0 2.5 2.5 0 0 1-5 0zM1 8a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v-2.5a.5.5 0 0 0-.5-.5h-10a.5.5 0 0 0-.5.5V12H2a1 1 0 0 1-1-1V8zm3 4h8v2H4v-2z"/>
+        </svg>
+        Imprimir / Guardar como PDF
+      </button>
+    </div>
+
+    <header>
+      <div class="header-content">
+        <h1 id="doc-title">Informe Técnico: Los 12 Principios aplicados a MiniJason</h1>
+        <p>Demostración y justificación de los principios en el cuerpo chibi y mecánicas de MiniJason.</p>
+      </div>
+      <div class="meta-grid">
+        <div class="meta-item">
+          <strong>Asignatura</strong>
+          Animación para Videojuegos
+        </div>
+        <div class="meta-item">
+          <strong>Estudiante</strong>
+          [Completar Nombre y Apellido]
+        </div>
+        <div class="meta-item">
+          <strong>Motor & Lenguaje</strong>
+          Unity 3D / C#
+        </div>
+        <div class="meta-item">
+          <strong>Personaje Principal</strong>
+          MiniJason (Chibi Slasher)
+        </div>
+      </div>
+    </header>
+
+    <div class="principles-grid">
+      <!-- 1 -->
+      <div class="principle-card">
+        <div class="card-header">
+          <span class="card-title">1. Squash and Stretch</span>
+          <span class="badge">Peso y Volumen</span>
+        </div>
+        <div class="card-body">
+          Deformación de escalas para acentuar el peso del cuerpo cabezón de MiniJason en saltos y caídas.
+        </div>
+        <div class="implementation">
+          <span class="code-ref">ControladorTerceraPersona.cs (Líneas 157-163, 301-305)</span>
+          <div class="justification">
+            En el despegue se aplica estiramiento vertical (Y=1.22, XZ=0.88). Al aterrizar se comprime (Y=0.72, XZ=1.14) durante 0.28s, <em>evitando la rigidez y vendiendo el peso de su cabeza chibi</em>.
+          </div>
+        </div>
+      </div>
+
+      <!-- 2 -->
+      <div class="principle-card">
+        <div class="card-header">
+          <span class="card-title">2. Anticipación</span>
+          <span class="badge">Preparación</span>
+        </div>
+        <div class="card-body">
+          Movimiento corporal previo que avisa de la inminente liberación de energía.
+        </div>
+        <div class="implementation">
+          <span class="code-ref">ControladorTerceraPersona.cs (Líneas 321-340, 907-925)</span>
+          <div class="justification">
+            Retardo de 0.25s al lanzar el hacha (wind-up) donde MiniJason carga el brazo hacia atrás. En la patada, la pierna <em>retrocede durante 0.12s antes del golpe</em>.
+          </div>
+        </div>
+      </div>
+
+      <!-- 3 -->
+      <div class="principle-card">
+        <div class="card-header">
+          <span class="card-title">3. Puesta en Escena</span>
+          <span class="badge">Claridad</span>
+        </div>
+        <div class="card-body">
+          Foco del encuadre e interfaz para destacar la puntería y carga de las mecánicas.
+        </div>
+        <div class="implementation">
+          <span class="code-ref">ControladorTerceraPersona.cs (Líneas 190-228, 557-616)</span>
+          <div class="justification">
+            Al apuntar, la cámara hace zoom sobre el hombro de MiniJason y se activa una retícula roja central. La barra de patada <em>cambia de amarillo a rojo indicando la energía</em>.
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 -->
+      <div class="principle-card">
+        <div class="card-header">
+          <span class="card-title">4. Acción Directa y Pose a Pose</span>
+          <span class="badge">Keyframes</span>
+        </div>
+        <div class="card-body">
+          Animaciones base tradicionales y cinemática procedural definida mediante extremos de poses clave.
+        </div>
+        <div class="implementation">
+          <span class="code-ref">ControladorTerceraPersona.cs (Líneas 907-959)</span>
+          <div class="justification">
+            La patada de MiniJason define poses clave matemáticas: <em>Carga (Wind-up), Impacto (Swing) y Retorno (Recovery)</em> de rodilla y muslo en código.
+          </div>
+        </div>
+      </div>
+
+      <!-- 5 -->
+      <div class="principle-card">
+        <div class="card-header">
+          <span class="card-title">5. Acción Continuada y Superpuesta</span>
+          <span class="badge">Inercia</span>
+        </div>
+        <div class="card-body">
+          Seguimiento del movimiento de extremidades y proyectiles tras finalizar la fuerza activa.
+        </div>
+        <div class="implementation">
+          <span class="code-ref">ObjetoLanzable.cs (Líneas 143-167) / Animaciones</span>
+          <div class="justification">
+            El brazo armado de MiniJason tiene 0.45s de inercia de follow-through. Las hachas <em>rebotan con física elástica al impactar enemigos</em> en lugar de frenar en seco.
+          </div>
+        </div>
+      </div>
+
+      <!-- 6 -->
+      <div class="principle-card">
+        <div class="card-header">
+          <span class="card-title">6. Aceleración y Desaceleración</span>
+          <span class="badge">Curvas Físicas</span>
+        </div>
+        <div class="card-body">
+          Suavizado de velocidad por inercia para evitar snaps robóticos en el rig 3D.
+        </div>
+        <div class="implementation">
+          <span class="code-ref">ControladorTerceraPersona.cs (Líneas 535-541, 919)</span>
+          <div class="justification">
+            Transición de 0.15s en Animator. El Squash & Stretch y articulaciones de piernas usan <em>Mathf.SmoothStep para acelerar y desacelerar fluidamente</em>.
+          </div>
+        </div>
+      </div>
+
+      <!-- 7 -->
+      <div class="principle-card">
+        <div class="card-header">
+          <span class="card-title">7. Arcos</span>
+          <span class="badge">Trayectorias</span>
+        </div>
+        <div class="card-body">
+          Trayectorias circulares y parabólicas en los ataques y saltos de MiniJason.
+        </div>
+        <div class="implementation">
+          <span class="code-ref">ObjetoLanzable.cs (Línea 81) / Huesos</span>
+          <div class="justification">
+            El hacha describe una parábola por gravedad física. El brazo de MiniJason al lanzar y su pierna al patear <em>giran formando arcos de rotación natural</em>.
+          </div>
+        </div>
+      </div>
+
+      <!-- 8 -->
+      <div class="principle-card">
+        <div class="card-header">
+          <span class="card-title">8. Acción Secundaria</span>
+          <span class="badge">Detalle</span>
+        </div>
+        <div class="card-body">
+          Movimientos complementarios que enriquecen y dan vida a la acción principal.
+        </div>
+        <div class="implementation">
+          <span class="code-ref">ObjetoLanzable.cs (Líneas 117-126) / Conducción</span>
+          <div class="justification">
+            El hacha rota a 720°/s en el aire. El balón oscila lateralmente (dribling) al pie de MiniJason al correr. Hay <em>salpicaduras físicas de sangre al golpear</em>.
+          </div>
+        </div>
+      </div>
+
+      <!-- 9 -->
+      <div class="principle-card">
+        <div class="card-header">
+          <span class="card-title">9. Timing y Spacing</span>
+          <span class="badge">Ritmo</span>
+        </div>
+        <div class="card-body">
+          Ratios de tiempo y cuadros para contrastar la rapidez y peso de las extremidades de MiniJason.
+        </div>
+        <div class="implementation">
+          <span class="code-ref">ControladorTerceraPersona.cs (Líneas 10-11, 915-945)</span>
+          <div class="justification">
+            Caminar (3f) frente a correr (7f) cambia las pisadas de MiniJason. La patada alterna <em>carga controlada (0.12s) con impacto veloz (0.10s)</em>.
+          </div>
+        </div>
+      </div>
+
+      <!-- 10 -->
+      <div class="principle-card">
+        <div class="card-header">
+          <span class="card-title">10. Exageración</span>
+          <span class="badge">Fuerza Visual</span>
+        </div>
+        <div class="card-body">
+          Magnificación de reacciones físicas para lograr un estilo arcade caricaturesco y divertido.
+        </div>
+        <div class="implementation">
+          <span class="code-ref">ObjetoLanzable.cs (Líneas 211-254) / DefensorAI</span>
+          <div class="justification">
+            Calabazas explotan en 12 trozos físicos con flash de luz naranja. Al ser tackleado por defensores, MiniJason <em>vuela con knockback de 6.5f y stun de 0.9s</em>.
+          </div>
+        </div>
+      </div>
+
+      <!-- 11 -->
+      <div class="principle-card">
+        <div class="card-header">
+          <span class="card-title">11. Modelado Sólido</span>
+          <span class="badge">Volumen 3D</span>
+        </div>
+        <div class="card-body">
+          Consistencia en el volumen y deformaciones no destructivas de la anatomía 3D.
+        </div>
+        <div class="implementation">
+          <span class="code-ref">ControladorTerceraPersona.cs (Líneas 893-905)</span>
+          <div class="justification">
+            Al agacharse (Ctrl), las articulaciones giran y la cadera (`hips`) baja `-0.45f`, <em>manteniendo la proporción y masa tridimensional de MiniJason sin colapsar</em>.
+          </div>
+        </div>
+      </div>
+
+      <!-- 12 -->
+      <div class="principle-card">
+        <div class="card-header">
+          <span class="card-title">12. Atractivo (Appeal)</span>
+          <span class="badge">Identidad</span>
+        </div>
+        <div class="card-body">
+          Diseño carismático y personalidad viva mediante posturas animadas en reposo.
+        </div>
+        <div class="implementation">
+          <span class="code-ref">ControladorTerceraPersona.cs (Línea 90) / Diseño</span>
+          <div class="justification">
+            El carisma cómico de MiniJason (chibi asesino de terror con máscara de hockey y machete jugando al fútbol) y su <em>bucle idle de respiración atenta</em> captan el interés.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

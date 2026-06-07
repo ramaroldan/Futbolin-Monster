@@ -1,0 +1,181 @@
+INFORME TÉCNICO: LOS 12 PRINCIPIOS DE ANIMACIÓN APLICADOS A MINIJASON
+Asignatura: Animación para Videojuegos
+Proyecto: Prototipo Sandbox Interactivo (Fútbol y Combate)
+Personaje: MiniJason (Chibi Terror Character)
+Estudiante: [Completar Nombre y Apellido]
+
+================================================================================
+Este documento detalla la aplicación y justificación teórica de los 12 principios
+fundamentales de la animación integrados en los movimientos y físicas de nuestro
+protagonista, MiniJason, dentro del sandbox interactivo desarrollado en Unity.
+================================================================================
+
+1. ESTIRAMIENTO Y ENCOGIMIENTO (SQUASH AND STRETCH)
+--------------------------------------------------
+* Aplicación en MiniJason:
+  - Salto (Despegue): Script "ControladorTerceraPersona.cs" (Líneas 301-305) - Al 
+    iniciar el salto, el cuerpo chibi de MiniJason se estira verticalmente a 
+    escala Y = 1.22 (con reducción en XZ = 0.88) para acentuar el impulso de despegue.
+  - Aterrizaje (Impacto): "ControladorTerceraPersona.cs" (Líneas 157-163) - Al 
+    impactar contra el suelo, su cuerpo rechoncho se comprime verticalmente a 
+    escala Y = 0.72 (con ensanchamiento en XZ = 1.14) durante 0.28s, 
+    transmitiendo el peso y la gravedad de su cabeza gigante.
+  - Destrucción de Obstáculos: Script "ObjetoLanzable.cs" (Líneas 230-233) - Las 
+    calabazas impactadas sufren una distorsión física de escala en sus 
+    fragmentos antes de dispersarse.
+* Justificación: Dada la anatomía caricaturesca de MiniJason (cuerpo pequeño y 
+  cabeza enorme), el Squash and Stretch procedural es muy visible y evita que 
+  el personaje se sienta rígido, acentuando su inercia física.
+
+
+2. ANTICIPACIÓN (ANTICIPATION)
+------------------------------
+* Aplicación en MiniJason:
+  - Lanzamiento de Hacha Machete: "ControladorTerceraPersona.cs" (Líneas 321-340) 
+    - Antes de lanzar, MiniJason realiza una preparación o "wind-up" de 0.25s 
+    donde rota hacia la cámara, levanta el brazo armado y acumula energía hacia 
+    atrás antes de soltar el proyectil.
+  - Patada de Fútbol: "ControladorTerceraPersona.cs" (Líneas 907-925) - En la 
+    patada procedural, MiniJason flexiona el muslo y la rodilla hacia atrás en 
+    la Fase 1 (Wind-up) durante 0.12s antes del golpe frontal.
+* Justificación: Prepara visualmente al jugador para la acción violenta o 
+  deportiva de MiniJason, dándole fuerza y credibilidad al impacto final.
+
+
+3. PUESTA EN ESCENA (STAGING)
+-----------------------------
+* Aplicación en MiniJason:
+  - Cámara de Apuntado y Mira UI: "ControladorTerceraPersona.cs" (Líneas 190-228) 
+    - Al apuntar con click derecho, la cámara hace zoom sobre el hombro de 
+    MiniJason y bloquea su rotación con la mirada de la cámara, activando una 
+    retícula roja central de apuntado en la interfaz gráfica (Líneas 557-616).
+  - Carga de Energía: La barra de UI de carga de patada (Líneas 785-821) cambia 
+    de amarillo a rojo intenso debajo del crosshair, indicando claramente al 
+    jugador la potencia con la que se pateará el balón.
+* Justificación: Enfoca la atención directamente en la puntería y la acción de 
+  MiniJason, asegurando que el combate a distancia y la conducción de la 
+  pelota sean legibles y claros.
+
+
+4. ACCIÓN DIRECTA Y POSE A POSE (STRAIGHT AHEAD AND POSE TO POSE)
+-----------------------------------------------------------------
+* Aplicación en MiniJason:
+  - Animaciones Clave (Pose a Pose): Los ciclos de movimiento tradicional de 
+    MiniJason (Idle, Caminar, Correr, Saltar y Muerte) se animaron fotograma a 
+    fotograma definiendo poses estructuradas para controlar pesos y siluetas.
+  - Patada Procedural (Pose a Pose en Código): "ControladorTerceraPersona.cs" 
+    (Líneas 907-959) - Se programó la patada definiendo tres posiciones clave: 
+    Carga (Pierna atrás), Impacto (Pie extendido) y Recuperación (Retorno a 
+    la posición original de pie).
+* Justificación: Garantiza un control preciso de la deformación anatómica de 
+  los huesos de MiniJason y del timing exacto del golpe al balón.
+
+
+5. ACCIÓN CONTINUADA Y SUPERPUESTA (FOLLOW THROUGH AND OVERLAPPING ACTION)
+--------------------------------------------------------------------------
+* Aplicación en MiniJason:
+  - Inercia del Lanzamiento: "ControladorTerceraPersona.cs" (Líneas 380-384) - 
+    Después de que MiniJason suelta el hacha, su brazo continúa el recorrido 
+    descendente por 0.45s antes de volver a la postura por defecto.
+  - Rebote del Proyectil: "ObjetoLanzable.cs" (Líneas 143-167) - Al golpear a 
+    los payasos (arquero o defensores), el hacha rebota físicamente y cae al 
+    suelo en lugar de detenerse bruscamente, mostrando la inercia del golpe.
+  - Caída del Arquero Rival: "PayasoArquero.cs" (Líneas 267-285) - Tras tirarse 
+    para atajar la pelota, el arquero tiene una fase de desaceleración y caída 
+    antes de poder levantarse de nuevo.
+* Justificación: Elimina la rigidez mecánica del personaje, mostrando cómo las 
+  distintas partes y objetos continúan moviéndose debido a su propia inercia.
+
+
+6. ACELERACIÓN Y DESACELERACIÓN (SLOW IN AND SLOW OUT)
+------------------------------------------------------
+* Aplicación en MiniJason:
+  - Mezcla de Animaciones: Las transiciones del Animator de MiniJason usan un 
+    CrossFade de 0.15s ("ControladorTerceraPersona.cs", Líneas 535-541) para 
+    evitar saltos bruscos entre ciclos.
+  - Movimiento Eased: El Squash & Stretch (Línea 919) y las articulaciones de 
+    las piernas en la patada usan "Mathf.SmoothStep", aplicando curvas de 
+    aceleración al inicio y desaceleración al final.
+* Justificación: Simula de forma creíble la masa física de MiniJason; los 
+  cuerpos pesados no alcanzan velocidades máximas ni se frenan de golpe.
+
+
+7. ARCOS (ARCS)
+---------------
+* Aplicación en MiniJason:
+  - Trayectoria del Hacha: El hacha arrojada por MiniJason vuela utilizando 
+    gravedad física ("ObjetoLanzable.cs", Línea 81), describiendo una parábola 
+    curva en el espacio.
+  - Extremidades: La pierna de MiniJason al patear y el brazo al lanzar hachas 
+    giran dibujando arcos circulares alrededor de la articulación de su cadera 
+    y hombro.
+  - Zambullida del Portero: El arquero rival ("PayasoArquero.cs", Líneas 258-261) 
+    salta describiendo una trayectoria senoidal (arco aéreo).
+* Justificación: Los movimientos naturales de los seres vivos y proyectiles 
+  siguen trayectorias curvas, no líneas rectas mecánicas.
+
+
+8. ACCIÓN SECUNDARIA (SECONDARY ACTION)
+---------------------------------------
+* Aplicación en MiniJason:
+  - Giro del Hacha: El hacha rota continuamente a 720°/s en el aire sobre su 
+    eje mientras viaja en su trayectoria balística ("ObjetoLanzable.cs", 
+    Líneas 117-126).
+  - Oscilación del Balón (Dribbling): Al correr, el balón oscila de izquierda a 
+    derecha frente a MiniJason ("ControladorTerceraPersona.cs", Líneas 648-665), 
+    simulando que la empuja alternadamente con cada pie.
+  - Partículas de Daño: Sangre esférica con física sale disparada del cuerpo 
+    de los enemigos al recibir impactos ("PayasoArquero.cs", Líneas 154-189).
+* Justificación: Añade capas de detalle visual que apoyan y enriquecen la 
+  acción principal de movimiento y combate.
+
+
+9. TIMING Y ESPACIADO (TIMING)
+------------------------------
+* Aplicación en MiniJason:
+  - Caminar vs. Correr: La velocidad de caminar es 3f y la de correr es 7f 
+    ("ControladorTerceraPersona.cs", Líneas 10-11). Esto modifica la cantidad 
+    de espacio cubierto entre frames y la rapidez del ciclo de pisadas.
+  - Contraste Rítmico de la Patada: La pierna tarda 0.12s en cargar (timing 
+    lento para anticipar) y solo 0.10s en dar el impacto (muy veloz), con 
+    0.28s de recuperación lenta.
+* Justificación: Define el peso, la velocidad y la intención física de cada 
+  acción. Cambios drásticos en el espaciado generan la sensación de fuerza.
+
+
+10. EXAGERACIÓN (EXAGGERATION)
+------------------------------
+* Aplicación en MiniJason:
+  - Explosión de Calabazas: Las calabazas estallan con un destello naranja de 
+    intensidad 4f y se fragmentan en 12 pedazos que vuelan de forma hiperactiva 
+    ("ObjetoLanzable.cs", Líneas 211-254).
+  - Barrida y Knockback: Si un defensor tacklea a MiniJason, este es lanzado 
+    con una fuerza exagerada de 6.5f y queda aturdido por 0.9s.
+  - Recuperación de Enemigos: Los enemigos caídos se congelan en el suelo por 
+    3.8s antes de reincorporarse de golpe.
+* Justificación: Sobredimensiona las reacciones físicas para lograr un estilo 
+  arcade/cartoon altamente responsivo y satisfactorio de jugar.
+
+
+11. MODELADO SÓLIDO (SOLID DRAWING)
+------------------------------------
+* Aplicación en MiniJason:
+  - Malla Chibi Tridimensional: El rig 3D de MiniJason mantiene su volumen, 
+    equilibrio y legibilidad visual desde cualquier perspectiva de la cámara.
+  - Agachado Procedural: Al presionar Ctrl ("ControladorTerceraPersona.cs", 
+    Líneas 893-905), la cadera baja -0.45f y las rodillas se doblan de forma 
+    coherente sin deformar destructivamente ni colapsar la malla del modelo 3D.
+* Justificación: Asegura que el personaje se sienta volumétrico y sólido en el 
+  espacio 3D sin perder su forma al flexionarse.
+
+
+12. ATRACTIVO (APPEAL)
+----------------------
+* Aplicación en MiniJason:
+  - Contraste Carismático: MiniJason es una parodia chibi de un asesino de 
+    terror jugando al fútbol y tirando hachas a payasos en un estadio deportivo, 
+    lo que genera empatía, carisma y humor.
+  - Actitud de Vida (Idle): MiniJason respira dinámicamente en reposo, evitando 
+    posturas estáticas cuando no recibe entradas del jugador.
+* Justificación: Logra que el diseño y el movimiento del personaje resulten 
+  atractivos y agradables de controlar para el jugador.

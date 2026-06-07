@@ -24,13 +24,19 @@ public class ControladorTerceraPersona : MonoBehaviour
     
     [Header("Ajustes del Proyectil Lanzado")]
     public Vector3 rotacionAdicionalProyectil = new Vector3(0f, 0f, 90f);
+    public Vector3 escalaProyectil = Vector3.one;
     
     [HideInInspector]
     public bool estaApuntando = false;
     
     [Header("Configuración de Fútbol")]
     public PelotaFutbol pelotaDriblando = null;
-    public float fuerzaPatada = 14f;
+    
+    [Header("Ajustes de Patada / Disparo")]
+    [Tooltip("Fuerza mínima de la patada (con carga mínima)")]
+    public float fuerzaPatadaMin = 7f;
+    [Tooltip("Fuerza máxima de la patada (con carga máxima)")]
+    public float fuerzaPatadaMax = 20f;
     
     [Header("Ajustes de Conducción de Balón")]
     [Tooltip("Velocidad de seguimiento de la pelota al moverse (menor = más inercia, mayor = más pegada a los pies)")]
@@ -75,6 +81,10 @@ public class ControladorTerceraPersona : MonoBehaviour
     private bool estaEnElSuelo;
     private bool estaLanzando = false;
     private float tiempoUltimoLanzamiento = -10f;
+    
+    // Gestión de aturdimiento por barrida
+    private bool estaAturdido = false;
+    private float tiempoFinAturdimiento = 0f;
     
     private string estadoAnimacionActual = "";
     private GameObject miraCanvas;
@@ -133,6 +143,26 @@ public class ControladorTerceraPersona : MonoBehaviour
 
     void Update()
     {
+        if (estaAturdido)
+        {
+            if (Time.time >= tiempoFinAturdimiento)
+            {
+                estaAturdido = false;
+            }
+            else
+            {
+                // Decelerar knockback horizontal
+                float yVal = velocidad.y;
+                velocidad.y = 0f;
+                velocidad = Vector3.MoveTowards(velocidad, Vector3.zero, Time.deltaTime * 8f);
+                velocidad.y = yVal + gravedad * Time.deltaTime;
+
+                controlador.Move(velocidad * Time.deltaTime);
+                CambiarEstadoAnimacion("GetDamage");
+                return;
+            }
+        }
+
         estaEnElSuelo = controlador.isGrounded;
         if (estaEnElSuelo && velocidad.y < 0)
         {
@@ -319,7 +349,15 @@ public class ControladorTerceraPersona : MonoBehaviour
             proyectilVisual = Instantiate(prefabLanzable, manoDerecha);
             proyectilVisual.transform.localPosition = offsetPosicionMano;
             proyectilVisual.transform.localRotation = Quaternion.Euler(offsetRotacionMano);
-            proyectilVisual.transform.localScale = Vector3.one;
+            
+            // Ajustar escala local para que la escala global coincida con escalaProyectil
+            Vector3 lossy = manoDerecha.lossyScale;
+            Vector3 escalaLocal = escalaProyectil;
+            if (Mathf.Abs(lossy.x) > 0.0001f && Mathf.Abs(lossy.y) > 0.0001f && Mathf.Abs(lossy.z) > 0.0001f)
+            {
+                escalaLocal = new Vector3(escalaProyectil.x / lossy.x, escalaProyectil.y / lossy.y, escalaProyectil.z / lossy.z);
+            }
+            proyectilVisual.transform.localScale = escalaLocal;
             
             // Deshabilitar física y colisiones para el objeto sostenido en la mano
             Rigidbody rbVisual = proyectilVisual.GetComponent<Rigidbody>();
@@ -399,6 +437,7 @@ public class ControladorTerceraPersona : MonoBehaviour
         
         // Instanciar aplicando la dirección hacia el objetivo
         GameObject proyectil = Instantiate(prefabLanzable, posLanzamiento, rotacionHaciaDestino * Quaternion.Euler(rotacionAdicionalProyectil));
+        proyectil.transform.localScale = escalaProyectil;
         
         // Inicializar el script ObjetoLanzable con la dirección de lanzamiento real y precisa
         ObjetoLanzable scriptProyectil = proyectil.GetComponent<ObjetoLanzable>();
@@ -732,8 +771,8 @@ public class ControladorTerceraPersona : MonoBehaviour
             dirPatada.y += elevacionVertical;
             dirPatada = dirPatada.normalized;
             
-            // Fuerza de patada: cuanto más carga, más fuerte sale (de 9f a 24f)
-            float fuerza = Mathf.Lerp(9f, 24f, chargeRatio);
+            // Fuerza de patada: cuanto más carga, más fuerte sale (según parámetros mínimos y máximos)
+            float fuerza = Mathf.Lerp(fuerzaPatadaMin, fuerzaPatadaMax, chargeRatio);
             Vector3 fuerzaTotal = dirPatada * fuerza;
             
             // Soltar el balón antes de patear
@@ -922,5 +961,28 @@ public class ControladorTerceraPersona : MonoBehaviour
         rotThighOffset = Vector3.zero;
         rotShinOffset = Vector3.zero;
         pateandoProcedural = false;
+    }
+
+    public void RecibirBarrida(float duracionAturdimiento, Vector3 knockback)
+    {
+        if (estaAturdido) return;
+        estaAturdido = true;
+        tiempoFinAturdimiento = Time.time + duracionAturdimiento;
+        
+        // Detener dribling de inmediato si lo tiene
+        if (pelotaDriblando != null)
+        {
+            pelotaDriblando.DetenerConduccion();
+            pelotaDriblando = null;
+        }
+        
+        // Desactivar cargas y mira
+        cargandoPatada = false;
+        if (barraCargaFondo != null) barraCargaFondo.SetActive(false);
+        if (miraCanvas != null) miraCanvas.SetActive(estaApuntando);
+        
+        velocidad = knockback;
+        
+        CambiarEstadoAnimacion("GetDamage");
     }
 }

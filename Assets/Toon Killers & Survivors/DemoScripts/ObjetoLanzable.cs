@@ -150,6 +150,23 @@ public class ObjetoLanzable : MonoBehaviour
             return;
         }
 
+        // Verificar si colisionó con un defensor
+        DefensorAI defensor = colision.gameObject.GetComponent<DefensorAI>();
+        if (defensor != null)
+        {
+            Vector3 puntoImpacto = colision.contacts.Length > 0 ? colision.contacts[0].point : colision.transform.position;
+            defensor.RecibirDaño(puntoImpacto);
+            
+            // Hacer que el hacha rebote de forma elástica hacia atrás y caiga al suelo
+            haImpactado = true;
+            rb.isKinematic = false;
+            rb.linearVelocity = (transform.forward * -4f + Vector3.up * 5f);
+            
+            // Destruir el proyectil después de 1 segundo
+            Destroy(gameObject, 1.0f);
+            return;
+        }
+
         // Verificar si colisionó con una calabaza (Pumpkin)
         bool esCalabaza = colision.gameObject.name.ToLower().Contains("pumpkin") || 
                            (colision.transform.parent != null && colision.transform.parent.name.Equals("Pumpkins", System.StringComparison.OrdinalIgnoreCase));

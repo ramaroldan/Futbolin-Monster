@@ -64,7 +64,6 @@
     <Compile Include="Assets\TutorialInfo\Scripts\Editor\ReadmeEditor.cs" />
     <Compile Include="Assets\Toon Killers &amp; Survivors\DemoScripts\Editor\ConfiguradorArquero.cs" />
     <Compile Include="Assets\Toon Killers &amp; Survivors\DemoScripts\Editor\ConfiguradorTerceraPersona.cs" />
-    <Compile Include="Assets\Toon Killers &amp; Survivors\DemoScripts\Editor\ConfiguradorFutbol.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
