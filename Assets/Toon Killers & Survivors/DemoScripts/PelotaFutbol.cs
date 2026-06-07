@@ -7,6 +7,10 @@ public class PelotaFutbol : MonoBehaviour
     [Header("Configuración de Conducción")]
     [Tooltip("Distancia a la que el jugador puede empezar a conducir la pelota")]
     public float rangoConduccion = 1.3f;
+
+    [Header("Ajustes de Rotación Visual")]
+    [Tooltip("Multiplicador de la velocidad de rotación visual (1 = real, menor = gira más lento, mayor = gira más rápido)")]
+    public float multiplicadorRotacion = 1f;
     
     public bool estaConducida { get; private set; } = false;
     public bool puedeSerRecogida { get; private set; } = true;
@@ -14,6 +18,7 @@ public class PelotaFutbol : MonoBehaviour
     private Rigidbody rb;
     private Transform jugadorConductor;
     private Vector3 posicionInicial;
+    private Vector3 ultimaPosicion;
 
     void Awake()
     {
@@ -41,6 +46,8 @@ public class PelotaFutbol : MonoBehaviour
             pm.frictionCombine = PhysicsMaterialCombine.Average;
             col.material = pm;
         }
+
+        ultimaPosicion = transform.position;
     }
 
     public void IniciarConduccion(Transform jugador)
@@ -93,27 +100,28 @@ public class PelotaFutbol : MonoBehaviour
 
     void Update()
     {
-        // Rotar visualmente la pelota cuando está siendo conducida
-        if (estaConducida && jugadorConductor != null)
+        // Rotar visualmente la pelota cuando está siendo conducida basándose en su propio desplazamiento real
+        if (estaConducida)
         {
-            CharacterController cc = jugadorConductor.GetComponent<CharacterController>();
-            Vector3 velocidad = cc != null ? cc.velocity : Vector3.zero;
-            velocidad.y = 0; // Descartar movimiento vertical
+            Vector3 desplazamiento = transform.position - ultimaPosicion;
+            desplazamiento.y = 0; // Descartar movimiento vertical
             
-            float rapidez = velocidad.magnitude;
-            if (rapidez > 0.1f)
+            float distanciaMover = desplazamiento.magnitude;
+            if (distanciaMover > 0.001f)
             {
-                // El eje de giro es perpendicular al vector de velocidad (producto cruz con Vector3.up)
-                Vector3 ejeRotacion = Vector3.Cross(Vector3.up, velocidad.normalized);
+                // El eje de giro es perpendicular al vector de desplazamiento
+                Vector3 ejeRotacion = Vector3.Cross(Vector3.up, desplazamiento.normalized);
                 
                 // Radio del balón para calcular rotación angular correcta (V = w * r => w = V / r)
                 float radio = transform.localScale.x * 0.5f;
-                float angulo = (rapidez * Time.deltaTime / radio) * Mathf.Rad2Deg;
+                float angulo = (distanciaMover / radio) * Mathf.Rad2Deg * multiplicadorRotacion;
                 
                 // Rotar en el espacio mundial
                 transform.Rotate(ejeRotacion, angulo, Space.World);
             }
         }
+
+        ultimaPosicion = transform.position;
     }
 
     void FixedUpdate()

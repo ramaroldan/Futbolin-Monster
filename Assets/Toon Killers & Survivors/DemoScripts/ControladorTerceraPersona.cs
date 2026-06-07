@@ -32,6 +32,16 @@ public class ControladorTerceraPersona : MonoBehaviour
     public PelotaFutbol pelotaDriblando = null;
     public float fuerzaPatada = 14f;
     
+    [Header("Ajustes de Conducción de Balón")]
+    [Tooltip("Velocidad de seguimiento de la pelota al moverse (menor = más inercia, mayor = más pegada a los pies)")]
+    public float suavizadoMovimientoConduccion = 10f;
+    [Tooltip("Velocidad de frenado de la pelota al detenerse")]
+    public float suavizadoParadaConduccion = 15f;
+    [Tooltip("Frecuencia base de la oscilación lateral de la pelota (dribling)")]
+    public float frecuenciaDribling = 7f;
+    [Tooltip("Amplitud de la oscilación lateral de la pelota (dribling)")]
+    public float amplitudDribling = 0.08f;
+    
     private bool estaPateando = false;
     private float cooldownRecogidaPatada = 0f;
     
@@ -600,9 +610,25 @@ public class ControladorTerceraPersona : MonoBehaviour
                 return;
             }
             
-            // Colocar la pelota a 0.75m adelante de los pies del jugador y 0.15m elevada (radio de la pelota)
-            Vector3 posIdealBalon = transform.position + transform.forward * 0.75f + Vector3.up * 0.15f;
-            pelotaDriblando.transform.position = posIdealBalon;
+            // Colocar la pelota adelante de los pies del jugador con oscilación lateral (dribling de pies) y suavizado
+            float velocidadJugador = controlador != null ? controlador.velocity.magnitude : 0f;
+            
+            // Oscilación lateral según el movimiento para simular llevarla con ambos pies
+            float multiplicadorVelocidadSway = velocidadJugador > 4f ? 1.7f : 1f;
+            float frecuenciaSway = frecuenciaDribling * multiplicadorVelocidadSway;
+            float amplitudSway = velocidadJugador > 0.1f ? amplitudDribling : 0f;
+            Vector3 oscilacionLateral = transform.right * Mathf.Sin(Time.time * frecuenciaSway) * amplitudSway;
+            
+            // Retraso leve al acelerar/frenar (oscilación adelante-atrás)
+            float oscilacionFrontal = velocidadJugador > 0.1f ? (Mathf.Cos(Time.time * frecuenciaSway) * 0.02f) : 0f;
+            
+            // Altura y offset según el radio del balón
+            float radioPelota = pelotaDriblando.transform.localScale.x * 0.5f;
+            Vector3 posIdealBalon = transform.position + transform.forward * (0.6f + radioPelota + oscilacionFrontal) + Vector3.up * radioPelota + oscilacionLateral;
+            
+            // Interpolar suavemente para que la pelota tenga inercia y no parezca rígidamente pegada
+            float velocidadSuavizado = velocidadJugador > 0.1f ? suavizadoMovimientoConduccion : suavizadoParadaConduccion;
+            pelotaDriblando.transform.position = Vector3.Lerp(pelotaDriblando.transform.position, posIdealBalon, Time.deltaTime * velocidadSuavizado);
             
             // Forzar velocidad a cero mientras se conduce para evitar física errática
             Rigidbody rbPelota = pelotaDriblando.GetComponent<Rigidbody>();
