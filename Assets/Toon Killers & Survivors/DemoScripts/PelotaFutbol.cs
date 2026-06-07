@@ -215,7 +215,19 @@ public class PelotaFutbol : MonoBehaviour
     private bool ChequearSuelo()
     {
         float radio = transform.localScale.x * 0.5f;
-        // Lanzar un rayo hacia abajo un poco más allá del radio del balón (radio + 0.1f)
-        return Physics.Raycast(transform.position, Vector3.down, radio + 0.1f);
+        // Comenzar el raycast un poco más abajo del centro (por ejemplo, a 0.8 * radio) para salir del colisionador de la pelota
+        Vector3 origen = transform.position + Vector3.down * (radio * 0.8f);
+        float distancia = radio * 0.4f; // Distancia para sobrepasar el radio de la pelota + margen
+        
+        // Usar RaycastAll para poder ignorar la propia pelota
+        RaycastHit[] hits = Physics.RaycastAll(origen, Vector3.down, distancia, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore);
+        foreach (var hit in hits)
+        {
+            if (hit.collider.gameObject != gameObject && !hit.transform.IsChildOf(transform))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

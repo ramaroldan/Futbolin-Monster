@@ -30,6 +30,10 @@ public class ControladorTerceraPersona : MonoBehaviour
     [HideInInspector]
     public bool estaApuntando = false;
     
+    [Header("Ajustes de Altura / Modelo Visual")]
+    [Tooltip("Ajuste de altura del modelo visual para alinear los pies con el suelo")]
+    public float offsetVisualY = -0.05f;
+    
     [Header("Configuración de Fútbol")]
     public PelotaFutbol pelotaDriblando = null;
     
@@ -174,6 +178,10 @@ public class ControladorTerceraPersona : MonoBehaviour
     void Start()
     {
         controlador = GetComponent<CharacterController>();
+        if (controlador != null)
+        {
+            controlador.skinWidth = 0.02f;
+        }
         animador = GetComponent<Animator>();
         
         if (animador != null && animador.isHuman)
@@ -986,12 +994,30 @@ public class ControladorTerceraPersona : MonoBehaviour
             
             // --- CORRECCIÓN DE ALTURA: Raycast para que siempre toque el suelo real ---
             float alturaBalon = transform.position.y + radioPelota; // fallback
-            Ray rayoSuelo = new Ray(posHorizontal + Vector3.up * 0.5f, Vector3.down);
-            RaycastHit hitSuelo;
-            if (Physics.Raycast(rayoSuelo, out hitSuelo, 2.0f, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
+            Ray rayoSuelo = new Ray(posHorizontal + Vector3.up * 1.5f, Vector3.down);
+            RaycastHit[] hitsSuelo = Physics.RaycastAll(rayoSuelo, 3.0f, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore);
+            
+            float highestGroundY = -9999f;
+            bool foundGround = false;
+            foreach (var hit in hitsSuelo)
             {
-                // El balón debe estar exactamente sobre el suelo detectado
-                alturaBalon = hitSuelo.point.y + radioPelota;
+                // Ignorar colisiones con el jugador (o sus hijos) y el balón (o sus hijos)
+                if (hit.transform == transform || hit.transform.IsChildOf(transform) || 
+                    hit.transform == pelotaDriblando.transform || hit.transform.IsChildOf(pelotaDriblando.transform))
+                {
+                    continue;
+                }
+                
+                if (hit.point.y > highestGroundY)
+                {
+                    highestGroundY = hit.point.y;
+                    foundGround = true;
+                }
+            }
+            
+            if (foundGround)
+            {
+                alturaBalon = highestGroundY + radioPelota;
             }
             
             // Mini rebote cosmético entre toques (simula que el balón rebota levemente al ser tocado)
@@ -1267,9 +1293,11 @@ public class ControladorTerceraPersona : MonoBehaviour
             }
         }
 
-        // Aplicar Squash & Stretch procedimental al modelo visual
+        // Aplicar posición y Squash & Stretch procedimental al modelo visual
         if (visualModelTransform != null && !estaAturdido)
         {
+            visualModelTransform.localPosition = new Vector3(0f, offsetVisualY, 0f);
+            
             float scaleXZFactor = 1f / Mathf.Sqrt(scaleYFactor);
             visualModelTransform.localScale = new Vector3(
                 escalaInicialVisual.x * scaleXZFactor, 
