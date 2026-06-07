@@ -62,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Toon Killers &amp; Survivors\DemoScripts\MarcadorHUD.cs" />
+    <Compile Include="Assets\Toon Killers &amp; Survivors\DemoScripts\ArqueroIK.cs" />
     <Compile Include="Assets\Toon Killers &amp; Survivors\DemoScripts\ParedLimite.cs" />
     <Compile Include="Assets\Toon Killers &amp; Survivors\DemoScripts\ActivadorCinematica.cs" />
     <Compile Include="Assets\Toon Killers &amp; Survivors\DemoScripts\PayasoArquero.cs" />

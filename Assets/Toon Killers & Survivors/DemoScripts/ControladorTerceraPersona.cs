@@ -41,16 +41,26 @@ public class ControladorTerceraPersona : MonoBehaviour
     
     [Header("Ajustes de Conducción de Balón")]
     [Tooltip("Velocidad de seguimiento de la pelota al moverse (menor = más inercia, mayor = más pegada a los pies)")]
-    public float suavizadoMovimientoConduccion = 10f;
+    public float suavizadoMovimientoConduccion = 12f;
     [Tooltip("Velocidad de frenado de la pelota al detenerse")]
-    public float suavizadoParadaConduccion = 15f;
-    [Tooltip("Frecuencia base de la oscilación lateral de la pelota (dribling)")]
-    public float frecuenciaDribling = 7f;
-    [Tooltip("Amplitud de la oscilación lateral de la pelota (dribling)")]
-    public float amplitudDribling = 0.08f;
+    public float suavizadoParadaConduccion = 18f;
+    [Tooltip("Frecuencia base de los toques de balón al conducir (pasos por segundo)")]
+    public float frecuenciaDribling = 3.5f;
+    [Tooltip("Distancia lateral entre el balón y el eje central (alternancia de pies)")]
+    public float amplitudDribling = 0.22f;
+    [Tooltip("Qué tan adelante van los pies al tocar el balón (offset frontal)")]
+    public float offsetFrontalPie = 0.55f;
+    [Tooltip("Altura de rebote del balón entre toques (0 = siempre en suelo)")]
+    public float alturaToqueDriblin = 0.04f;
     
     private bool estaPateando = false;
     private float cooldownRecogidaPatada = 0f;
+    
+    // Dribling procedimental - estado interno
+    private float faseDribling = 0f;         // Fase acumulada (0..1 por ciclo de zancada)
+    private bool pieActivo = false;           // false = pie izquierdo, true = pie derecho
+    private float tiempoUltimoToque = 0f;    // Para timing de rebote
+    private bool enFaseToque = false;
     
     [Header("Carga de Patada")]
     public float tiempoCargaMax = 1.2f;
@@ -938,6 +948,8 @@ public class ControladorTerceraPersona : MonoBehaviour
             if (!pelotaDriblando.estaConducida)
             {
                 pelotaDriblando = null;
+                faseDribling = 0f;
+                enFaseToque = false;
                 // Si la pelota se perdió, ocultar la barra de carga si estaba activa
                 if (cargandoPatada)
                 {
@@ -948,25 +960,64 @@ public class ControladorTerceraPersona : MonoBehaviour
                 return;
             }
             
-            // Colocar la pelota adelante de los pies del jugador con oscilación lateral (dribling de pies) y suavizado
             float velocidadJugador = controlador != null ? controlador.velocity.magnitude : 0f;
-            
-            // Oscilación lateral según el movimiento para simular llevarla con ambos pies
-            float multiplicadorVelocidadSway = velocidadJugador > 4f ? 1.7f : 1f;
-            float frecuenciaSway = frecuenciaDribling * multiplicadorVelocidadSway;
-            float amplitudSway = velocidadJugador > 0.1f ? amplitudDribling : 0f;
-            Vector3 oscilacionLateral = transform.right * Mathf.Sin(Time.time * frecuenciaSway) * amplitudSway;
-            
-            // Retraso leve al acelerar/frenar (oscilación adelante-atrás)
-            float oscilacionFrontal = velocidadJugador > 0.1f ? (Mathf.Cos(Time.time * frecuenciaSway) * 0.02f) : 0f;
-            
-            // Altura y offset según el radio del balón
             float radioPelota = pelotaDriblando.transform.localScale.x * 0.5f;
-            Vector3 posIdealBalon = transform.position + transform.forward * (0.6f + radioPelota + oscilacionFrontal) + Vector3.up * radioPelota + oscilacionLateral;
+            
+            // --- SISTEMA DE TOQUES ALTERNOS DE PIE (DRIBLING REAL DE FÚTBOL) ---
+            // Avanzar la fase según velocidad (más rápido = toques más frecuentes)
+            float velocidadFase = velocidadJugador > 0.1f
+                ? frecuenciaDribling * Mathf.Lerp(0.7f, 1.5f, velocidadJugador / velocidadCorrer)
+                : 0f;
+            faseDribling += velocidadFase * Time.deltaTime;
+            
+            // Detectar cada medio ciclo = cambio de pie
+            float faseActual = faseDribling % 1.0f;
+            bool pieDerecho = ((int)(faseDribling) % 2 == 0);
+            
+            // Offset lateral: alterna entre pie izq y pie der
+            float ladoPie = pieDerecho ? 1f : -1f;
+            // El balón va hacia el pie activo con mayor amplitud cuando se mueve
+            float ampLateral = velocidadJugador > 0.1f ? amplitudDribling : (amplitudDribling * 0.3f);
+            // Suavizar transición de pie (usando sin de la fase)
+            float lateralSmooth = Mathf.Sin(faseDribling * Mathf.PI) * ladoPie;
+            Vector3 offsetLateral = transform.right * lateralSmooth * ampLateral;
+            
+            // Offset frontal: el balón va un poco más adelante al inicio del toque y vuelve
+            float offsetFrontal = offsetFrontalPie + Mathf.Abs(Mathf.Sin(faseDribling * Mathf.PI)) * 0.1f;
+            if (velocidadJugador < 0.1f) offsetFrontal = offsetFrontalPie;
+            
+            // --- POSICIÓN HORIZONTAL IDEAL ---
+            Vector3 posHorizontal = transform.position 
+                + transform.forward * (offsetFrontal + radioPelota)
+                + offsetLateral;
+            
+            // --- CORRECCIÓN DE ALTURA: Raycast para que siempre toque el suelo real ---
+            float alturaBalon = transform.position.y + radioPelota; // fallback
+            Ray rayoSuelo = new Ray(posHorizontal + Vector3.up * 0.5f, Vector3.down);
+            RaycastHit hitSuelo;
+            if (Physics.Raycast(rayoSuelo, out hitSuelo, 2.0f, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
+            {
+                // El balón debe estar exactamente sobre el suelo detectado
+                alturaBalon = hitSuelo.point.y + radioPelota;
+            }
+            
+            // Mini rebote cosmético entre toques (simula que el balón rebota levemente al ser tocado)
+            float alturaToque = 0f;
+            if (velocidadJugador > 0.3f)
+            {
+                // Rebote suave siguiendo una curva sinusoidal entre toques
+                alturaToque = Mathf.Abs(Mathf.Sin(faseDribling * Mathf.PI)) * alturaToqueDriblin;
+            }
+            
+            Vector3 posIdealBalon = new Vector3(posHorizontal.x, alturaBalon + alturaToque, posHorizontal.z);
             
             // Interpolar suavemente para que la pelota tenga inercia y no parezca rígidamente pegada
             float velocidadSuavizado = velocidadJugador > 0.1f ? suavizadoMovimientoConduccion : suavizadoParadaConduccion;
-            pelotaDriblando.transform.position = Vector3.Lerp(pelotaDriblando.transform.position, posIdealBalon, Time.deltaTime * velocidadSuavizado);
+            pelotaDriblando.transform.position = Vector3.Lerp(
+                pelotaDriblando.transform.position,
+                posIdealBalon,
+                Time.deltaTime * velocidadSuavizado
+            );
             
             // Forzar velocidad a cero mientras se conduce para evitar física errática
             Rigidbody rbPelota = pelotaDriblando.GetComponent<Rigidbody>();
@@ -978,6 +1029,9 @@ public class ControladorTerceraPersona : MonoBehaviour
         }
         else
         {
+            // Resetear fase de dribling al soltar el balón
+            faseDribling = 0f;
+            enFaseToque = false;
             // Si no tenemos la pelota, asegurar que la barra de carga esté oculta
             if (cargandoPatada)
             {
