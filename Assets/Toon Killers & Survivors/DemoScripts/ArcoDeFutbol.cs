@@ -27,6 +27,20 @@ public class ArcoDeFutbol : MonoBehaviour
         {
             luzCelebracion.enabled = false;
         }
+
+        // Si ya existe MarcadorHUD (nuevo sistema unificado), desactivamos la UI antigua
+        if (MarcadorHUD.Instancia != null)
+        {
+            if (textoMarcador != null) textoMarcador.gameObject.SetActive(false);
+            if (panelGolUI != null) panelGolUI.SetActive(false);
+            
+            Canvas canvasViejo = GetComponentInParent<Canvas>();
+            if (canvasViejo != null && canvasViejo.name == "CanvasFutbol")
+            {
+                canvasViejo.gameObject.SetActive(false);
+            }
+        }
+
         ActualizarMarcador();
         ConfigurarFisicaPostes();
     }
@@ -63,7 +77,7 @@ public class ArcoDeFutbol : MonoBehaviour
             tiempoCelebracion += Time.deltaTime;
             
             // Animación pulsante del cartel de ¡GOL! en la pantalla
-            if (panelGolUI != null)
+            if (panelGolUI != null && panelGolUI.activeSelf)
             {
                 float escala = 1.0f + Mathf.Abs(Mathf.Sin(tiempoCelebracion * 10f)) * 0.25f;
                 panelGolUI.transform.localScale = new Vector3(escala, escala, escala);
@@ -101,7 +115,7 @@ public class ArcoDeFutbol : MonoBehaviour
         }
         
         // Activar UI festiva
-        if (panelGolUI != null)
+        if (panelGolUI != null && MarcadorHUD.Instancia == null)
         {
             panelGolUI.SetActive(true);
             panelGolUI.transform.localScale = Vector3.zero;

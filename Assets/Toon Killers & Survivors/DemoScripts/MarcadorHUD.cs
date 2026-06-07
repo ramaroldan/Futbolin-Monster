@@ -59,6 +59,13 @@ public class MarcadorHUD : MonoBehaviour
 
     void Start()
     {
+        // Desactivar la UI vieja redundante si existe
+        GameObject viejoCanvas = GameObject.Find("CanvasFutbol");
+        if (viejoCanvas != null)
+        {
+            viejoCanvas.SetActive(false);
+        }
+
         // Si no se han asignado las referencias, construir la UI dinámicamente
         if (canvasHUD == null)
         {
@@ -90,7 +97,7 @@ public class MarcadorHUD : MonoBehaviour
         {
             int minutos = Mathf.FloorToInt(tiempoRestante / 60f);
             int segundos = Mathf.FloorToInt(tiempoRestante % 60f);
-            textoTiempo.text = string.Format("{0:00}:{1:00}", minutos, segundos);
+            textoTiempo.text = "⏱️ " + string.Format("{0:00}:{1:00}", minutos, segundos);
             
             // Si queda poco tiempo (menos de 15s), poner en rojo parpadeante
             if (tiempoRestante < 15f && tiempoRestante > 0f)
@@ -104,11 +111,11 @@ public class MarcadorHUD : MonoBehaviour
     {
         if (textoGoles != null)
         {
-            textoGoles.text = "GOLES: " + golesActuales;
+            textoGoles.text = "⚽ GOLES: " + golesActuales;
         }
         if (textoNoqueos != null)
         {
-            textoNoqueos.text = "NOQUEOS: " + noqueosActuales;
+            textoNoqueos.text = "💀 K.O.: " + noqueosActuales;
         }
     }
 
@@ -248,10 +255,10 @@ public class MarcadorHUD : MonoBehaviour
         if (textoResumenFin != null)
         {
             textoResumenFin.text = string.Format(
-                "GOLES ANOTADOS: <color=#33ff33>{0}</color>\n" +
-                "DEFENSORES NOQUEADOS: <color=#ff3333>{1}</color>\n" +
-                "BARRIDAS SUFRIDAS: <color=#ff8800>{2}</color>\n\n" +
-                "RANGO DEL PARTIDO: <color={3}><size=55>{4}</size></color>",
+                "⚽  <b>GOLES ANOTADOS:</b> <color=#33ff33>{0}</color>\n\n" +
+                "💀  <b>DEFENSORES NOQUEADOS:</b> <color=#ff3333>{1}</color>\n\n" +
+                "🛡️  <b>BARRIDAS SUFRIDAS:</b> <color=#ff8800>{2}</color>\n\n\n" +
+                "🏆  <b>RANGO DEL PARTIDO:</b> <color={3}><b><size=65>{4}</size></b></color>",
                 golesActuales,
                 noqueosActuales,
                 tacleadasSufridas,
@@ -267,6 +274,15 @@ public class MarcadorHUD : MonoBehaviour
     {
         Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void SalirDelJuego()
+    {
+        #if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+        #else
+        Application.Quit();
+        #endif
     }
 
     // --- CONSTRUCCIÓN DINÁMICA DE LA UI ---
@@ -285,7 +301,7 @@ public class MarcadorHUD : MonoBehaviour
         
         goCanvas.AddComponent<GraphicRaycaster>();
         
-        // 2. Panel superior del Marcador (Estilo Glassmorphism)
+        // 2. Panel superior del Marcador (Estilo Glassmorphism Premium)
         GameObject goPanel = new GameObject("PanelMarcador");
         goPanel.transform.SetParent(goCanvas.transform, false);
         
@@ -294,14 +310,14 @@ public class MarcadorHUD : MonoBehaviour
         rtPanel.anchorMax = new Vector2(0.5f, 1f);
         rtPanel.pivot = new Vector2(0.5f, 1f);
         rtPanel.anchoredPosition = new Vector2(0f, -15f);
-        rtPanel.sizeDelta = new Vector2(480f, 75f);
+        rtPanel.sizeDelta = new Vector2(580f, 75f);
         
         Image imgPanel = goPanel.AddComponent<Image>();
-        imgPanel.color = new Color(0.08f, 0.08f, 0.1f, 0.75f); // Fondo gris muy oscuro traslúcido
+        imgPanel.color = new Color(0.04f, 0.04f, 0.07f, 0.85f); // Gris azulado ultra oscuro traslúcido
         
-        // Bordes con Outline en el panel
+        // Bordes con Outline neón moderno en el panel
         Outline panelOutline = goPanel.AddComponent<Outline>();
-        panelOutline.effectColor = new Color(0.3f, 0.3f, 0.4f, 0.5f);
+        panelOutline.effectColor = new Color(0.0f, 0.8f, 1.0f, 0.8f); // Cyan neón
         panelOutline.effectDistance = new Vector2(2f, 2f);
 
         // 3. Texto del Temporizador (En el centro del panel)
@@ -309,7 +325,7 @@ public class MarcadorHUD : MonoBehaviour
         goTiempo.transform.SetParent(goPanel.transform, false);
         textoTiempo = goTiempo.AddComponent<Text>();
         textoTiempo.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-        textoTiempo.fontSize = 32;
+        textoTiempo.fontSize = 28;
         textoTiempo.alignment = TextAnchor.MiddleCenter;
         textoTiempo.color = Color.white;
         
@@ -317,12 +333,12 @@ public class MarcadorHUD : MonoBehaviour
         rtTiempo.anchorMin = new Vector2(0.5f, 0.5f);
         rtTiempo.anchorMax = new Vector2(0.5f, 0.5f);
         rtTiempo.anchoredPosition = Vector2.zero;
-        rtTiempo.sizeDelta = new Vector2(120f, 60f);
+        rtTiempo.sizeDelta = new Vector2(160f, 60f);
 
-        // Sombras para los textos
-        Shadow shadowTiempo = goTiempo.AddComponent<Shadow>();
-        shadowTiempo.effectColor = Color.black;
-        shadowTiempo.effectDistance = new Vector2(2f, -2f);
+        // Contorno más fuerte para legibilidad
+        Outline outlineTiempo = goTiempo.AddComponent<Outline>();
+        outlineTiempo.effectColor = Color.black;
+        outlineTiempo.effectDistance = new Vector2(1.5f, 1.5f);
 
         // 4. Texto de Goles (Lado izquierdo del panel)
         GameObject goGoles = new GameObject("TextoGoles");
@@ -337,12 +353,12 @@ public class MarcadorHUD : MonoBehaviour
         rtGoles.anchorMin = new Vector2(0f, 0.5f);
         rtGoles.anchorMax = new Vector2(0f, 0.5f);
         rtGoles.pivot = new Vector2(0f, 0.5f);
-        rtGoles.anchoredPosition = new Vector2(20f, 0f);
-        rtGoles.sizeDelta = new Vector2(160f, 50f);
+        rtGoles.anchoredPosition = new Vector2(25f, 0f);
+        rtGoles.sizeDelta = new Vector2(180f, 50f);
 
-        Shadow shadowGoles = goGoles.AddComponent<Shadow>();
-        shadowGoles.effectColor = Color.black;
-        shadowGoles.effectDistance = new Vector2(2f, -2f);
+        Outline outlineGoles = goGoles.AddComponent<Outline>();
+        outlineGoles.effectColor = Color.black;
+        outlineGoles.effectDistance = new Vector2(1.5f, 1.5f);
 
         // 5. Texto de Noqueos (Lado derecho del panel)
         GameObject goNoqueos = new GameObject("TextoNoqueos");
@@ -357,19 +373,19 @@ public class MarcadorHUD : MonoBehaviour
         rtNoqueos.anchorMin = new Vector2(1f, 0.5f);
         rtNoqueos.anchorMax = new Vector2(1f, 0.5f);
         rtNoqueos.pivot = new Vector2(1f, 0.5f);
-        rtNoqueos.anchoredPosition = new Vector2(-20f, 0f);
-        rtNoqueos.sizeDelta = new Vector2(160f, 50f);
+        rtNoqueos.anchoredPosition = new Vector2(-25f, 0f);
+        rtNoqueos.sizeDelta = new Vector2(180f, 50f);
 
-        Shadow shadowNoqueos = goNoqueos.AddComponent<Shadow>();
-        shadowNoqueos.effectColor = Color.black;
-        shadowNoqueos.effectDistance = new Vector2(2f, -2f);
+        Outline outlineNoqueos = goNoqueos.AddComponent<Outline>();
+        outlineNoqueos.effectColor = Color.black;
+        outlineNoqueos.effectDistance = new Vector2(1.5f, 1.5f);
 
         // 6. Texto de Anuncios Centrales
         GameObject goAnuncios = new GameObject("TextoAnuncios");
         goAnuncios.transform.SetParent(goCanvas.transform, false);
         textoAnuncios = goAnuncios.AddComponent<Text>();
         textoAnuncios.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-        textoAnuncios.fontSize = 44;
+        textoAnuncios.fontSize = 52; // Un poco más grande para impacto visual
         textoAnuncios.alignment = TextAnchor.MiddleCenter;
         textoAnuncios.color = Color.yellow;
         textoAnuncios.gameObject.SetActive(false);
@@ -377,47 +393,68 @@ public class MarcadorHUD : MonoBehaviour
         RectTransform rtAnuncios = goAnuncios.GetComponent<RectTransform>();
         rtAnuncios.anchorMin = new Vector2(0.5f, 0.5f);
         rtAnuncios.anchorMax = new Vector2(0.5f, 0.5f);
-        rtAnuncios.anchoredPosition = new Vector2(0f, 100f); // Posicionado arriba del centro
-        rtAnuncios.sizeDelta = new Vector2(800f, 100f);
+        rtAnuncios.anchoredPosition = new Vector2(0f, 120f); // Posicionado arriba del centro
+        rtAnuncios.sizeDelta = new Vector2(900f, 120f);
 
         Outline outlineAnuncios = goAnuncios.AddComponent<Outline>();
         outlineAnuncios.effectColor = Color.black;
-        outlineAnuncios.effectDistance = new Vector2(2.5f, 2.5f);
+        outlineAnuncios.effectDistance = new Vector2(3f, 3f);
 
-        // 7. Panel de Fin de Partido (Oscurecido y centrado)
+        // 7. Panel de Fin de Partido (Fondo oscuro total a pantalla completa para enfocar atención)
         panelFinPartido = new GameObject("PanelFinPartido");
         panelFinPartido.transform.SetParent(goCanvas.transform, false);
         panelFinPartido.SetActive(false);
         
         RectTransform rtFin = panelFinPartido.AddComponent<RectTransform>();
-        rtFin.anchorMin = new Vector2(0.5f, 0.5f);
-        rtFin.anchorMax = new Vector2(0.5f, 0.5f);
+        rtFin.anchorMin = new Vector2(0f, 0f);
+        rtFin.anchorMax = new Vector2(1f, 1f);
         rtFin.pivot = new Vector2(0.5f, 0.5f);
         rtFin.anchoredPosition = Vector2.zero;
-        rtFin.sizeDelta = new Vector2(600f, 450f);
+        rtFin.sizeDelta = Vector2.zero;
         
         Image imgFin = panelFinPartido.AddComponent<Image>();
-        imgFin.color = new Color(0.05f, 0.05f, 0.08f, 0.95f); // Fondo muy opaco para concentrar atención
+        imgFin.color = new Color(0.02f, 0.02f, 0.04f, 0.8f); // Negro azulado traslúcido
         
-        Outline outlineFin = panelFinPartido.AddComponent<Outline>();
-        outlineFin.effectColor = new Color(1f, 0.84f, 0f, 0.5f); // Borde dorado tenue
-        outlineFin.effectDistance = new Vector2(3f, 3f);
+        // Evita clics accidentales detrás del panel
+        panelFinPartido.AddComponent<CanvasGroup>();
 
-        // Título "FIN DEL PARTIDO"
+        // Tarjeta central de estadísticas (Stats Card)
+        GameObject goCard = new GameObject("TarjetaEstadisticas");
+        goCard.transform.SetParent(panelFinPartido.transform, false);
+        
+        RectTransform rtCard = goCard.AddComponent<RectTransform>();
+        rtCard.anchorMin = new Vector2(0.5f, 0.5f);
+        rtCard.anchorMax = new Vector2(0.5f, 0.5f);
+        rtCard.pivot = new Vector2(0.5f, 0.5f);
+        rtCard.anchoredPosition = Vector2.zero;
+        rtCard.sizeDelta = new Vector2(580f, 500f);
+        
+        Image imgCard = goCard.AddComponent<Image>();
+        imgCard.color = new Color(0.06f, 0.06f, 0.10f, 0.95f); // Gris azulado premium
+        
+        Outline outlineCard = goCard.AddComponent<Outline>();
+        outlineCard.effectColor = new Color(1f, 0.84f, 0f, 0.75f); // Dorado brillante para la tarjeta de resumen
+        outlineCard.effectDistance = new Vector2(3f, 3f);
+        
+        Shadow shadowCard = goCard.AddComponent<Shadow>();
+        shadowCard.effectColor = new Color(0f, 0f, 0f, 0.6f);
+        shadowCard.effectDistance = new Vector2(8f, -8f);
+
+        // Título "RESUMEN DEL PARTIDO"
         GameObject goFinTitulo = new GameObject("FinTitulo");
-        goFinTitulo.transform.SetParent(panelFinPartido.transform, false);
+        goFinTitulo.transform.SetParent(goCard.transform, false);
         Text txtFinTitulo = goFinTitulo.AddComponent<Text>();
         txtFinTitulo.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-        txtFinTitulo.fontSize = 38;
+        txtFinTitulo.fontSize = 36;
         txtFinTitulo.alignment = TextAnchor.MiddleCenter;
-        txtFinTitulo.text = "FIN DEL PARTIDO";
-        txtFinTitulo.color = Color.yellow;
+        txtFinTitulo.text = "RESUMEN DEL PARTIDO";
+        txtFinTitulo.color = new Color(1f, 0.84f, 0f); // Dorado
         
         RectTransform rtFinTitulo = goFinTitulo.GetComponent<RectTransform>();
         rtFinTitulo.anchorMin = new Vector2(0.5f, 1f);
         rtFinTitulo.anchorMax = new Vector2(0.5f, 1f);
         rtFinTitulo.pivot = new Vector2(0.5f, 1f);
-        rtFinTitulo.anchoredPosition = new Vector2(0f, -30f);
+        rtFinTitulo.anchoredPosition = new Vector2(0f, -35f);
         rtFinTitulo.sizeDelta = new Vector2(500f, 50f);
 
         Outline outlineFinTitulo = goFinTitulo.AddComponent<Outline>();
@@ -426,7 +463,7 @@ public class MarcadorHUD : MonoBehaviour
 
         // Texto Resumen Estadísticas
         GameObject goResumen = new GameObject("TextoResumen");
-        goResumen.transform.SetParent(panelFinPartido.transform, false);
+        goResumen.transform.SetParent(goCard.transform, false);
         textoResumenFin = goResumen.AddComponent<Text>();
         textoResumenFin.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
         textoResumenFin.fontSize = 22;
@@ -438,30 +475,34 @@ public class MarcadorHUD : MonoBehaviour
         rtResumen.anchorMin = new Vector2(0.5f, 0.5f);
         rtResumen.anchorMax = new Vector2(0.5f, 0.5f);
         rtResumen.pivot = new Vector2(0.5f, 0.5f);
-        rtResumen.anchoredPosition = new Vector2(0f, -10f);
-        rtResumen.sizeDelta = new Vector2(500f, 220f);
+        rtResumen.anchoredPosition = new Vector2(0f, 0f);
+        rtResumen.sizeDelta = new Vector2(500f, 260f);
 
-        // Botón de Reiniciar
+        // Botón de Reiniciar (Jugar Otra Vez)
         GameObject goBoton = new GameObject("BotonReiniciar");
-        goBoton.transform.SetParent(panelFinPartido.transform, false);
+        goBoton.transform.SetParent(goCard.transform, false);
         
         RectTransform rtBoton = goBoton.AddComponent<RectTransform>();
         rtBoton.anchorMin = new Vector2(0.5f, 0f);
         rtBoton.anchorMax = new Vector2(0.5f, 0f);
         rtBoton.pivot = new Vector2(0.5f, 0f);
-        rtBoton.anchoredPosition = new Vector2(0f, 40f);
+        rtBoton.anchoredPosition = new Vector2(-130f, 40f);
         rtBoton.sizeDelta = new Vector2(240f, 50f);
         
         Image imgBoton = goBoton.AddComponent<Image>();
-        imgBoton.color = new Color(0.2f, 0.6f, 0.2f); // Verde botón
+        imgBoton.color = new Color(0.12f, 0.53f, 0.28f); // Verde
         
+        Outline outlineBoton = goBoton.AddComponent<Outline>();
+        outlineBoton.effectColor = new Color(0.5f, 1f, 0.6f, 0.4f);
+        outlineBoton.effectDistance = new Vector2(1.5f, 1.5f);
+
         botonReiniciar = goBoton.AddComponent<Button>();
         
         // Transición de color del botón al pasar el mouse
         ColorBlock coloresBoton = botonReiniciar.colors;
-        coloresBoton.normalColor = new Color(0.2f, 0.6f, 0.2f);
-        coloresBoton.highlightedColor = new Color(0.3f, 0.8f, 0.3f);
-        coloresBoton.pressedColor = new Color(0.15f, 0.4f, 0.15f);
+        coloresBoton.normalColor = new Color(0.12f, 0.53f, 0.28f);
+        coloresBoton.highlightedColor = new Color(0.18f, 0.7f, 0.38f);
+        coloresBoton.pressedColor = new Color(0.08f, 0.38f, 0.2f);
         botonReiniciar.colors = coloresBoton;
 
         // Texto dentro del Botón
@@ -469,9 +510,9 @@ public class MarcadorHUD : MonoBehaviour
         goBotonTexto.transform.SetParent(goBoton.transform, false);
         Text txtBoton = goBotonTexto.AddComponent<Text>();
         txtBoton.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-        txtBoton.fontSize = 20;
+        txtBoton.fontSize = 18;
         txtBoton.alignment = TextAnchor.MiddleCenter;
-        txtBoton.text = "RECOMENZAR PARTIDO";
+        txtBoton.text = "🔄 JUGAR OTRA VEZ";
         txtBoton.color = Color.white;
         
         RectTransform rtBotonTexto = goBotonTexto.GetComponent<RectTransform>();
@@ -479,11 +520,59 @@ public class MarcadorHUD : MonoBehaviour
         rtBotonTexto.anchorMax = Vector3.one;
         rtBotonTexto.sizeDelta = Vector2.zero;
 
-        Shadow shadowBoton = goBotonTexto.AddComponent<Shadow>();
-        shadowBoton.effectColor = Color.black;
-        shadowBoton.effectDistance = new Vector2(1f, -1f);
+        Outline outlineTxtBoton = goBotonTexto.AddComponent<Outline>();
+        outlineTxtBoton.effectColor = Color.black;
+        outlineTxtBoton.effectDistance = new Vector2(1.5f, 1.5f);
 
         // Añadir Listener para el reinicio
         botonReiniciar.onClick.AddListener(RecomenzarPartido);
+
+        // Nuevo Botón de Salir del Juego
+        GameObject goBotonSalir = new GameObject("BotonSalir");
+        goBotonSalir.transform.SetParent(goCard.transform, false);
+        
+        RectTransform rtBotonSalir = goBotonSalir.AddComponent<RectTransform>();
+        rtBotonSalir.anchorMin = new Vector2(0.5f, 0f);
+        rtBotonSalir.anchorMax = new Vector2(0.5f, 0f);
+        rtBotonSalir.pivot = new Vector2(0.5f, 0f);
+        rtBotonSalir.anchoredPosition = new Vector2(130f, 40f);
+        rtBotonSalir.sizeDelta = new Vector2(240f, 50f);
+        
+        Image imgBotonSalir = goBotonSalir.AddComponent<Image>();
+        imgBotonSalir.color = new Color(0.6f, 0.2f, 0.2f); // Rojo
+        
+        Outline outlineBotonSalir = goBotonSalir.AddComponent<Outline>();
+        outlineBotonSalir.effectColor = new Color(1f, 0.6f, 0.6f, 0.4f);
+        outlineBotonSalir.effectDistance = new Vector2(1.5f, 1.5f);
+
+        Button botonSalir = goBotonSalir.AddComponent<Button>();
+        
+        ColorBlock coloresBotonSalir = botonSalir.colors;
+        coloresBotonSalir.normalColor = new Color(0.6f, 0.2f, 0.2f);
+        coloresBotonSalir.highlightedColor = new Color(0.8f, 0.3f, 0.3f);
+        coloresBotonSalir.pressedColor = new Color(0.4f, 0.15f, 0.15f);
+        botonSalir.colors = coloresBotonSalir;
+
+        // Texto dentro del Botón Salir
+        GameObject goBotonSalirTexto = new GameObject("TextoBotonSalir");
+        goBotonSalirTexto.transform.SetParent(goBotonSalir.transform, false);
+        Text txtBotonSalir = goBotonSalirTexto.AddComponent<Text>();
+        txtBotonSalir.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+        txtBotonSalir.fontSize = 18;
+        txtBotonSalir.alignment = TextAnchor.MiddleCenter;
+        txtBotonSalir.text = "❌ SALIR DEL JUEGO";
+        txtBotonSalir.color = Color.white;
+        
+        RectTransform rtBotonSalirTexto = goBotonSalirTexto.GetComponent<RectTransform>();
+        rtBotonSalirTexto.anchorMin = Vector2.zero;
+        rtBotonSalirTexto.anchorMax = Vector3.one;
+        rtBotonSalirTexto.sizeDelta = Vector2.zero;
+
+        Outline outlineTxtBotonSalir = goBotonSalirTexto.AddComponent<Outline>();
+        outlineTxtBotonSalir.effectColor = Color.black;
+        outlineTxtBotonSalir.effectDistance = new Vector2(1.5f, 1.5f);
+
+        // Añadir Listener para salir
+        botonSalir.onClick.AddListener(SalirDelJuego);
     }
 }
