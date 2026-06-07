@@ -163,6 +163,13 @@ public class ControladorTerceraPersona : MonoBehaviour
 
     void Start()
     {
+        // Si estamos en la escena de menú principal, no hacer nada y desactivarse
+        if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "MainMenu")
+        {
+            this.enabled = false;
+            return;
+        }
+
         controlador = GetComponent<CharacterController>();
         animador = GetComponent<Animator>();
         

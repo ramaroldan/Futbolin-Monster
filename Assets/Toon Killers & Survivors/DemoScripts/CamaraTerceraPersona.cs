@@ -33,6 +33,15 @@ public class CamaraTerceraPersona : MonoBehaviour
     
     void Start()
     {
+        // Si estamos en la escena de menú principal, no hacer nada y desactivarse
+        if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "MainMenu")
+        {
+            this.enabled = false;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            return;
+        }
+
         // Bloquear y ocultar el cursor
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;

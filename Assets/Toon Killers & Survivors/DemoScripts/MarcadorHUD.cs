@@ -34,6 +34,12 @@ public class MarcadorHUD : MonoBehaviour
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     private static void InicializarAutomaticamente()
     {
+        // No autogenerar el marcador si estamos en el menú principal
+        if (SceneManager.GetActiveScene().name == "MainMenu")
+        {
+            return;
+        }
+
         if (Instancia == null)
         {
             MarcadorHUD hudExistente = FindObjectOfType<MarcadorHUD>();
