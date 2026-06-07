@@ -6,3 +6,9 @@
 [Ll]ogs/
 UserSettings/
 MemoryCaptures/
+
+# Visual Studio cache and settings
+.vs/
+*.suo
+*.user
+*.userprefs

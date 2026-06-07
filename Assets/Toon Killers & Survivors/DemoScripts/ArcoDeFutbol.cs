@@ -95,6 +95,11 @@ public class ArcoDeFutbol : MonoBehaviour
         contadorGoles++;
         ActualizarMarcador();
         
+        if (MarcadorHUD.Instancia != null)
+        {
+            MarcadorHUD.Instancia.RegistrarGol();
+        }
+        
         // Activar UI festiva
         if (panelGolUI != null)
         {

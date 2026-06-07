@@ -21,6 +21,7 @@ public class ControladorTerceraPersona : MonoBehaviour
     [Header("Ajustes del Objeto en Mano")]
     public Vector3 offsetPosicionMano = new Vector3(0.02f, 0.05f, 0f);
     public Vector3 offsetRotacionMano = new Vector3(0f, 90f, 90f);
+    public GameObject hachaEnMano;
     
     [Header("Ajustes del Proyectil Lanzado")]
     public Vector3 rotacionAdicionalProyectil = new Vector3(0f, 0f, 90f);
@@ -77,6 +78,68 @@ public class ControladorTerceraPersona : MonoBehaviour
     private Vector3 rotShinOffset = Vector3.zero;
     private bool pateandoProcedural = false;
     
+    [Header("Principios de Animación (Straight Ahead & Pose to Pose)")]
+    [Tooltip("Suavizado al acelerar (Slow In)")]
+    public float suavizadoAceleracion = 8f;
+    [Tooltip("Suavizado al frenar/parar (Slow Out)")]
+    public float suavizadoDeceleracion = 12f;
+
+    [Header("Principios Animación - Muelle de Balanceo Torso")]
+    public float springForceTorso = 180f;
+    public float dampingForceTorso = 14f;
+    public float pesoInclinacionPitch = 1.5f;
+    public float pesoVelocidadPitch = 0.8f;
+    public float pesoInclinacionRoll = 1.2f;
+    public float pesoVelocidadRoll = 0.6f;
+    public float inclinacionTorsoMax = 20f;
+
+    [Header("Principios Animación - Muelle de Cabeza")]
+    public float springForceHead = 120f;
+    public float dampingForceHead = 10f;
+    public float multiplicadorLagCabeza = -0.5f; 
+    public float inclinacionCabezaMax = 15f;
+
+    [Header("Principios Animación - Squash & Stretch")]
+    public float springForceSquash = 220f;
+    public float dampingForceSquash = 15f;
+    public float pesoSquashFrenado = 0.20f;
+    public float pesoStretchInicio = 0.08f;
+
+    // Estado físico actual e inercial
+    private Vector3 velocidadHorizontalActual = Vector3.zero;
+    private Vector3 velocidadHorizontalObjetivo = Vector3.zero;
+    private Vector3 lastHorizontalVelocity = Vector3.zero;
+
+    // Referencias de huesos y modelo visual
+    private Transform spine;
+    private Transform head;
+    private Transform visualModelTransform;
+    private Vector3 escalaInicialVisual = Vector3.one;
+
+    // Variables de simulación del muelle del Torso (Pitch y Roll)
+    private float tiltPitch = 0f;
+    private float tiltRoll = 0f;
+    private float tiltPitchVelocity = 0f;
+    private float tiltRollVelocity = 0f;
+
+    // Variables de simulación del muelle de la Cabeza
+    private float headTiltPitch = 0f;
+    private float headTiltRoll = 0f;
+    private float headTiltPitchVelocity = 0f;
+    private float headTiltRollVelocity = 0f;
+
+    // Variables de simulación del Squash & Stretch
+    private float scaleYFactor = 1f;
+    private float scaleYVelocity = 0f;
+    
+    // Anticipación y caída (Straight Ahead)
+    private bool anticipandoSalto = false;
+    private float tiempoInicioSalto = 0f;
+    [Header("Principios Animación - Tiempos y Pesos extra")]
+    public float duracionAnticipacionSalto = 0.12f;
+    public float pesoSquashCaida = 0.04f;
+    private bool estabaEnElAire = false;
+    
     private Vector3 velocidad;
     private bool estaEnElSuelo;
     private bool estaLanzando = false;
@@ -110,6 +173,42 @@ public class ControladorTerceraPersona : MonoBehaviour
             leftThigh = animador.GetBoneTransform(HumanBodyBones.LeftUpperLeg);
             leftShin = animador.GetBoneTransform(HumanBodyBones.LeftLowerLeg);
             hips = animador.GetBoneTransform(HumanBodyBones.Hips);
+            spine = animador.GetBoneTransform(HumanBodyBones.Spine);
+            head = animador.GetBoneTransform(HumanBodyBones.Head);
+        }
+        
+        visualModelTransform = transform.Find("Character1_Reference");
+        if (visualModelTransform == null)
+        {
+            visualModelTransform = transform;
+        }
+        escalaInicialVisual = visualModelTransform.localScale;
+        
+        // Inicializar automáticamente hachaEnMano si no se asignó en el Inspector
+        if (hachaEnMano == null)
+        {
+            Transform manoDerecha = BuscarManoDerecha(transform);
+            if (manoDerecha != null)
+            {
+                Transform weaponHandler = manoDerecha.Find("WeaponHandler");
+                if (weaponHandler != null)
+                {
+                    Transform axe = weaponHandler.Find("Axe");
+                    if (axe != null)
+                    {
+                        hachaEnMano = axe.gameObject;
+                    }
+                }
+                
+                if (hachaEnMano == null)
+                {
+                    Transform axe = BuscarHachaRecursivo(manoDerecha);
+                    if (axe != null)
+                    {
+                        hachaEnMano = axe.gameObject;
+                    }
+                }
+            }
         }
         
         if (Camera.main != null)
@@ -148,6 +247,7 @@ public class ControladorTerceraPersona : MonoBehaviour
             if (Time.time >= tiempoFinAturdimiento)
             {
                 estaAturdido = false;
+                velocidadHorizontalActual = Vector3.zero;
             }
             else
             {
@@ -163,10 +263,33 @@ public class ControladorTerceraPersona : MonoBehaviour
             }
         }
 
+        bool fueGrounded = estaEnElSuelo;
         estaEnElSuelo = controlador.isGrounded;
+        
+        // Detectar impacto al aterrizar (peso)
+        if (estaEnElSuelo && !fueGrounded && estabaEnElAire)
+        {
+            float velocidadDeCaida = Mathf.Abs(velocidad.y);
+            scaleYVelocity = -Mathf.Clamp(velocidadDeCaida, 3f, 18f) * pesoSquashCaida;
+            estabaEnElAire = false;
+        }
+        
+        if (!estaEnElSuelo)
+        {
+            estabaEnElAire = true;
+        }
+
         if (estaEnElSuelo && velocidad.y < 0)
         {
             velocidad.y = -2f;
+        }
+        
+        // Lanzamiento real tras anticipación de salto
+        if (anticipandoSalto && Time.time >= tiempoInicioSalto + duracionAnticipacionSalto)
+        {
+            velocidad.y = Mathf.Sqrt(alturaSalto * -2f * gravedad);
+            anticipandoSalto = false;
+            scaleYVelocity = 3.5f; // Estiramiento explosivo al saltar (Stretch Y)
         }
         
         // Manejar la mecánica de apuntado
@@ -174,10 +297,13 @@ public class ControladorTerceraPersona : MonoBehaviour
         
         ManejarAgachado();
         
-        if (!estaLanzando && !estaPateando)
+        if (!estaPateando)
         {
             MoverYRotar();
-            ManejarSalto();
+            if (!estaLanzando)
+            {
+                ManejarSalto();
+            }
         }
         
         ManejarLanzamiento();
@@ -187,8 +313,98 @@ public class ControladorTerceraPersona : MonoBehaviour
         velocidad.y += gravedad * Time.deltaTime;
         controlador.Move(velocidad * Time.deltaTime);
         
+        // Simular muelles procedimentales (Straight Ahead)
+        SimularMuelleAnimacion();
+        
         // Manejar el estado de animación
         ActualizarEstadoAnimacion();
+    }
+
+    private void SimularMuelleAnimacion()
+    {
+        // 1. Calcular aceleración horizontal (en m/s^2)
+        Vector3 acceleration = Time.deltaTime > 0f ? (velocidadHorizontalActual - lastHorizontalVelocity) / Time.deltaTime : Vector3.zero;
+        
+        // Evitar tirones extremos por teletransportación o cortes
+        acceleration = Vector3.ClampMagnitude(acceleration, 60f);
+        
+        lastHorizontalVelocity = velocidadHorizontalActual;
+        
+        // 2. Proyectar aceleración y velocidad sobre los ejes locales del personaje
+        float localAccelForward = Vector3.Dot(acceleration, transform.forward);
+        float localAccelRight = Vector3.Dot(acceleration, transform.right);
+        
+        float localSpeedForward = Vector3.Dot(velocidadHorizontalActual, transform.forward);
+        float localSpeedRight = Vector3.Dot(velocidadHorizontalActual, transform.right);
+        
+        // 3. Simular Torso Tilt (Pitch & Roll) con muelle físico (Spring-Damper)
+        float targetPitch = -localAccelForward * pesoInclinacionPitch - localSpeedForward * pesoVelocidadPitch;
+        float targetRoll = -localAccelRight * pesoInclinacionRoll - localSpeedRight * pesoVelocidadRoll;
+        
+        // Si está agachado o cuerpo a tierra, reducir las inclinaciones para mantener la pose compacta
+        if (estaAgachado)
+        {
+            targetPitch *= 0.5f;
+            targetRoll *= 0.5f;
+        }
+        else if (estaCuerpoTierra)
+        {
+            targetPitch = 0f;
+            targetRoll = 0f;
+        }
+
+        // Aplicar ecuaciones de muelle del torso (Pitch)
+        float forcePitch = (targetPitch - tiltPitch) * springForceTorso;
+        tiltPitchVelocity += forcePitch * Time.deltaTime;
+        tiltPitchVelocity -= tiltPitchVelocity * dampingForceTorso * Time.deltaTime;
+        tiltPitch += tiltPitchVelocity * Time.deltaTime;
+        tiltPitch = Mathf.Clamp(tiltPitch, -inclinacionTorsoMax, inclinacionTorsoMax);
+
+        // Aplicar ecuaciones de muelle del torso (Roll)
+        float forceRoll = (targetRoll - tiltRoll) * springForceTorso;
+        tiltRollVelocity += forceRoll * Time.deltaTime;
+        tiltRollVelocity -= tiltRollVelocity * dampingForceTorso * Time.deltaTime;
+        tiltRoll += tiltRollVelocity * Time.deltaTime;
+        tiltRoll = Mathf.Clamp(tiltRoll, -inclinacionTorsoMax, inclinacionTorsoMax);
+
+        // 4. Simular Cabeza (Head Lag / Overlapping Action)
+        float targetHeadPitch = -tiltPitch * multiplicadorLagCabeza;
+        float targetHeadRoll = -tiltRoll * multiplicadorLagCabeza;
+
+        // Ecuaciones de muelle de la cabeza (Pitch)
+        float forceHeadPitch = (targetHeadPitch - headTiltPitch) * springForceHead;
+        headTiltPitchVelocity += forceHeadPitch * Time.deltaTime;
+        headTiltPitchVelocity -= headTiltPitchVelocity * dampingForceHead * Time.deltaTime;
+        headTiltPitch += headTiltPitchVelocity * Time.deltaTime;
+        headTiltPitch = Mathf.Clamp(headTiltPitch, -inclinacionCabezaMax, inclinacionCabezaMax);
+
+        // Ecuaciones de muelle de la cabeza (Roll)
+        float forceHeadRoll = (targetHeadRoll - headTiltRoll) * springForceHead;
+        headTiltRollVelocity += forceHeadRoll * Time.deltaTime;
+        headTiltRollVelocity -= headTiltRollVelocity * dampingForceHead * Time.deltaTime;
+        headTiltRoll += headTiltRollVelocity * Time.deltaTime;
+        headTiltRoll = Mathf.Clamp(headTiltRoll, -inclinacionCabezaMax, inclinacionCabezaMax);
+
+        // 5. Simular Squash & Stretch (Estiramiento y Encogimiento procedimental)
+        float targetSquashY = anticipandoSalto ? 0.76f : 1.0f;
+        
+        // Fuerzas externas que afectan al Squash & Stretch Y
+        float forceAcc = 0f;
+        if (localAccelForward < -0.1f) // Frenado / Desaceleración en seco (Squash)
+        {
+            forceAcc = localAccelForward * pesoSquashFrenado;
+        }
+        else if (localAccelForward > 0.1f) // Aceleración de despegue (Stretch)
+        {
+            forceAcc = localAccelForward * pesoStretchInicio;
+        }
+
+        // Ecuación de muelle para Squash & Stretch
+        float forceSquash = (targetSquashY - scaleYFactor) * springForceSquash;
+        scaleYVelocity += (forceSquash + forceAcc) * Time.deltaTime;
+        scaleYVelocity -= scaleYVelocity * dampingForceSquash * Time.deltaTime;
+        scaleYFactor += scaleYVelocity * Time.deltaTime;
+        scaleYFactor = Mathf.Clamp(scaleYFactor, 0.75f, 1.25f);
     }
 
     private void ManejarApuntado()
@@ -266,6 +482,18 @@ public class ControladorTerceraPersona : MonoBehaviour
                 velocidadObjetivo = estaCorriendo ? velocidadCorrer : velocidadCaminar;
             }
             
+            // Si está lanzando, reducir la velocidad para mantener la fluidez sin frenar en seco
+            if (estaLanzando)
+            {
+                velocidadObjetivo *= 0.4f;
+            }
+            
+            if (anticipandoSalto)
+            {
+                velocidadObjetivo = 0f;
+            }
+            
+            Vector3 direccionMovimiento = Vector3.zero;
             if (camaraPrincipal != null)
             {
                 Vector3 adelanteCam = camaraPrincipal.forward;
@@ -275,39 +503,45 @@ public class ControladorTerceraPersona : MonoBehaviour
                 adelanteCam.Normalize();
                 derechaCam.Normalize();
                 
-                Vector3 direccionMovimiento = (adelanteCam * direccionEntrada.z + derechaCam * direccionEntrada.x).normalized;
-                
-                // Mover el personaje
-                controlador.Move(direccionMovimiento * velocidadObjetivo * Time.deltaTime);
-                
-                // Rotar el personaje en la dirección del movimiento (si no está apuntando)
-                if (!estaApuntando)
-                {
-                    Quaternion rotacionObjetivo = Quaternion.LookRotation(direccionMovimiento);
-                    transform.rotation = Quaternion.Slerp(transform.rotation, rotacionObjetivo, velocidadRotacion * Time.deltaTime);
-                }
+                direccionMovimiento = (adelanteCam * direccionEntrada.z + derechaCam * direccionEntrada.x).normalized;
             }
             else
             {
-                // Fallback a movimiento de ejes globales si no hay cámara
-                controlador.Move(direccionEntrada * velocidadObjetivo * Time.deltaTime);
-                if (!estaApuntando)
-                {
-                    Quaternion rotacionObjetivo = Quaternion.LookRotation(direccionEntrada);
-                    transform.rotation = Quaternion.Slerp(transform.rotation, rotacionObjetivo, velocidadRotacion * Time.deltaTime);
-                }
+                direccionMovimiento = direccionEntrada;
             }
+            
+            velocidadHorizontalObjetivo = direccionMovimiento * velocidadObjetivo;
+        }
+        else
+        {
+            velocidadHorizontalObjetivo = Vector3.zero;
+        }
+        
+        // Aplicar Slow In / Slow Out (Aceleración / Desaceleración)
+        float rate = velocidadHorizontalObjetivo.magnitude > 0.01f ? suavizadoAceleracion : suavizadoDeceleracion;
+        velocidadHorizontalActual = Vector3.Lerp(velocidadHorizontalActual, velocidadHorizontalObjetivo, Time.deltaTime * rate);
+        
+        // Mover el personaje horizontalmente
+        controlador.Move(velocidadHorizontalActual * Time.deltaTime);
+        
+        // Rotar el personaje en la dirección del movimiento (si no está apuntando y se mueve)
+        if (!estaApuntando && velocidadHorizontalActual.magnitude >= 0.1f)
+        {
+            Quaternion rotacionObjetivo = Quaternion.LookRotation(velocidadHorizontalActual.normalized);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotacionObjetivo, velocidadRotacion * Time.deltaTime);
         }
     }
 
     private void ManejarSalto()
     {
         if (estaAgachado || estaCuerpoTierra) return; // Impedir saltar si está agachado o cuerpo a tierra
+        if (anticipandoSalto) return;
         
         var keyboard = Keyboard.current;
         if (keyboard != null && keyboard.spaceKey.wasPressedThisFrame && estaEnElSuelo)
         {
-            velocidad.y = Mathf.Sqrt(alturaSalto * -2f * gravedad);
+            anticipandoSalto = true;
+            tiempoInicioSalto = Time.time;
         }
     }
 
@@ -341,10 +575,16 @@ public class ControladorTerceraPersona : MonoBehaviour
             }
         }
         
-        // Encontrar la mano derecha y equipar el proyectil visualmente
+        // Encontrar la mano derecha y equipar el proyectil visualmente (si no hay un hacha estática)
         Transform manoDerecha = BuscarManoDerecha(transform);
         GameObject proyectilVisual = null;
-        if (manoDerecha != null && prefabLanzable != null)
+        
+        if (hachaEnMano != null)
+        {
+            // Asegurar que el hacha en mano esté activa al inicio del lanzamiento
+            hachaEnMano.SetActive(true);
+        }
+        else if (manoDerecha != null && prefabLanzable != null)
         {
             proyectilVisual = Instantiate(prefabLanzable, manoDerecha);
             proyectilVisual.transform.localPosition = offsetPosicionMano;
@@ -370,20 +610,40 @@ public class ControladorTerceraPersona : MonoBehaviour
             if (scriptVisual != null) Destroy(scriptVisual);
         }
         
-        // Esperar al momento de liberación en la animación (aprox. 0.25s)
-        yield return new WaitForSeconds(0.25f);
+        // Esperar al momento de liberación en la animación (aprox. 0.25s) e inclinar torso hacia atrás (Anticipación)
+        float tLanzado = 0f;
+        while (tLanzado < 0.25f)
+        {
+            tLanzado += Time.deltaTime;
+            tiltPitch = Mathf.Lerp(tiltPitch, 15f, tLanzado / 0.25f);
+            yield return null;
+        }
         
-        // Destruir el hacha visual de la mano
+        // Ocultar o destruir el hacha visual de la mano
         if (proyectilVisual != null)
         {
             Destroy(proyectilVisual);
+        }
+        if (hachaEnMano != null)
+        {
+            hachaEnMano.SetActive(false);
         }
         
         // Instanciar y lanzar el proyectil físico real
         InstanciarProyectil(manoDerecha);
         
+        // Impulso inercial hacia adelante (Follow Through) al soltar
+        tiltPitch = -15f;
+        tiltPitchVelocity = -30f;
+        
         // Esperar a que termine la animación para devolver el control al jugador
         yield return new WaitForSeconds(0.45f);
+        
+        // Reactivar el hacha en mano al finalizar el lanzamiento
+        if (hachaEnMano != null)
+        {
+            hachaEnMano.SetActive(true);
+        }
         
         estaLanzando = false;
     }
@@ -506,22 +766,15 @@ public class ControladorTerceraPersona : MonoBehaviour
         }
         else
         {
-            float horizontal = 0f;
-            float vertical = 0f;
-            var keyboard = Keyboard.current;
-            if (keyboard != null)
-            {
-                if (keyboard.wKey.isPressed || keyboard.upArrowKey.isPressed) vertical = 1f;
-                if (keyboard.sKey.isPressed || keyboard.downArrowKey.isPressed) vertical = -1f;
-                if (keyboard.aKey.isPressed || keyboard.leftArrowKey.isPressed) horizontal = -1f;
-                if (keyboard.dKey.isPressed || keyboard.rightArrowKey.isPressed) horizontal = 1f;
-            }
+            // Pose to Pose: Transición de estados controlada por la velocidad real del personaje
+            float speedMag = velocidadHorizontalActual.magnitude;
             
-            Vector3 direccionEntrada = new Vector3(horizontal, 0f, vertical);
-            
-            if (direccionEntrada.magnitude >= 0.1f)
+            if (speedMag >= 0.15f)
             {
-                if (keyboard != null && keyboard.leftShiftKey.isPressed)
+                var keyboard = Keyboard.current;
+                bool quiereCorrer = keyboard != null && keyboard.leftShiftKey.isPressed;
+                
+                if (quiereCorrer && speedMag > (velocidadCaminar + 0.5f))
                 {
                     CambiarEstadoAnimacion(ANIM_CORRER);
                 }
@@ -533,6 +786,22 @@ public class ControladorTerceraPersona : MonoBehaviour
             else
             {
                 CambiarEstadoAnimacion(ANIM_IDLE);
+            }
+            
+            // Eliminar foot sliding sincronizando animador.speed con la velocidad física
+            if (estadoAnimacionActual == ANIM_CAMINAR)
+            {
+                animador.speed = speedMag / velocidadCaminar;
+            }
+            else if (estadoAnimacionActual == ANIM_CORRER)
+            {
+                animador.speed = speedMag / velocidadCorrer;
+            }
+            
+            // Limitar para evitar velocidades absurdas del animator
+            if (speedMag >= 0.15f)
+            {
+                animador.speed = Mathf.Clamp(animador.speed, 0.4f, 1.4f);
             }
         }
     }
@@ -547,13 +816,36 @@ public class ControladorTerceraPersona : MonoBehaviour
 
     private Transform BuscarManoDerecha(Transform parent)
     {
-        if (parent.name.Equals("RightHand", System.StringComparison.OrdinalIgnoreCase))
+        if (animador != null)
+        {
+            Transform hand = animador.GetBoneTransform(HumanBodyBones.RightHand);
+            if (hand != null) return hand;
+        }
+        
+        if (parent.name.Equals("RightHand", System.StringComparison.OrdinalIgnoreCase) || 
+            parent.name.Contains("RightHand") || 
+            parent.name.Equals("Character1_RightHand", System.StringComparison.OrdinalIgnoreCase))
         {
             return parent;
         }
         foreach (Transform child in parent)
         {
             Transform found = BuscarManoDerecha(child);
+            if (found != null) return found;
+        }
+        return null;
+    }
+
+    private Transform BuscarHachaRecursivo(Transform parent)
+    {
+        if (parent.name.Equals("Axe", System.StringComparison.OrdinalIgnoreCase) || 
+            parent.name.Equals("Hacha", System.StringComparison.OrdinalIgnoreCase))
+        {
+            return parent;
+        }
+        foreach (Transform child in parent)
+        {
+            Transform found = BuscarHachaRecursivo(child);
             if (found != null) return found;
         }
         return null;
@@ -907,6 +1199,30 @@ public class ControladorTerceraPersona : MonoBehaviour
             if (rightShin != null) rightShin.localRotation *= Quaternion.Euler(70f, 0f, 0f);
             if (leftShin != null) leftShin.localRotation *= Quaternion.Euler(70f, 0f, 0f);
         }
+
+        // Aplicar inclinaciones procedimentales (Straight Ahead) si no está cuerpo a tierra ni aturdido
+        if (!estaCuerpoTierra && !estaAturdido)
+        {
+            if (spine != null)
+            {
+                spine.localRotation *= Quaternion.Euler(tiltPitch, 0f, tiltRoll);
+            }
+            if (head != null)
+            {
+                head.localRotation *= Quaternion.Euler(headTiltPitch, 0f, headTiltRoll);
+            }
+        }
+
+        // Aplicar Squash & Stretch procedimental al modelo visual
+        if (visualModelTransform != null && !estaAturdido)
+        {
+            float scaleXZFactor = 1f / Mathf.Sqrt(scaleYFactor);
+            visualModelTransform.localScale = new Vector3(
+                escalaInicialVisual.x * scaleXZFactor, 
+                escalaInicialVisual.y * scaleYFactor, 
+                escalaInicialVisual.z * scaleXZFactor
+            );
+        }
     }
 
     private IEnumerator SecuenciaPatadaProcedural()
@@ -968,6 +1284,11 @@ public class ControladorTerceraPersona : MonoBehaviour
         if (estaAturdido) return;
         estaAturdido = true;
         tiempoFinAturdimiento = Time.time + duracionAturdimiento;
+
+        if (MarcadorHUD.Instancia != null)
+        {
+            MarcadorHUD.Instancia.RegistrarTacleado();
+        }
         
         // Detener dribling de inmediato si lo tiene
         if (pelotaDriblando != null)

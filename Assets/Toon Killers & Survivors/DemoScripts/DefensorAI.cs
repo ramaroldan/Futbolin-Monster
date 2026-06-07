@@ -559,6 +559,11 @@ public class DefensorAI : MonoBehaviour
 
         Debug.Log("¡El defensor " + gameObject.name + " se ha desmayado!");
 
+        if (MarcadorHUD.Instancia != null)
+        {
+            MarcadorHUD.Instancia.RegistrarNoqueo(gameObject.name);
+        }
+
         yield return new WaitForSeconds(1.2f);
 
         if (animador != null) animador.speed = 0f;

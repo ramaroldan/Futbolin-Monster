@@ -80,6 +80,24 @@ public class ObjetoLanzable : MonoBehaviour
         // Habilitar gravedad para una caída realista
         rb.useGravity = true;
 
+        // Configurar TrailRenderer (Acción Secundaria / Estela de Viento)
+        TrailRenderer trail = gameObject.GetComponent<TrailRenderer>();
+        if (trail == null)
+        {
+            trail = gameObject.AddComponent<TrailRenderer>();
+        }
+        trail.time = 0.25f;
+        trail.startWidth = 0.22f;
+        trail.endWidth = 0.01f;
+        trail.material = new Material(Shader.Find("Sprites/Default"));
+        
+        Gradient gradient = new Gradient();
+        gradient.SetKeys(
+            new GradientColorKey[] { new GradientColorKey(Color.white, 0.0f), new GradientColorKey(new Color(0.9f, 0.9f, 1f), 1.0f) },
+            new GradientAlphaKey[] { new GradientAlphaKey(0.45f, 0.0f), new GradientAlphaKey(0.0f, 1.0f) }
+        );
+        trail.colorGradient = gradient;
+
         // Autodestrucción después del tiempo de vida
         Destroy(gameObject, tiempoDeVida);
     }
@@ -133,11 +151,16 @@ public class ObjetoLanzable : MonoBehaviour
             return;
         }
 
+        Vector3 puntoImpacto = colision.contacts.Length > 0 ? colision.contacts[0].point : colision.transform.position;
+        Vector3 normalImpacto = colision.contacts.Length > 0 ? colision.contacts[0].normal : Vector3.up;
+
+        // Crear anillo de impacto visual (Acción y Reacción lúdica)
+        CrearAnilloDeImpacto(puntoImpacto, normalImpacto);
+
         // Verificar si colisionó con el arquero
         PayasoArquero arquero = colision.gameObject.GetComponent<PayasoArquero>();
         if (arquero != null)
         {
-            Vector3 puntoImpacto = colision.contacts.Length > 0 ? colision.contacts[0].point : colision.transform.position;
             arquero.RecibirDaño(puntoImpacto);
             
             // Hacer que el hacha rebote de forma elástica hacia atrás y caiga al suelo
@@ -154,7 +177,6 @@ public class ObjetoLanzable : MonoBehaviour
         DefensorAI defensor = colision.gameObject.GetComponent<DefensorAI>();
         if (defensor != null)
         {
-            Vector3 puntoImpacto = colision.contacts.Length > 0 ? colision.contacts[0].point : colision.transform.position;
             defensor.RecibirDaño(puntoImpacto);
             
             // Hacer que el hacha rebote de forma elástica hacia atrás y caiga al suelo
@@ -206,6 +228,67 @@ public class ObjetoLanzable : MonoBehaviour
         
         // Programar destrucción final tras adherirse
         Destroy(gameObject, 1.5f);
+    }
+
+    private void CrearAnilloDeImpacto(Vector3 posicion, Vector3 normal)
+    {
+        // Crear un GameObject circular usando una primitiva de esfera achatada translúcida
+        GameObject anillo = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        anillo.name = "AnilloImpacto";
+        anillo.transform.position = posicion + normal * 0.05f;
+        
+        if (normal != Vector3.zero)
+        {
+            anillo.transform.rotation = Quaternion.LookRotation(normal);
+        }
+        
+        anillo.transform.localScale = new Vector3(0.1f, 0.1f, 0.01f);
+        
+        Collider colAnillo = anillo.GetComponent<Collider>();
+        if (colAnillo != null) Destroy(colAnillo);
+        
+        MeshRenderer mr = anillo.GetComponent<MeshRenderer>();
+        if (mr != null)
+        {
+            Material mat = new Material(Shader.Find("Sprites/Default"));
+            mat.color = new Color(1.0f, 1.0f, 1.0f, 0.8f);
+            mr.sharedMaterial = mat;
+        }
+
+        StartCoroutine(AnimarAnillo(anillo));
+    }
+
+    private System.Collections.IEnumerator AnimarAnillo(GameObject anillo)
+    {
+        float t = 0f;
+        float duracion = 0.22f;
+        Vector3 escalaInicial = new Vector3(0.05f, 0.05f, 0.005f);
+        Vector3 escalaFinal = new Vector3(2.5f, 2.5f, 0.02f);
+        
+        MeshRenderer mr = anillo.GetComponent<MeshRenderer>();
+        Material mat = (mr != null && mr.sharedMaterial != null) ? mr.material : null;
+        
+        while (t < 1f && anillo != null)
+        {
+            t += Time.deltaTime / duracion;
+            float tSuave = Mathf.SmoothStep(0f, 1f, t);
+            
+            anillo.transform.localScale = Vector3.Lerp(escalaInicial, escalaFinal, tSuave);
+            
+            if (mat != null)
+            {
+                Color c = mat.color;
+                c.a = Mathf.Lerp(0.8f, 0f, tSuave);
+                mat.color = c;
+            }
+            
+            yield return null;
+        }
+        
+        if (anillo != null)
+        {
+            Destroy(anillo);
+        }
     }
 
     private void CrearExplosionDeEscombros(Vector3 posicion, Material materialCalabaza)

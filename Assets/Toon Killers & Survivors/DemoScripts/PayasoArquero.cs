@@ -199,6 +199,11 @@ public class PayasoArquero : MonoBehaviour
 
         Debug.Log("¡El arquero se ha desmayado tras recibir 3 hachazos!");
 
+        if (MarcadorHUD.Instancia != null)
+        {
+            MarcadorHUD.Instancia.RegistrarNoqueo("Arquero Payaso");
+        }
+
         // Esperar a que se ejecute la caída de la animación (1.2 segundos)
         yield return new WaitForSeconds(1.2f);
 

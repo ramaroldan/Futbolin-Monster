@@ -11,6 +11,12 @@ public class PelotaFutbol : MonoBehaviour
     [Header("Ajustes de Rotación Visual")]
     [Tooltip("Multiplicador de la velocidad de rotación visual (1 = real, menor = gira más lento, mayor = gira más rápido)")]
     public float multiplicadorRotacion = 1f;
+
+    [Header("Física Avanzada")]
+    [Tooltip("Multiplicador de gravedad en el aire para caída pesada y realista")]
+    public float multiplicadorGravedad = 2.2f;
+
+    private TrailRenderer trail;
     
     public bool estaConducida { get; private set; } = false;
     public bool puedeSerRecogida { get; private set; } = true;
@@ -47,6 +53,35 @@ public class PelotaFutbol : MonoBehaviour
             col.material = pm;
         }
 
+        // Configurar rastro visual (TrailRenderer) de forma automática
+        trail = GetComponent<TrailRenderer>();
+        if (trail == null)
+        {
+            trail = gameObject.AddComponent<TrailRenderer>();
+        }
+        
+        trail.time = 0.6f;
+        trail.startWidth = 0.15f;
+        trail.endWidth = 0f;
+        trail.autodestruct = false;
+        trail.emitting = false;
+        
+        // Asignar un material unlit para que brille con el Bloom
+        Shader unlitShader = Shader.Find("Universal Render Pipeline/Particles/Unlit");
+        if (unlitShader == null)
+        {
+            unlitShader = Shader.Find("Sprites/Default");
+        }
+        trail.material = new Material(unlitShader);
+        
+        // Gradiente neón (verde-limón neón a transparente)
+        Gradient gradient = new Gradient();
+        gradient.SetKeys(
+            new GradientColorKey[] { new GradientColorKey(new Color(0.8f, 1.0f, 0.2f), 0.0f), new GradientColorKey(new Color(0.1f, 0.9f, 0.5f), 1.0f) },
+            new GradientAlphaKey[] { new GradientAlphaKey(0.8f, 0.0f), new GradientAlphaKey(0.0f, 1.0f) }
+        );
+        trail.colorGradient = gradient;
+
         ultimaPosicion = transform.position;
     }
 
@@ -59,6 +94,12 @@ public class PelotaFutbol : MonoBehaviour
         rb.useGravity = false;
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
+        
+        if (trail != null)
+        {
+            trail.emitting = false;
+            trail.Clear();
+        }
     }
 
     public void DetenerConduccion()
@@ -74,6 +115,14 @@ public class PelotaFutbol : MonoBehaviour
         DetenerConduccion();
         rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic; // Activar detección continua al patear
         StartCoroutine(CooldownRecogida(0.6f));
+        
+        if (trail != null)
+        {
+            trail.emitting = true;
+            trail.Clear();
+            trail.AddPosition(transform.position); // Forzar inicio inmediato del rastro en la posición actual del impacto
+        }
+        
         rb.AddForce(fuerza, ForceMode.Impulse);
     }
 
@@ -126,6 +175,24 @@ public class PelotaFutbol : MonoBehaviour
 
     void FixedUpdate()
     {
+        // Aplicar gravedad adicional en el aire para una caída realista y un arco más pronunciado
+        if (!estaConducida && !rb.isKinematic)
+        {
+            bool enSuelo = ChequearSuelo();
+            if (!enSuelo)
+            {
+                rb.AddForce(Physics.gravity * (multiplicadorGravedad - 1f), ForceMode.Acceleration);
+            }
+            else
+            {
+                // Si está en el suelo y rueda muy lento, desactivar el rastro de trayectoria
+                if (rb.linearVelocity.magnitude < 2.0f && trail != null)
+                {
+                    trail.emitting = false;
+                }
+            }
+        }
+
         // Detectar si el jugador está cerca para iniciar conducción
         if (estaConducida || !puedeSerRecogida) return;
         
@@ -143,5 +210,12 @@ public class PelotaFutbol : MonoBehaviour
                 }
             }
         }
+    }
+
+    private bool ChequearSuelo()
+    {
+        float radio = transform.localScale.x * 0.5f;
+        // Lanzar un rayo hacia abajo un poco más allá del radio del balón (radio + 0.1f)
+        return Physics.Raycast(transform.position, Vector3.down, radio + 0.1f);
     }
 }
