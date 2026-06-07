@@ -27,9 +27,9 @@ public class DefensorAI : MonoBehaviour
 
     [Header("Marcación por Zona")]
     public float xMin = 45f;
-    public float xMax = 65f;
-    public float zMin = 0f;
-    public float zMax = 0f;
+    public float xMax = 58.15f;
+    public float zMin = 55f;
+    public float zMax = 90f;
     
     [HideInInspector]
     public Vector3 posicionInicial;
@@ -99,22 +99,14 @@ public class DefensorAI : MonoBehaviour
         if (xMin == 0f && xMax == 0f)
         {
             xMin = 45f;
-            xMax = 65f;
+            xMax = 58.15f;
         }
 
-        // Auto-inicializar límites Z basados en el lado inicial del campo
+        // Auto-inicializar límites Z
         if (zMin == 0f && zMax == 0f)
         {
-            if (posicionInicial.z < 73f)
-            {
-                zMin = 55f;
-                zMax = 73f;
-            }
-            else
-            {
-                zMin = 73f;
-                zMax = 90f;
-            }
+            zMin = 55f;
+            zMax = 90f;
         }
 
         // Buscar portería dinámica en el escenario
@@ -203,6 +195,11 @@ public class DefensorAI : MonoBehaviour
                 ActualizarRegresando(necesitaCobertura);
                 break;
         }
+
+        // Limitar la posición del defensor para que no pueda avanzar más allá de la mitad de la cancha (xMax)
+        Vector3 posClamped = transform.position;
+        posClamped.x = Mathf.Clamp(posClamped.x, xMin, xMax);
+        transform.position = posClamped;
     }
 
     bool EstaEnZona(Vector3 posicion)
@@ -294,7 +291,7 @@ public class DefensorAI : MonoBehaviour
             posicionObjetivo = targetPos + velJugador * tiempoAnticipacion;
             
             // Limitar para no salirse de la cancha en la predicción
-            posicionObjetivo.x = Mathf.Clamp(posicionObjetivo.x, 44f, 66f);
+            posicionObjetivo.x = Mathf.Clamp(posicionObjetivo.x, xMin, xMax);
             posicionObjetivo.z = Mathf.Clamp(posicionObjetivo.z, 55f, 90f);
         }
 

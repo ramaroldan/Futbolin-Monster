@@ -71,19 +71,9 @@ public class AutoConfiguradorDefensores
 
             // Límites por defecto de marcación
             ai.xMin = 45f;
-            ai.xMax = 65f;
-            
-            // Auto-inicializar Z basados en su posición inicial
-            if (defensor.transform.position.z < 73f)
-            {
-                ai.zMin = 55f;
-                ai.zMax = 73f;
-            }
-            else
-            {
-                ai.zMin = 73f;
-                ai.zMax = 90f;
-            }
+            ai.xMax = 58.15f;
+            ai.zMin = 55f;
+            ai.zMax = 90f;
 
             // Asignar referencias locales al jugador y pelota
             GameObject jugadorObj = GameObject.FindGameObjectWithTag("Player");

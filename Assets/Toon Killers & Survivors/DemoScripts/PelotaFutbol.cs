@@ -23,13 +23,21 @@ public class PelotaFutbol : MonoBehaviour
     
     private Rigidbody rb;
     private Transform jugadorConductor;
-    private Vector3 posicionInicial;
+    
+    [Header("Configuración de Respawn")]
+    [Tooltip("Posición a la que la pelota volverá al resetearse. Modificable desde el inspector.")]
+    public Vector3 posicionRespawn = new Vector3(58.15f, 9.27f, 72.85f);
+    
     private Vector3 ultimaPosicion;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        posicionInicial = transform.position;
+        // Si posicionRespawn es cero, usar la posición actual de la escena como fallback
+        if (posicionRespawn == Vector3.zero)
+        {
+            posicionRespawn = transform.position;
+        }
     }
 
     void Start()
@@ -137,7 +145,7 @@ public class PelotaFutbol : MonoBehaviour
 
     public void ResetearPelotaOriginal()
     {
-        ResetearPelota(posicionInicial);
+        ResetearPelota(posicionRespawn);
     }
 
     private IEnumerator CooldownRecogida(float tiempo)
