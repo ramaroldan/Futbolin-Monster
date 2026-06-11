@@ -16,6 +16,9 @@ public class ArcoDeFutbol : MonoBehaviour
     private int contadorGoles = 0;
     private bool celebrando = false;
     private float tiempoCelebracion = 0f;
+    
+    private AudioClip clipSpookyGoal;
+    private AudioSource audioSource;
 
     void Start()
     {
@@ -43,6 +46,7 @@ public class ArcoDeFutbol : MonoBehaviour
 
         ActualizarMarcador();
         ConfigurarFisicaPostes();
+        PrepararSonidoSpooky();
     }
 
     private void ConfigurarFisicaPostes()
@@ -125,7 +129,13 @@ public class ArcoDeFutbol : MonoBehaviour
         if (luzCelebracion != null)
         {
             luzCelebracion.enabled = true;
-            luzCelebracion.color = new Color(0.0f, 1.0f, 0.8f); // Color neón cian
+            luzCelebracion.color = Random.value > 0.5f ? new Color(1.0f, 0.4f, 0.0f) : new Color(0.1f, 1.0f, 0.1f); // Naranja o Verde Halloween
+        }
+        
+        // Reproducir sonido espeluznante sintetizado
+        if (audioSource != null)
+        {
+            audioSource.Play();
         }
         
         // Lanzar partículas festivas físicas (confeti neón)
@@ -174,11 +184,10 @@ public class ArcoDeFutbol : MonoBehaviour
         contenedor.transform.position = origen;
         
         Color[] colores = new Color[] {
-            new Color(1f, 0.2f, 0.2f),  // Rojo neón
-            new Color(0.2f, 1f, 0.2f),  // Verde neón
-            new Color(0.2f, 0.2f, 1f),  // Azul neón
-            new Color(1f, 0.8f, 0f),    // Amarillo neón
-            new Color(1f, 0.2f, 1f)     // Rosa neón
+            new Color(1.0f, 0.4f, 0.0f),  // Naranja Halloween
+            new Color(0.1f, 1.0f, 0.1f),  // Verde Espectral
+            new Color(0.5f, 0.0f, 0.8f),  // Púrpura Tenebroso
+            new Color(1.0f, 0.8f, 0.0f)   // Amarillo Vela
         };
         
         int cantidadDePedazos = 30;
@@ -212,5 +221,49 @@ public class ArcoDeFutbol : MonoBehaviour
         }
         
         Destroy(contenedor, 3f);
+    }
+
+    private void PrepararSonidoSpooky()
+    {
+        int sampleRate = 44100;
+        float duration = 2.2f;
+        int numSamples = (int)(sampleRate * duration);
+        float[] samples = new float[numSamples];
+        
+        for (int i = 0; i < numSamples; i++)
+        {
+            float t = (float)i / sampleRate;
+            
+            // Generar risa espectral (barrido de frecuencia descendente)
+            // La frecuencia baja de 220Hz a 60Hz, con oscilación para simular carcajadas
+            float sweep = Mathf.Max(0.1f, 1.0f - (t / duration));
+            float laughter = Mathf.Sin(t * 14f); // 14 risotadas por segundo
+            float freq = 180f * sweep + laughter * 40f * sweep;
+            
+            float wave = Mathf.Sin(2f * Mathf.PI * freq * t);
+            
+            // Añadir ruido blanco para textura de viento fantasmal
+            float noise = (Random.value * 2f - 1f) * 0.12f * sweep;
+            
+            // Envolvente: ataque rápido y caída lenta modulada
+            float env;
+            if (t < 0.15f) env = t / 0.15f;
+            else env = Mathf.Max(0f, 1f - (t - 0.15f) / (duration - 0.15f));
+            
+            // Añadir una vibración extra espeluznante
+            float tremolo = 0.7f + 0.3f * Mathf.Sin(t * 30f);
+            
+            samples[i] = (wave + noise) * env * tremolo * 0.45f;
+        }
+        
+        clipSpookyGoal = AudioClip.Create("SpookyGoalSound", numSamples, 1, sampleRate, false);
+        clipSpookyGoal.SetData(samples, 0);
+        
+        audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource.clip = clipSpookyGoal;
+        audioSource.playOnAwake = false;
+        audioSource.spatialBlend = 1.0f; // Sonido 3D
+        audioSource.minDistance = 5f;
+        audioSource.maxDistance = 60f;
     }
 }

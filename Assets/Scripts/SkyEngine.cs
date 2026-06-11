@@ -57,6 +57,8 @@ public class SkyEngine : MonoBehaviour
     public float ambientIntensityScale = 1f;
 
     [Header("Parámetros de Clima")]
+    [Tooltip("Desactivar por completo la niebla a nivel de RenderSettings")]
+    public bool disableFog = false;
     public WeatherType currentWeather = WeatherType.Clear;
     public WeatherType targetWeather = WeatherType.Clear;
     [Range(0.01f, 5f)]
@@ -277,7 +279,7 @@ public class SkyEngine : MonoBehaviour
             currentRainIntensity = Mathf.Lerp(startRain, targetRain, weatherProgress);
 
             // Aplicar niebla
-            RenderSettings.fog = (currentFogDensity > 0.001f);
+            RenderSettings.fog = !disableFog && (currentFogDensity > 0.001f);
             RenderSettings.fogDensity = currentFogDensity;
             RenderSettings.fogColor = currentFogColor;
 
@@ -331,7 +333,7 @@ public class SkyEngine : MonoBehaviour
         currentLightMultiplier = lightMult;
         currentRainIntensity = rain;
 
-        RenderSettings.fog = (currentFogDensity > 0.001f);
+        RenderSettings.fog = !disableFog && (currentFogDensity > 0.001f);
         RenderSettings.fogDensity = currentFogDensity;
         RenderSettings.fogColor = currentFogColor;
 

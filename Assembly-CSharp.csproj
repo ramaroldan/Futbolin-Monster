@@ -76,6 +76,7 @@
     <Compile Include="Assets\Scripts\SkyEngine.cs" />
     <Compile Include="Assets\Toon Killers &amp; Survivors\DemoScripts\RotateOver.cs" />
     <Compile Include="Assets\Toon Killers &amp; Survivors\DemoScripts\ObjetoLanzable.cs" />
+    <Compile Include="Assets\Scripts\FloatingGhost.cs" />
     <Compile Include="Assets\Toon Killers &amp; Survivors\DemoScripts\MainMenuManager.cs" />
     <Compile Include="Assets\Toon Killers &amp; Survivors\DemoScripts\CharChanger.cs" />
   </ItemGroup>
