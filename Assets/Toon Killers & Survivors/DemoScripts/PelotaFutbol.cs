@@ -22,6 +22,7 @@ public class PelotaFutbol : MonoBehaviour
     public bool puedeSerRecogida { get; private set; } = true;
     
     private Rigidbody rb;
+    private SphereCollider sphereCollider;
     private Transform jugadorConductor;
     
     [Header("Configuración de Respawn")]
@@ -29,10 +30,20 @@ public class PelotaFutbol : MonoBehaviour
     public Vector3 posicionRespawn = new Vector3(58.15f, 9.27f, 72.85f);
     
     private Vector3 ultimaPosicion;
+    private float worldRadius = 0.165f;
+    private float worldCenterOffsetY = 0.108f;
+    
+    private AudioSource audioSource;
+    private AudioClip clipChuto;
+    private AudioClip clipRebote;
+
+    public float RadioMundo => worldRadius;
+    public float OffsetCentroYMundo => worldCenterOffsetY;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        sphereCollider = GetComponent<SphereCollider>();
         // Si posicionRespawn es cero, usar la posición actual de la escena como fallback
         if (posicionRespawn == Vector3.zero)
         {
@@ -90,18 +101,96 @@ public class PelotaFutbol : MonoBehaviour
         );
         trail.colorGradient = gradient;
 
+        // Configurar AudioSource y generar audios procedurales
+        audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource.playOnAwake = false;
+        audioSource.spatialBlend = 1.0f; // Sonido 3D
+        audioSource.minDistance = 2f;
+        audioSource.maxDistance = 40f;
+        audioSource.volume = 1f;
+
+        GenerarAudiosProcedurales();
+        ActualizarDimensionesColision();
+
         ultimaPosicion = transform.position;
+    }
+
+    public void ActualizarDimensionesColision()
+    {
+        if (sphereCollider != null)
+        {
+            worldRadius = sphereCollider.radius * transform.localScale.x;
+            worldCenterOffsetY = sphereCollider.center.y * transform.localScale.y;
+        }
+        else
+        {
+            worldRadius = transform.localScale.x * 0.5f;
+            worldCenterOffsetY = 0f;
+        }
+    }
+
+    private void GenerarAudiosProcedurales()
+    {
+        int sampleRate = 44100;
+        
+        // 1. Kick/Chuto (Tacto del pie - thud sordo)
+        float durationKick = 0.18f;
+        int samplesKick = Mathf.RoundToInt(sampleRate * durationKick);
+        float[] dataKick = new float[samplesKick];
+        for (int i = 0; i < samplesKick; i++)
+        {
+            float t = (float)i / sampleRate;
+            float freq = Mathf.Lerp(280f, 60f, t / durationKick);
+            float phase = 2f * Mathf.PI * freq * t;
+            float wave = Mathf.Sin(phase);
+            float noise = (Random.value * 2f - 1f) * 0.15f;
+            float env = Mathf.Exp(-18f * t);
+            dataKick[i] = (wave + noise) * env * 0.6f;
+        }
+        clipChuto = AudioClip.Create("KickBall", samplesKick, 1, sampleRate, false);
+        clipChuto.SetData(dataKick, 0);
+
+        // 2. Rebote (Impacto con obstáculos/suelo)
+        float durationBounce = 0.1f;
+        int samplesBounce = Mathf.RoundToInt(sampleRate * durationBounce);
+        float[] dataBounce = new float[samplesBounce];
+        for (int i = 0; i < samplesBounce; i++)
+        {
+            float t = (float)i / sampleRate;
+            float freq = Mathf.Lerp(450f, 180f, t / durationBounce);
+            float phase = 2f * Mathf.PI * freq * t;
+            float wave = Mathf.Sin(phase);
+            float noise = (Random.value * 2f - 1f) * 0.05f;
+            float env = Mathf.Exp(-35f * t);
+            dataBounce[i] = (wave + noise) * env * 0.5f;
+        }
+        clipRebote = AudioClip.Create("BounceBall", samplesBounce, 1, sampleRate, false);
+        clipRebote.SetData(dataBounce, 0);
+    }
+
+    public void PlaySoftDribbleSound(float volumen)
+    {
+        if (audioSource != null && clipRebote != null)
+        {
+            audioSource.pitch = Random.Range(0.85f, 0.95f);
+            audioSource.PlayOneShot(clipRebote, volumen * 0.45f);
+            audioSource.pitch = 1.0f; // Restaurar pitch
+        }
     }
 
     public void IniciarConduccion(Transform jugador)
     {
         estaConducida = true;
         jugadorConductor = jugador;
-        rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
         rb.isKinematic = true;
         rb.useGravity = false;
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
+        
+        // Desactivar TODOS los colliders (principal e hijos) para que ningún mesh
+        // de la calabaza empuje contra el terreno ni contra el CharacterController
+        foreach (var col in GetComponentsInChildren<Collider>(true))
+            col.enabled = false;
         
         if (trail != null)
         {
@@ -116,22 +205,41 @@ public class PelotaFutbol : MonoBehaviour
         jugadorConductor = null;
         rb.isKinematic = false;
         rb.useGravity = true;
+        
+        // Reactivar todos los colliders al soltar la pelota
+        foreach (var col in GetComponentsInChildren<Collider>(true))
+            col.enabled = true;
     }
 
     public void Patear(Vector3 fuerza)
     {
+        Patear(fuerza, Vector3.zero);
+    }
+
+    public void Patear(Vector3 fuerza, Vector3 spin)
+    {
         DetenerConduccion();
         rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic; // Activar detección continua al patear
-        StartCoroutine(CooldownRecogida(0.6f));
+        
+        // Cooldown dinámico: patadas más suaves = menor cooldown para retomar posesión rápida
+        float ratioFuerza = Mathf.InverseLerp(7f, 22f, fuerza.magnitude);
+        float cooldown = Mathf.Lerp(0.18f, 0.6f, ratioFuerza);
+        StartCoroutine(CooldownRecogida(cooldown));
         
         if (trail != null)
         {
             trail.emitting = true;
             trail.Clear();
-            trail.AddPosition(transform.position); // Forzar inicio inmediato del rastro en la posición actual del impacto
+            trail.AddPosition(transform.position); // Forzar inicio inmediato del rastro
         }
         
         rb.AddForce(fuerza, ForceMode.Impulse);
+        rb.angularVelocity = spin;
+
+        if (audioSource != null && clipChuto != null)
+        {
+            audioSource.PlayOneShot(clipChuto, 1.0f);
+        }
     }
 
     public void ResetearPelota(Vector3 posicion)
@@ -170,7 +278,7 @@ public class PelotaFutbol : MonoBehaviour
                 Vector3 ejeRotacion = Vector3.Cross(Vector3.up, desplazamiento.normalized);
                 
                 // Radio del balón para calcular rotación angular correcta (V = w * r => w = V / r)
-                float radio = transform.localScale.x * 0.5f;
+                float radio = worldRadius;
                 float angulo = (distanciaMover / radio) * Mathf.Rad2Deg * multiplicadorRotacion;
                 
                 // Rotar en el espacio mundial
@@ -183,16 +291,26 @@ public class PelotaFutbol : MonoBehaviour
 
     void FixedUpdate()
     {
-        // Aplicar gravedad adicional en el aire para una caída realista y un arco más pronunciado
+        // Aplicar gravedad adicional y efecto Magnus en el aire
         if (!estaConducida && !rb.isKinematic)
         {
+            ActualizarDimensionesColision();
             bool enSuelo = ChequearSuelo();
             if (!enSuelo)
             {
+                // Gravedad adicional
                 rb.AddForce(Physics.gravity * (multiplicadorGravedad - 1f), ForceMode.Acceleration);
+
+                // Efecto Magnus: F = K * (w x v)
+                float magnusCoeff = 0.12f;
+                Vector3 magnusForce = magnusCoeff * Vector3.Cross(rb.angularVelocity, rb.linearVelocity);
+                rb.AddForce(magnusForce, ForceMode.Acceleration);
             }
             else
             {
+                // Resistencia al rodamiento en el césped para frenado natural
+                rb.AddForce(-rb.linearVelocity * 0.25f, ForceMode.Acceleration);
+
                 // Si está en el suelo y rueda muy lento, desactivar el rastro de trayectoria
                 if (rb.linearVelocity.magnitude < 2.0f && trail != null)
                 {
@@ -208,7 +326,6 @@ public class PelotaFutbol : MonoBehaviour
         if (jugador != null)
         {
             float distancia = Vector3.Distance(transform.position, jugador.transform.position);
-            // La base del jugador está en sus pies, lo que da una lectura perfecta al balón en el suelo
             if (distancia <= rangoConduccion)
             {
                 ControladorTerceraPersona controlador = jugador.GetComponent<ControladorTerceraPersona>();
@@ -222,10 +339,11 @@ public class PelotaFutbol : MonoBehaviour
 
     private bool ChequearSuelo()
     {
-        float radio = transform.localScale.x * 0.5f;
-        // Comenzar el raycast un poco más abajo del centro (por ejemplo, a 0.8 * radio) para salir del colisionador de la pelota
-        Vector3 origen = transform.position + Vector3.down * (radio * 0.8f);
-        float distancia = radio * 0.4f; // Distancia para sobrepasar el radio de la pelota + margen
+        // El centro de la esfera en el espacio de mundo es:
+        Vector3 centroMundo = transform.position + Vector3.up * worldCenterOffsetY;
+        // Comenzamos el raycast un poco más abajo del centro de la esfera
+        Vector3 origen = centroMundo + Vector3.down * (worldRadius * 0.8f);
+        float distancia = worldRadius * 0.4f; // Distancia para sobrepasar el radio de la pelota + margen
         
         // Usar RaycastAll para poder ignorar la propia pelota
         RaycastHit[] hits = Physics.RaycastAll(origen, Vector3.down, distancia, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore);
@@ -237,5 +355,24 @@ public class PelotaFutbol : MonoBehaviour
             }
         }
         return false;
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (estaConducida) return;
+        
+        // Ignorar colisiones de activación del jugador si están en cooldown
+        if (collision.gameObject.CompareTag("Player") && !puedeSerRecogida) return;
+
+        float velocidadImpacto = collision.relativeVelocity.magnitude;
+        if (velocidadImpacto > 0.8f)
+        {
+            if (audioSource != null && clipRebote != null)
+            {
+                // El volumen escala con la velocidad de impacto
+                float volumen = Mathf.Clamp01(velocidadImpacto / 12f);
+                audioSource.PlayOneShot(clipRebote, volumen);
+            }
+        }
     }
 }

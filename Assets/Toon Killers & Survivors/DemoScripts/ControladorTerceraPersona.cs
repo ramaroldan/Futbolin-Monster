@@ -45,26 +45,30 @@ public class ControladorTerceraPersona : MonoBehaviour
     
     [Header("Ajustes de Conducción de Balón")]
     [Tooltip("Velocidad de seguimiento de la pelota al moverse (menor = más inercia, mayor = más pegada a los pies)")]
-    public float suavizadoMovimientoConduccion = 12f;
+    public float suavizadoMovimientoConduccion = 22f;
     [Tooltip("Velocidad de frenado de la pelota al detenerse")]
-    public float suavizadoParadaConduccion = 18f;
+    public float suavizadoParadaConduccion = 28f;
     [Tooltip("Frecuencia base de los toques de balón al conducir (pasos por segundo)")]
     public float frecuenciaDribling = 3.5f;
     [Tooltip("Distancia lateral entre el balón y el eje central (alternancia de pies)")]
-    public float amplitudDribling = 0.22f;
+    public float amplitudDribling = 0.10f;
     [Tooltip("Qué tan adelante van los pies al tocar el balón (offset frontal)")]
-    public float offsetFrontalPie = 0.55f;
+    public float offsetFrontalPie = 0.18f;
     [Tooltip("Altura de rebote del balón entre toques (0 = siempre en suelo)")]
-    public float alturaToqueDriblin = 0.04f;
+    public float alturaToqueDriblin = 0.02f;
     
     private bool estaPateando = false;
     private float cooldownRecogidaPatada = 0f;
     
-    // Dribling procedimental - estado interno
-    private float faseDribling = 0f;         // Fase acumulada (0..1 por ciclo de zancada)
-    private bool pieActivo = false;           // false = pie izquierdo, true = pie derecho
-    private float tiempoUltimoToque = 0f;    // Para timing de rebote
+    // Dribling - estado interno
+    private float faseDribling = 0f;
+    private bool pieActivo = false;
+    private float tiempoUltimoToque = 0f;
     private bool enFaseToque = false;
+    private Vector3 localOffsetPelota = Vector3.zero;
+    private int ultimoPasoDribling = 0;
+    private float smoothedBallY = 0f;       // Y suavizada de la pelota (sin saltos)
+    private float pelotaPickupStartY = 0f;  // Y del balón al momento de recogerse
     
     [Header("Carga de Patada")]
     public float tiempoCargaMax = 1.2f;
@@ -946,10 +950,18 @@ public class ControladorTerceraPersona : MonoBehaviour
     {
         pelotaDriblando = pelota;
         pelotaDriblando.IniciarConduccion(transform);
+        // Offset XZ: partir de la posición actual del balón (sin Y)
+        Vector3 localActual = transform.InverseTransformPoint(pelotaDriblando.transform.position);
+        localOffsetPelota = new Vector3(localActual.x, 0f, localActual.z);
+        // Y suavizada: inicializar al Y objetivo correcto para evitar cualquier salto inicial
+        float targetY = transform.position.y + pelota.RadioMundo - pelota.OffsetCentroYMundo;
+        smoothedBallY = targetY;
+        pelotaPickupStartY = targetY;
     }
 
     private void ManejarFutbol()
     {
+        var keyboard = Keyboard.current;
         // Si estamos conduciendo el balón, actualizar su posición frente a los pies
         if (pelotaDriblando != null)
         {
@@ -969,88 +981,43 @@ public class ControladorTerceraPersona : MonoBehaviour
             }
             
             float velocidadJugador = controlador != null ? controlador.velocity.magnitude : 0f;
-            float radioPelota = pelotaDriblando.transform.localScale.x * 0.5f;
-            
-            // --- SISTEMA DE TOQUES ALTERNOS DE PIE (DRIBLING REAL DE FÚTBOL) ---
-            // Avanzar la fase según velocidad (más rápido = toques más frecuentes)
-            float velocidadFase = velocidadJugador > 0.1f
-                ? frecuenciaDribling * Mathf.Lerp(0.7f, 1.5f, velocidadJugador / velocidadCorrer)
-                : 0f;
-            faseDribling += velocidadFase * Time.deltaTime;
-            
-            // Detectar cada medio ciclo = cambio de pie
-            float faseActual = faseDribling % 1.0f;
-            bool pieDerecho = ((int)(faseDribling) % 2 == 0);
-            
-            // Offset lateral: alterna entre pie izq y pie der
-            float ladoPie = pieDerecho ? 1f : -1f;
-            // El balón va hacia el pie activo con mayor amplitud cuando se mueve
-            float ampLateral = velocidadJugador > 0.1f ? amplitudDribling : (amplitudDribling * 0.3f);
-            // Suavizar transición de pie (usando sin de la fase)
-            float lateralSmooth = Mathf.Sin(faseDribling * Mathf.PI) * ladoPie;
-            Vector3 offsetLateral = transform.right * lateralSmooth * ampLateral;
-            
-            // Offset frontal: el balón va un poco más adelante al inicio del toque y vuelve
-            float offsetFrontal = offsetFrontalPie + Mathf.Abs(Mathf.Sin(faseDribling * Mathf.PI)) * 0.1f;
-            if (velocidadJugador < 0.1f) offsetFrontal = offsetFrontalPie;
-            
-            // --- POSICIÓN HORIZONTAL IDEAL ---
-            Vector3 posHorizontal = transform.position 
-                + transform.forward * (offsetFrontal + radioPelota)
-                + offsetLateral;
-            
-            // --- CORRECCIÓN DE ALTURA: Raycast para que siempre toque el suelo real ---
-            float alturaBalon = transform.position.y + radioPelota; // fallback
-            Ray rayoSuelo = new Ray(posHorizontal + Vector3.up * 1.5f, Vector3.down);
-            RaycastHit[] hitsSuelo = Physics.RaycastAll(rayoSuelo, 3.0f, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore);
-            
-            float highestGroundY = -9999f;
-            bool foundGround = false;
-            foreach (var hit in hitsSuelo)
-            {
-                // Ignorar colisiones con el jugador (o sus hijos) y el balón (o sus hijos)
-                if (hit.transform == transform || hit.transform.IsChildOf(transform) || 
-                    hit.transform == pelotaDriblando.transform || hit.transform.IsChildOf(pelotaDriblando.transform))
-                {
-                    continue;
-                }
-                
-                if (hit.point.y > highestGroundY)
-                {
-                    highestGroundY = hit.point.y;
-                    foundGround = true;
-                }
-            }
-            
-            if (foundGround)
-            {
-                alturaBalon = highestGroundY + radioPelota;
-            }
-            
-            // Mini rebote cosmético entre toques (simula que el balón rebota levemente al ser tocado)
-            float alturaToque = 0f;
-            if (velocidadJugador > 0.3f)
-            {
-                // Rebote suave siguiendo una curva sinusoidal entre toques
-                alturaToque = Mathf.Abs(Mathf.Sin(faseDribling * Mathf.PI)) * alturaToqueDriblin;
-            }
-            
-            Vector3 posIdealBalon = new Vector3(posHorizontal.x, alturaBalon + alturaToque, posHorizontal.z);
-            
-            // Interpolar suavemente para que la pelota tenga inercia y no parezca rígidamente pegada
-            float velocidadSuavizado = velocidadJugador > 0.1f ? suavizadoMovimientoConduccion : suavizadoParadaConduccion;
-            pelotaDriblando.transform.position = Vector3.Lerp(
-                pelotaDriblando.transform.position,
-                posIdealBalon,
-                Time.deltaTime * velocidadSuavizado
-            );
-            
-            // Forzar velocidad a cero mientras se conduce para evitar física errática
+            float radioPelota = pelotaDriblando.RadioMundo;
+            float offsetCentroY = pelotaDriblando.OffsetCentroYMundo;
+
+            // --- XZ: offset local fijo con lerp rápido solo para giros fluidos ---
+            bool estaCorriendo = keyboard != null && keyboard.leftShiftKey.isPressed
+                                 && velocidadJugador > velocidadCaminar * 0.8f;
+            float offsetFrontal = offsetFrontalPie + radioPelota + (estaCorriendo ? 0.08f : 0f);
+            Vector3 targetLocal = new Vector3(0f, 0f, offsetFrontal);
+            float snap = velocidadJugador > 0.1f ? suavizadoMovimientoConduccion : suavizadoParadaConduccion;
+            localOffsetPelota = Vector3.Lerp(localOffsetPelota, targetLocal, Time.deltaTime * snap);
+            Vector3 posXZ = transform.position
+                + transform.rotation * new Vector3(localOffsetPelota.x, 0f, localOffsetPelota.z);
+
+            // --- Y: sin raycast, sin lerp inestable ---
+            // El jugador (CharacterController) siempre está con los pies en el suelo.
+            // La Y objetivo del balón es fija: pie del jugador + radio - offset centro.
+            // Se suaviza a 80 Hz para absorber microvariaciones sin generar saltos.
+            float targetBallY = transform.position.y + radioPelota - offsetCentroY;
+            smoothedBallY = Mathf.Lerp(smoothedBallY, targetBallY, Time.deltaTime * 80f);
+
+            pelotaDriblando.transform.position = new Vector3(posXZ.x, smoothedBallY, posXZ.z);
+
+            // Rigidbody quieto
             Rigidbody rbPelota = pelotaDriblando.GetComponent<Rigidbody>();
             if (rbPelota != null)
             {
                 rbPelota.linearVelocity = Vector3.zero;
                 rbPelota.angularVelocity = Vector3.zero;
+            }
+
+            // Sonido de toque (por distancia recorrida)
+            faseDribling += velocidadJugador * Time.deltaTime;
+            if (faseDribling > 0.6f && velocidadJugador > 0.5f)
+            {
+                faseDribling = 0f;
+                pelotaDriblando.PlaySoftDribbleSound(
+                    Mathf.Lerp(0.08f, 0.28f, velocidadJugador / velocidadCorrer));
             }
         }
         else
@@ -1068,7 +1035,7 @@ public class ControladorTerceraPersona : MonoBehaviour
         }
         
         // Manejar la carga de la patada al mantener presionada la tecla E
-        var keyboard = Keyboard.current;
+        keyboard = Keyboard.current;
         if (keyboard != null && pelotaDriblando != null && !estaPateando && !estaLanzando)
         {
             if (keyboard.eKey.wasPressedThisFrame && !cargandoPatada)
@@ -1114,15 +1081,18 @@ public class ControladorTerceraPersona : MonoBehaviour
     private IEnumerator SecuenciaPatada(float chargeRatio)
     {
         estaPateando = true;
-        cooldownRecogidaPatada = Time.time + 0.8f; // Impedir que el pie aspire el balón inmediatamente (cooldown de 0.8s)
+        
+        // Cooldown dinámico en el jugador: patadas cortas = recupera el balón casi al instante
+        float cooldownJugador = Mathf.Lerp(0.22f, 0.65f, chargeRatio);
+        cooldownRecogidaPatada = Time.time + cooldownJugador;
         
         StartCoroutine(SecuenciaPatadaProcedural());
         
         // Ejecutar animación de patada usando MeleeWeaponAttack2
         CambiarEstadoAnimacion("MeleeWeaponAttack2");
         
-        // Esperar al momento de impacto físico en la animación (0.15s)
-        yield return new WaitForSeconds(0.15f);
+        // Reducir la espera para aplicar la fuerza (a solo 0.04 segundos/2 frames) para que sea instantáneo y responsivo
+        yield return new WaitForSeconds(0.04f);
         
         if (pelotaDriblando != null)
         {
@@ -1132,33 +1102,51 @@ public class ControladorTerceraPersona : MonoBehaviour
             if (estaApuntando && camaraPrincipal != null)
             {
                 dirPatada = camaraPrincipal.forward;
-                // Si la cámara apunta muy hacia abajo, forzar que la dirección del chuto no vaya hacia el suelo
                 if (dirPatada.y < 0) dirPatada.y = 0;
             }
             else
             {
-                // Si no está apuntando, usar el frente del personaje en el plano horizontal
                 dirPatada = transform.forward;
                 dirPatada.y = 0;
                 dirPatada.Normalize();
             }
             
             // Agregar elevación vertical en base a la carga.
-            // Para tiros con poca carga (tiros rasos o a media altura), la elevación es baja (de 0.08f a 0.15f).
-            // Para tiros con mucha carga, queremos que se eleve bastante (hasta 0.75f).
             float elevacionVertical = Mathf.Lerp(0.08f, 0.75f, chargeRatio);
             dirPatada.y += elevacionVertical;
             dirPatada = dirPatada.normalized;
             
-            // Fuerza de patada: cuanto más carga, más fuerte sale (según parámetros mínimos y máximos)
+            // Fuerza de patada
             float fuerza = Mathf.Lerp(fuerzaPatadaMin, fuerzaPatadaMax, chargeRatio);
             Vector3 fuerzaTotal = dirPatada * fuerza;
             
+            // --- CÁLCULO DE SPIN (Rotación / Comba) ---
+            // Dirección del efecto lateral si se presionan teclas A/D o Flechas
+            float steer = 0f;
+            var kb = Keyboard.current;
+            if (kb != null)
+            {
+                if (kb.aKey.isPressed || kb.leftArrowKey.isPressed) steer = -1f;
+                if (kb.dKey.isPressed || kb.rightArrowKey.isPressed) steer = 1f;
+            }
+
+            // Eje de rotación vertical para comba y eje horizontal para top-spin/back-spin
+            Vector3 axisHorizontal = Vector3.Cross(Vector3.up, dirPatada.normalized);
+            
+            // Menos elevación = top-spin (+), Más elevación = back-spin (-)
+            float spinVertical = Mathf.Lerp(3f, -12f, elevacionVertical); 
+            Vector3 spinVerticalVector = axisHorizontal * (spinVertical * chargeRatio);
+            
+            // Efecto lateral (Comba)
+            Vector3 spinLateralVector = Vector3.up * (steer * fuerza * 1.8f);
+            
+            Vector3 spinTotal = spinVerticalVector + spinLateralVector;
+
             // Soltar el balón antes de patear
             PelotaFutbol pelotaAPatear = pelotaDriblando;
             pelotaDriblando = null;
             
-            pelotaAPatear.Patear(fuerzaTotal);
+            pelotaAPatear.Patear(fuerzaTotal, spinTotal);
         }
         
         // Esperar a que acabe la animación antes de devolver el control (0.35s)
