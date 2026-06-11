@@ -68,6 +68,42 @@ public class SkyEngine : MonoBehaviour
     [Tooltip("Si se deja vacío, se creará un sistema de partículas de lluvia automáticamente siguiendo a la cámara")]
     public ParticleSystem rainParticleSystem;
 
+    [Header("Lluvia Aleatoria Automática")]
+    [Tooltip("Activar/desactivar el sistema de clima aleatorio automático")]
+    public bool lluviaAleatoria = true;
+
+    [Tooltip("Tiempo mínimo (segundos) entre cambios de clima aleatorios")]
+    [Min(1f)]
+    public float intervaloMinimo = 20f;
+
+    [Tooltip("Tiempo máximo (segundos) entre cambios de clima aleatorios")]
+    [Min(1f)]
+    public float intervaloMaximo = 60f;
+
+    [Tooltip("Duración mínima (segundos) de cada episodio de lluvia o tormenta")]
+    [Min(1f)]
+    public float duracionMinima = 15f;
+
+    [Tooltip("Duración máxima (segundos) de cada episodio de lluvia o tormenta")]
+    [Min(1f)]
+    public float duracionMaxima = 40f;
+
+    [Tooltip("Probabilidad de que llueva (vs. despejado) en cada intervalo. 0 = nunca, 1 = siempre")]
+    [Range(0f, 1f)]
+    public float probabilidadLluvia = 0.6f;
+
+    [Tooltip("¿Puede ocurrir tormenta además de lluvia simple?")]
+    public bool permitirTormenta = true;
+
+    [Tooltip("Probabilidad de que la lluvia sea tormenta (si probabilidadLluvia se cumple). 0 = nunca tormenta")]
+    [Range(0f, 1f)]
+    public float probabilidadTormenta = 0.3f;
+
+    // Estado interno del sistema aleatorio
+    private float tiempoProximoCambio = 0f;
+    private bool episodioActivo = false;      // True cuando hay lluvia/tormenta activa por el sistema aleatorio
+    private float tiempoFinEpisodio = 0f;
+
     // Estado interno del clima e interpolaciones
     private float weatherProgress = 1f; 
     private WeatherType previousWeather = WeatherType.Clear;
@@ -130,6 +166,9 @@ public class SkyEngine : MonoBehaviour
         {
             CrearSistemaDeLluviaProcedural();
         }
+        
+        // Planificar el primer cambio de clima aleatorio
+        tiempoProximoCambio = Time.time + Random.Range(intervaloMinimo, intervaloMaximo);
     }
 
     void Update()
@@ -148,7 +187,10 @@ public class SkyEngine : MonoBehaviour
         // 3. Procesar relámpagos si es tormenta
         ActualizarRelampagos();
 
-        // 4. Aplicar iluminación y ciclo de día y noche
+        // 4. Sistema de lluvia aleatoria automática
+        ActualizarLluviaAleatoria();
+
+        // 5. Aplicar iluminación y ciclo de día y noche
         ActualizarCicloDiaNoche();
     }
 
@@ -431,6 +473,53 @@ public class SkyEngine : MonoBehaviour
         // Apagar relámpago
         lightningIntensityOffset = 0f;
         isLightningFlashing = false;
+    }
+
+    private void ActualizarLluviaAleatoria()
+    {
+        if (!lluviaAleatoria || !Application.isPlaying) return;
+
+        float ahora = Time.time;
+
+        // Si hay un episodio activo, verificar si terminó
+        if (episodioActivo)
+        {
+            if (ahora >= tiempoFinEpisodio)
+            {
+                // Terminar el episodio: volver al clima despejado
+                episodioActivo = false;
+                targetWeather = WeatherType.Clear;
+                // Planificar el próximo cambio
+                tiempoProximoCambio = ahora + Random.Range(intervaloMinimo, intervaloMaximo);
+            }
+            return;
+        }
+
+        // Verificar si es momento de lanzar un nuevo evento de clima
+        if (ahora < tiempoProximoCambio) return;
+
+        // Decidir qué pasa: ¿llueve o está despejado?
+        if (Random.value <= probabilidadLluvia)
+        {
+            // Decidir si es tormenta o lluvia simple
+            WeatherType climaElegido = WeatherType.Rain;
+            if (permitirTormenta && Random.value <= probabilidadTormenta)
+            {
+                climaElegido = WeatherType.Storm;
+            }
+
+            targetWeather = climaElegido;
+            episodioActivo = true;
+            float duracion = Random.Range(duracionMinima, duracionMaxima);
+            tiempoFinEpisodio = ahora + duracion;
+
+            Debug.Log($"[SkyEngine] Lluvia aleatoria: {climaElegido} por {duracion:F0}s.");
+        }
+        else
+        {
+            // No llueve este intervalo, esperar el siguiente
+            tiempoProximoCambio = ahora + Random.Range(intervaloMinimo, intervaloMaximo);
+        }
     }
 
     private void CrearSistemaDeLluviaProcedural()
