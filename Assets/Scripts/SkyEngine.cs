@@ -21,6 +21,12 @@ public class SkyEngine : MonoBehaviour
     [Tooltip("Multiplicador de la velocidad del tiempo")]
     public float timeMultiplier = 1f;
 
+    [Header("Dirección de la Órbita")]
+    [Tooltip("Inclinación lateral (Z) de la órbita (por defecto 15)")]
+    public float orbitTilt = 15f;
+    [Tooltip("Orientación horizontal (Y) de la órbita (por defecto 0 para pasar frente a la cámara)")]
+    public float orbitYaw = 0f;
+
     [Header("Referencias de Iluminación")]
     [Tooltip("Luz direccional del Sol (Día)")]
     public Light sunLight;
@@ -44,6 +50,7 @@ public class SkyEngine : MonoBehaviour
     public Gradient groundColorGradient;
     public AnimationCurve exposureCurve;
     public AnimationCurve atmosphereThicknessCurve;
+    public AnimationCurve sunSizeCurve;
 
     [Header("Iluminación Ambiental")]
     public Gradient ambientColorGradient;
@@ -155,20 +162,18 @@ public class SkyEngine : MonoBehaviour
         float sunAngleX = (t * 360f) - 90f;
         if (sunLight != null)
         {
-            // Mantenemos una inclinación lateral constante de Y=45 y Z=0 para que pase en diagonal
-            sunLight.transform.rotation = Quaternion.Euler(sunAngleX, 45f, 0f);
+            sunLight.transform.rotation = Quaternion.Euler(sunAngleX, orbitYaw, orbitTilt);
         }
 
         if (moonLight != null)
         {
-            // La luna está desfasada 180 grados del sol
             float moonAngleX = sunAngleX + 180f;
-            moonLight.transform.rotation = Quaternion.Euler(moonAngleX, 45f, 0f);
+            moonLight.transform.rotation = Quaternion.Euler(moonAngleX, orbitYaw, -orbitTilt);
         }
 
         // --- 2. Intensidad y Color de las luces ---
-        float sunIntensity = sunIntensityCurve.Evaluate(t) * currentLightMultiplier;
-        float moonIntensity = moonIntensityCurve.Evaluate(t) * currentLightMultiplier;
+        float sunIntensity = Mathf.Max(0f, sunIntensityCurve.Evaluate(t)) * currentLightMultiplier;
+        float moonIntensity = Mathf.Max(0f, moonIntensityCurve.Evaluate(t)) * currentLightMultiplier;
 
         if (sunLight != null)
         {
@@ -202,8 +207,9 @@ public class SkyEngine : MonoBehaviour
         {
             targetSkybox.SetColor("_SkyTint", skyTintGradient.Evaluate(t));
             targetSkybox.SetColor("_GroundColor", groundColorGradient.Evaluate(t));
-            targetSkybox.SetFloat("_Exposure", exposureCurve.Evaluate(t));
-            targetSkybox.SetFloat("_AtmosphereThickness", atmosphereThicknessCurve.Evaluate(t));
+            targetSkybox.SetFloat("_Exposure", Mathf.Max(0.01f, exposureCurve.Evaluate(t)));
+            targetSkybox.SetFloat("_AtmosphereThickness", Mathf.Max(0.1f, atmosphereThicknessCurve.Evaluate(t)));
+            targetSkybox.SetFloat("_SunSize", Mathf.Max(0.005f, sunSizeCurve.Evaluate(t)));
         }
 
         // --- 4. Actualizar Iluminación Ambiental ---
@@ -717,6 +723,23 @@ public class SkyEngine : MonoBehaviour
                     new GradientAlphaKey(1f, 1f)
                 }
             );
+        }
+
+        // 10. Curva de Tamaño del Sol/Luna (Luna un poco más grande y mística)
+        if (sunSizeCurve == null || sunSizeCurve.length == 0)
+        {
+            sunSizeCurve = new AnimationCurve();
+            sunSizeCurve.AddKey(new Keyframe(0f, 0.05f));        // Medianoche
+            sunSizeCurve.AddKey(new Keyframe(0.2f, 0.05f));
+            sunSizeCurve.AddKey(new Keyframe(0.3f, 0.04f));       // Día
+            sunSizeCurve.AddKey(new Keyframe(0.7f, 0.04f));
+            sunSizeCurve.AddKey(new Keyframe(0.8f, 0.05f));
+            sunSizeCurve.AddKey(new Keyframe(1f, 0.05f));
+
+            for (int i = 0; i < sunSizeCurve.length; i++)
+            {
+                sunSizeCurve.SmoothTangents(i, 0.5f);
+            }
         }
     }
 }
