@@ -166,6 +166,25 @@ public class ControladorTerceraPersona : MonoBehaviour
     private string estadoAnimacionActual = "";
     private GameObject miraCanvas;
     private GameObject miraContenedor;
+
+    [Header("Sonidos de Pisadas")]
+    [Tooltip("Lista de clips de audio para las pisadas. Se reproducirán al azar.")]
+    public AudioClip[] clipsPisadas;
+    [Tooltip("Volumen de las pisadas")]
+    [Range(0f, 1f)] public float volumenPisadas = 0.5f;
+    [Tooltip("Intervalo de tiempo entre pisadas al caminar")]
+    public float intervaloPisadaCaminar = 0.45f;
+    [Tooltip("Intervalo de tiempo entre pisadas al correr")]
+    public float intervaloPisadaCorrer = 0.28f;
+    [Tooltip("Intervalo de tiempo entre pisadas al agacharse")]
+    public float intervaloPisadaAgachado = 0.65f;
+
+    private AudioSource audioSourcePisadas;
+    private float temporizadorPisadas = 0f;
+
+    [Header("Sonidos de Combate")]
+    [Tooltip("Clip de sonido que se reproduce al lanzar el objeto")]
+    public AudioClip sonidoLanzamiento;
     
     // Nombres de los estados de animación en Dagger.controller
     private const string ANIM_IDLE = "Idle";
@@ -254,6 +273,15 @@ public class ControladorTerceraPersona : MonoBehaviour
         // Crear la mira en pantalla al iniciar
         CrearMiraUI();
         CrearBarraCargaUI();
+
+        // Configurar AudioSource para las pisadas
+        audioSourcePisadas = GetComponent<AudioSource>();
+        if (audioSourcePisadas == null)
+        {
+            audioSourcePisadas = gameObject.AddComponent<AudioSource>();
+        }
+        audioSourcePisadas.playOnAwake = false;
+        audioSourcePisadas.spatialBlend = 1f; // Sonido 3D
     }
 
     void OnDestroy()
@@ -343,6 +371,9 @@ public class ControladorTerceraPersona : MonoBehaviour
         
         // Manejar el estado de animación
         ActualizarEstadoAnimacion();
+
+        // Manejar sonidos de pisadas
+        ManejarSonidosPisadas();
     }
 
     private void SimularMuelleAnimacion()
@@ -656,6 +687,12 @@ public class ControladorTerceraPersona : MonoBehaviour
         
         // Instanciar y lanzar el proyectil físico real
         InstanciarProyectil(manoDerecha);
+
+        // Reproducir sonido de lanzamiento
+        if (audioSourcePisadas != null && sonidoLanzamiento != null)
+        {
+            audioSourcePisadas.PlayOneShot(sonidoLanzamiento, 0.8f);
+        }
         
         // Impulso inercial hacia adelante (Follow Through) al soltar
         tiltPitch = -15f;
@@ -1394,5 +1431,70 @@ public class ControladorTerceraPersona : MonoBehaviour
         velocidad = knockback;
         
         CambiarEstadoAnimacion("GetDamage");
+    }
+
+    private void ManejarSonidosPisadas()
+    {
+        // Solo reproducir si estamos en el suelo y nos estamos moviendo horizontalmente
+        bool seEstaMoviendo = velocidadHorizontalActual.magnitude >= 0.15f;
+        
+        if (estaEnElSuelo && seEstaMoviendo && !estaAturdido)
+        {
+            float intervaloActual = intervaloPisadaCaminar;
+            
+            // Determinar si está corriendo (usando Shift)
+            var keyboard = Keyboard.current;
+            bool estaCorriendo = keyboard != null && keyboard.leftShiftKey.isPressed && !estaAgachado && !estaCuerpoTierra;
+
+            if (estaCuerpoTierra)
+            {
+                intervaloActual = intervaloPisadaAgachado * 1.2f;
+            }
+            else if (estaAgachado)
+            {
+                intervaloActual = intervaloPisadaAgachado;
+            }
+            else if (estaCorriendo)
+            {
+                intervaloActual = intervaloPisadaCorrer;
+            }
+
+            // Incrementar temporizador
+            temporizadorPisadas += Time.deltaTime;
+            if (temporizadorPisadas >= intervaloActual)
+            {
+                ReproducirSonidoPisada();
+                temporizadorPisadas = 0f;
+            }
+        }
+        else
+        {
+            // Resetear el temporizador para que la primera pisada al moverse sea casi instantánea
+            var keyboard = Keyboard.current;
+            float intervaloBase = (keyboard != null && keyboard.leftShiftKey.isPressed) ? intervaloPisadaCorrer : (estaAgachado ? intervaloPisadaAgachado : intervaloPisadaCaminar);
+            temporizadorPisadas = intervaloBase * 0.95f;
+        }
+    }
+
+    private void ReproducirSonidoPisada()
+    {
+        if (clipsPisadas == null || clipsPisadas.Length == 0 || audioSourcePisadas == null)
+            return;
+
+        // Seleccionar un clip al azar
+        int indice = Random.Range(0, clipsPisadas.Length);
+        AudioClip clip = clipsPisadas[indice];
+
+        if (clip != null)
+        {
+            // Variar levemente el pitch para evitar monotonía
+            audioSourcePisadas.pitch = Random.Range(0.85f, 1.15f);
+            
+            float volumenActual = volumenPisadas;
+            if (estaAgachado) volumenActual *= 0.5f;
+            if (estaCuerpoTierra) volumenActual *= 0.25f;
+
+            audioSourcePisadas.PlayOneShot(clip, volumenActual);
+        }
     }
 }
