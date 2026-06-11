@@ -73,6 +73,7 @@
     <Compile Include="Assets\Toon Killers &amp; Survivors\DemoScripts\CamaraTerceraPersona.cs" />
     <Compile Include="Assets\Toon Killers &amp; Survivors\DemoScripts\DefensorAI.cs" />
     <Compile Include="Assets\Toon Killers &amp; Survivors\DemoScripts\AnimationToButton.cs" />
+    <Compile Include="Assets\Scripts\SkyEngine.cs" />
     <Compile Include="Assets\Toon Killers &amp; Survivors\DemoScripts\RotateOver.cs" />
     <Compile Include="Assets\Toon Killers &amp; Survivors\DemoScripts\ObjetoLanzable.cs" />
     <Compile Include="Assets\Toon Killers &amp; Survivors\DemoScripts\MainMenuManager.cs" />
