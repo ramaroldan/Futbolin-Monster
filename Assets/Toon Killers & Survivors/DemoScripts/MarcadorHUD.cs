@@ -83,6 +83,28 @@ public class MarcadorHUD : MonoBehaviour
         {
             ConstruirUIDinamica();
         }
+
+        // Asegurar que exista un EventSystem en la escena para procesar clicks en la UI
+        UnityEngine.EventSystems.EventSystem existingEventSystem = FindFirstObjectByType<UnityEngine.EventSystems.EventSystem>();
+        if (existingEventSystem == null)
+        {
+            GameObject eventSystemObj = new GameObject("EventSystem");
+            eventSystemObj.AddComponent<UnityEngine.EventSystems.EventSystem>();
+            eventSystemObj.AddComponent<UnityEngine.InputSystem.UI.InputSystemUIInputModule>();
+            Debug.Log("¡Se autogeneró el EventSystem con InputSystemUIInputModule para compatibilidad con el nuevo Input System!");
+        }
+        else
+        {
+            // Si ya existe un EventSystem, nos aseguramos de que use el nuevo módulo de Input System
+            // para evitar el crash con UnityEngine.Input
+            UnityEngine.EventSystems.StandaloneInputModule oldModule = existingEventSystem.GetComponent<UnityEngine.EventSystems.StandaloneInputModule>();
+            if (oldModule != null)
+            {
+                Destroy(oldModule);
+                existingEventSystem.gameObject.AddComponent<UnityEngine.InputSystem.UI.InputSystemUIInputModule>();
+                Debug.Log("¡Se reemplazó StandaloneInputModule por InputSystemUIInputModule para compatibilidad con el nuevo Input System!");
+            }
+        }
         
         ActualizarTextoMarcador();
         MostrarAnuncio("¡EMPIEZA EL PARTIDO!", Color.yellow);
@@ -284,17 +306,18 @@ public class MarcadorHUD : MonoBehaviour
 
     public void RecomenzarPartido()
     {
+        Debug.Log("Reiniciando partido...");
         Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void SalirDelJuego()
     {
-        #if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-        #else
-        Application.Quit();
-        #endif
+        Debug.Log("Volviendo al Menú Principal...");
+        Time.timeScale = 1f;
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        SceneManager.LoadScene("MainMenu");
     }
 
     // --- CONSTRUCCIÓN DINÁMICA DE LA UI ---

@@ -87,6 +87,11 @@ public class PayasoArquero : MonoBehaviour
     private bool estaDesmayado = false;
     private bool recibiendoDaño = false;
 
+    [Header("── Sonidos ───────────────────────────────────────────")]
+    [Tooltip("Clip de sonido que se reproduce al recibir daño")]
+    public AudioClip sonidoDaño;
+    private AudioSource audioSource;
+
     private Vector3 posicionInicial;
     private Quaternion rotacionOriginalGk;
     private float currentOffset = 0f;
@@ -128,6 +133,15 @@ public class PayasoArquero : MonoBehaviour
         }
 
         AplicarDificultad();
+
+        // Configurar AudioSource para sonidos de daño
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+        audioSource.playOnAwake = false;
+        audioSource.spatialBlend = 1f; // Sonido 3D
     }
 
     void AplicarDificultad()
@@ -353,6 +367,13 @@ public class PayasoArquero : MonoBehaviour
 
         vidaActual--;
         GenerarSangre(puntoImpacto);
+
+        // Reproducir sonido de daño
+        if (audioSource != null && sonidoDaño != null)
+        {
+            audioSource.pitch = Random.Range(0.9f, 1.1f);
+            audioSource.PlayOneShot(sonidoDaño, 0.9f);
+        }
 
         if (vidaActual <= 0)
             StartCoroutine(SecuenciaDesmayo());

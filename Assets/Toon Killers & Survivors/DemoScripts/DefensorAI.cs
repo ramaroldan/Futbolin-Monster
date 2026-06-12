@@ -69,6 +69,11 @@ public class DefensorAI : MonoBehaviour
     private bool estaDesmayado = false;
     private bool recibiendoDaño = false;
 
+    [Header("Sonidos")]
+    [Tooltip("Clip de sonido que se reproduce al recibir daño")]
+    public AudioClip sonidoDaño;
+    private AudioSource audioSource;
+
     void Start()
     {
         animador = GetComponent<Animator>();
@@ -154,6 +159,15 @@ public class DefensorAI : MonoBehaviour
 
         AnimationToButton animToButton = GetComponent<AnimationToButton>();
         if (animToButton != null) animToButton.enabled = false;
+
+        // Configurar AudioSource para sonidos de daño
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+        audioSource.playOnAwake = false;
+        audioSource.spatialBlend = 1f; // Sonido 3D
     }
 
     void Update()
@@ -493,6 +507,13 @@ public class DefensorAI : MonoBehaviour
 
         vidaActual--;
         GenerarSangre(puntoImpacto);
+
+        // Reproducir sonido de daño
+        if (audioSource != null && sonidoDaño != null)
+        {
+            audioSource.pitch = Random.Range(0.9f, 1.1f);
+            audioSource.PlayOneShot(sonidoDaño, 0.9f);
+        }
 
         if (vidaActual <= 0)
         {

@@ -24,6 +24,11 @@ public class PelotaFutbol : MonoBehaviour
     private Rigidbody rb;
     private SphereCollider sphereCollider;
     private Transform jugadorConductor;
+
+    [Header("Sonidos")]
+    [Tooltip("Sonido que se reproduce al patear el balón")]
+    public AudioClip sonidoPatada;
+    private AudioSource audioSource;
     
     [Header("Configuración de Respawn")]
     [Tooltip("Posición a la que la pelota volverá al resetearse. Modificable desde el inspector.")]
@@ -53,6 +58,14 @@ public class PelotaFutbol : MonoBehaviour
 
     void Start()
     {
+        // Configurar AudioSource para sonidos de la pelota
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+        audioSource.playOnAwake = false;
+        audioSource.spatialBlend = 1f; // Sonido 3D
         // Configurar física realista de balón de fútbol (peso oficial: ~430g)
         rb.mass = 0.43f;
         rb.linearDamping = 0.15f;
@@ -233,6 +246,13 @@ public class PelotaFutbol : MonoBehaviour
             trail.AddPosition(transform.position); // Forzar inicio inmediato del rastro
         }
         
+        // Reproducir sonido de patada
+        if (audioSource != null && sonidoPatada != null)
+        {
+            audioSource.pitch = Random.Range(0.88f, 1.12f);
+            audioSource.PlayOneShot(sonidoPatada, 0.95f);
+        }
+
         rb.AddForce(fuerza, ForceMode.Impulse);
         rb.angularVelocity = spin;
 
