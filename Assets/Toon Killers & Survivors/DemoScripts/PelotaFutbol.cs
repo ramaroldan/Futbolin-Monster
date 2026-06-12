@@ -38,7 +38,6 @@ public class PelotaFutbol : MonoBehaviour
     private float worldRadius = 0.165f;
     private float worldCenterOffsetY = 0.108f;
     
-    private AudioSource audioSource;
     private AudioClip clipChuto;
     private AudioClip clipRebote;
 
